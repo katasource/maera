@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<xsd:schema xmlns="http://atlassian.com/schema/spring/plugin"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://atlassian.com/schema/spring/plugin"
+            elementFormDefault="qualified">
+
+    <xsd:attribute name="available" type="xsd:boolean">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[
+            Whether or not the given bean should be made available to plugins.
+            ]]></xsd:documentation>
+        </xsd:annotation>
+    </xsd:attribute>
+
+    <xsd:attribute name="contextClassLoader" default="USE_HOST">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[
+            The context class loader strategy for this bean.
+            ]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:NMTOKEN">
+                <xsd:enumeration value="USE_HOST"/>
+                <xsd:enumeration value="USE_PLUGIN"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:attribute>
+
+    <xsd:attribute name="ccls" default="USE_HOST">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[
+            (Deprecated) The context class loader strategy for this bean.
+            ]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:NMTOKEN">
+                <xsd:enumeration value="USE_HOST"/>
+                <xsd:enumeration value="USE_PLUGIN"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:attribute>
+
+    <xsd:element name="interface" type="xsd:string">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[
+            An interface of this bean that should be exposed to plugins.
+            ]]></xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+</xsd:schema>

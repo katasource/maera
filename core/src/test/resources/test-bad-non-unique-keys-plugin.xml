@@ -1,0 +1,4 @@
+<atlassian-plugin key="test.bad.plugin" name="Test Plugin">
+    <animal key="bear" name="Bear Animal" class="com.atlassian.plugin.mock.MockBear"/>
+    <mineral key="bear" name="Bar" class="com.atlassian.plugin.mock.MockGold"/>
+</atlassian-plugin>

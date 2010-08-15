@@ -1,0 +1,8 @@
+<atlassian-plugin name="Test Plugin" i18n-name-key="test.atlassian.plugin.i18n"
+                  key="test.atlassian.plugin.classloaded2">
+    <plugin-info>
+        <version>1.0</version>
+    </plugin-info>
+
+    <requiresRestart key="foo"/>
+</atlassian-plugin>

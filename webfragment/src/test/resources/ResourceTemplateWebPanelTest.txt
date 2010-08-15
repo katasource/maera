@@ -1,0 +1,2 @@
+This file is used as web panel contents in unit tests.
+Do not change its contents.

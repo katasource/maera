@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config version="5.2.1">
+    <nextId id="113"/>
+    <licenseKey name="Performance Engineering" company="Atlassian" key="S-ATLASSIAN#1772860001-ge3xmy5fqzgv#107"/>
+    <generalSettings setupHasRun="true" showQuickstart="false" lookAndFeel="3" iconMode="large" browserCommand=""
+                     externalSourceViewerCommand="" lastExportFormatClass="1" embeddedUseJvmpiFor15="false"
+                     embeddedUseInterpreted="false" defaultFilterTemplateId="" defaultProfilingSettingsTemplateId=""
+                     defaultTriggerSetId="">
+        <jvmConfigurations defaultId="100">
+            <jvmConfiguration id="101" name="Apple 1.4.2_18"
+                              javaHome="/System/Library/Frameworks/JavaVM.framework/Versions/1.4/Home"
+                              version="1.4.2_18" vendor="Apple Inc." arch="i386" modeId="" isJRE="false"/>
+            <jvmConfiguration id="102" name="Apple 1.4.2_18"
+                              javaHome="/System/Library/Frameworks/JavaVM.framework/Versions/1.4.1/Home"
+                              version="1.4.2_18" vendor="Apple Inc." arch="i386" modeId="" isJRE="false"/>
+            <jvmConfiguration id="103" name="Apple 1.4.2_18"
+                              javaHome="/System/Library/Frameworks/JavaVM.framework/Versions/1.4.2/Home"
+                              version="1.4.2_18" vendor="Apple Inc." arch="i386" modeId="" isJRE="false"/>
+            <jvmConfiguration id="104" name="Apple 1.5.0_16"
+                              javaHome="/System/Library/Frameworks/JavaVM.framework/Versions/1.5/Home"
+                              version="1.5.0_16" vendor="Apple Inc." arch="i386" modeId="" isJRE="false"/>
+            <jvmConfiguration id="105" name="Apple 1.5.0_16"
+                              javaHome="/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Home"
+                              version="1.5.0_16" vendor="Apple Inc." arch="i386" modeId="" isJRE="false"/>
+            <jvmConfiguration id="100" name="Apple 1.6.0_07"
+                              javaHome="/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Home"
+                              version="1.6.0_07" vendor="Apple Inc." arch="x86_64" modeId="" isJRE="false"/>
+            <jvmConfiguration id="106" name="Apple 1.6.0_07"
+                              javaHome="/System/Library/Frameworks/JavaVM.framework/Versions/1.6.0/Home"
+                              version="1.6.0_07" vendor="Apple Inc." arch="x86_64" modeId="" isJRE="false"/>
+            <jvmConfiguration id="107" name="Apple 1.6.0_07"
+                              javaHome="/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home"
+                              version="1.6.0_07" vendor="Apple Inc." arch="x86_64" modeId="" isJRE="false"/>
+        </jvmConfigurations>
+        <integrations>
+            <netbeansConfig installDir="" homeDir=""/>
+            <eclipseConfig installDir=""/>
+            <wsad5Config installDir=""/>
+            <rad6Config installDir=""/>
+            <eclipse3Config installDir=""/>
+            <jbuilderConfig installDir=""/>
+            <idea4Config installDir=""/>
+            <idea5Config installDir=""/>
+            <idea6Config installDir=""/>
+            <idea7Config installDir=""/>
+            <idea8Config installDir=""/>
+            <jdeveloperConfig installDir=""/>
+        </integrations>
+        <messageFlags frozenWarning="true" sessionOpenWarning="true" emptyClassPathWarning="true"
+                      parsePathWarning="true" vmExitWarning="true" vmCrashWarning="true" recordMemoryWarning="true"
+                      configSyncMessage="true" callTracerWarning="true" recordedObjectsComparisonWarning="true"
+                      heapwalkerObjectsComparisonWarning="true" closeSession="true" closeSnapshot="true"
+                      closeComparisons="true" hideNode="true" hprofComparison="true"
+                      dynamicInstrumentationWarning="true"/>
+        <directoryPresets export="" snapshots="/Users/gbarnett/Downloads" jws="" settingsExport=""/>
+        <exportFormats/>
+        <filterTemplates/>
+        <triggerSets/>
+    </generalSettings>
+    <comparisonSettings>
+        <viewSettings>
+            <telemetry scaleToFit="true" verticalGridlines="3" snapshotSymbol="3"/>
+            <objectsComparisonView primaryMeasure="1" sizeScale="1" differenceDisplayType="1" showZeroValues="false"/>
+            <allocationHotspots alwaysShowSignature="false" differenceDisplayType="1" showZeroValues="false" scale="1"/>
+            <cpuHotspots alwaysShowSignature="false" differenceDisplayType="1" showZeroValues="false" scale="1"/>
+            <cpuCalltree showCommonOnly="false" differenceDisplayType="1" showZeroValues="false"
+                         showPercentageBar="true" alwaysShowFQN="true" alwaysShowSignature="false" percentageBase="2"
+                         scale="1"/>
+            <allocationCalltree showCommonOnly="false" differenceDisplayType="1" showZeroValues="false" cumulate="true"
+                                showPercentageBar="true" alwaysShowFQN="true" alwaysShowSignature="false"
+                                percentageBase="2" scale="1"/>
+        </viewSettings>
+        <viewFilters/>
+    </comparisonSettings>
+    <templates>
+        <template id="50" name="All features enabled, dynamic bytecode instrumentation" startFrozen="false"
+                  recordCPUOnStartup="false" vmCannotExit="false" instrumentationType="1" samplingNoFilters="false"
+                  lineNumbers="false" samplingFrequency="5" timeType="1" monitorBlockedThreshold="500"
+                  monitorWaitingThreshold="100000" disableCPUProfiling="false" recordAllocOnStartup="true"
+                  enableTriggersOnStartup="true" allocTreeRecordingType="1" disableMonitorContentions="false"
+                  componentDetection="true" urlRetainedParameters="" chronoHeap="false" autoUpdatePeriodLong="5"
+                  autoUpdatePeriodShort="2" filteredAnnotations="false" allUrls="false" annotationCap="20"
+                  showSystemThreads="false" utilConcurrentHandling="true" libraryDebugParameters=""
+                  description="This is JProfiler's fully featured mode. This default is suitable for evaluating JProfiler and for getting a general overview of the application's resource usage. In this setting, all stack information is accurate (dynamic instrumentation) with standard filters enabled."
+                  system="true">
+            <annotations>
+                <annotation type="1" enabled="true"/>
+                <annotation type="2" enabled="true"/>
+                <annotation type="3" enabled="true"/>
+                <annotation type="4" enabled="true"/>
+                <annotation type="5" enabled="false"/>
+            </annotations>
+        </template>
+        <template id="51" name="All features enabled, CPU sampling" startFrozen="false" recordCPUOnStartup="false"
+                  vmCannotExit="false" instrumentationType="3" samplingNoFilters="false" lineNumbers="false"
+                  samplingFrequency="5" timeType="1" monitorBlockedThreshold="500" monitorWaitingThreshold="100000"
+                  disableCPUProfiling="false" recordAllocOnStartup="true" enableTriggersOnStartup="true"
+                  allocTreeRecordingType="1" disableMonitorContentions="false" componentDetection="true"
+                  urlRetainedParameters="" chronoHeap="false" autoUpdatePeriodLong="5" autoUpdatePeriodShort="2"
+                  filteredAnnotations="false" allUrls="false" annotationCap="20" showSystemThreads="false"
+                  utilConcurrentHandling="true" libraryDebugParameters=""
+                  description="This template has low overhead and is particularly suitable for CPU profiling and for memory profiling when accurate allocation information is not important. JEE payloads cannot be annotated in the call tree, but payload hotspots without backtraces are available."
+                  system="true">
+            <annotations>
+                <annotation type="1" enabled="true"/>
+                <annotation type="2" enabled="true"/>
+                <annotation type="3" enabled="true"/>
+                <annotation type="4" enabled="true"/>
+                <annotation type="5" enabled="false"/>
+            </annotations>
+        </template>
+        <template id="53" name="All features enabled, CPU sampling with line number resolution" startFrozen="false"
+                  recordCPUOnStartup="false" vmCannotExit="false" instrumentationType="3" samplingNoFilters="false"
+                  lineNumbers="true" samplingFrequency="5" timeType="1" monitorBlockedThreshold="500"
+                  monitorWaitingThreshold="100000" disableCPUProfiling="false" recordAllocOnStartup="true"
+                  enableTriggersOnStartup="true" allocTreeRecordingType="1" disableMonitorContentions="false"
+                  componentDetection="true" urlRetainedParameters="" chronoHeap="false" autoUpdatePeriodLong="5"
+                  autoUpdatePeriodShort="2" filteredAnnotations="false" allUrls="false" annotationCap="20"
+                  showSystemThreads="false" utilConcurrentHandling="true" libraryDebugParameters=""
+                  description="This template is the 'All features enabled, sampling' template with additional line number resolution. It has low overhead and is particularly suitable for CPU profiling and for memory profiling when accurate allocation information is not important."
+                  system="true">
+            <annotations>
+                <annotation type="1" enabled="true"/>
+                <annotation type="2" enabled="true"/>
+                <annotation type="3" enabled="true"/>
+                <annotation type="4" enabled="true"/>
+                <annotation type="5" enabled="false"/>
+            </annotations>
+        </template>
+        <template id="52" name="Performance bottleneck search" startFrozen="false" recordCPUOnStartup="false"
+                  vmCannotExit="false" instrumentationType="3" samplingNoFilters="false" lineNumbers="false"
+                  samplingFrequency="5" timeType="1" monitorBlockedThreshold="500" monitorWaitingThreshold="100000"
+                  disableCPUProfiling="false" recordAllocOnStartup="true" enableTriggersOnStartup="true"
+                  allocTreeRecordingType="1" disableMonitorContentions="true" componentDetection="true"
+                  urlRetainedParameters="" chronoHeap="false" autoUpdatePeriodLong="5" autoUpdatePeriodShort="2"
+                  filteredAnnotations="false" allUrls="false" annotationCap="20" showSystemThreads="false"
+                  utilConcurrentHandling="true" libraryDebugParameters=""
+                  description="This setting is most suitable to quickly find performance bottlenecks. The overhead is very low (sampling), but accuracy of non-timing related stack information is low. No filters are used."
+                  system="true">
+            <annotations>
+                <annotation type="1" enabled="false"/>
+                <annotation type="2" enabled="false"/>
+                <annotation type="3" enabled="false"/>
+                <annotation type="4" enabled="false"/>
+                <annotation type="5" enabled="false"/>
+            </annotations>
+        </template>
+        <template id="55" name="Memory profiling only, no call tree collection" startFrozen="false"
+                  recordCPUOnStartup="false" vmCannotExit="false" instrumentationType="1" samplingNoFilters="false"
+                  lineNumbers="false" samplingFrequency="5" timeType="1" monitorBlockedThreshold="500"
+                  monitorWaitingThreshold="100000" disableCPUProfiling="true" recordAllocOnStartup="true"
+                  enableTriggersOnStartup="true" allocTreeRecordingType="1" disableMonitorContentions="true"
+                  componentDetection="true" urlRetainedParameters="" chronoHeap="false" autoUpdatePeriodLong="5"
+                  autoUpdatePeriodShort="2" filteredAnnotations="false" allUrls="false" annotationCap="20"
+                  showSystemThreads="false" utilConcurrentHandling="true" libraryDebugParameters=""
+                  description="Only memory profiling is enabled, CPU and Thread views will not be available. Additionally, there is no allocation information. The overhead is very low."
+                  system="true">
+            <annotations>
+                <annotation type="1" enabled="true"/>
+                <annotation type="2" enabled="true"/>
+                <annotation type="3" enabled="true"/>
+                <annotation type="4" enabled="true"/>
+                <annotation type="5" enabled="false"/>
+            </annotations>
+        </template>
+        <template id="58" name="Thread profiling only, no call tree collection" startFrozen="false"
+                  recordCPUOnStartup="false" vmCannotExit="false" instrumentationType="1" samplingNoFilters="false"
+                  lineNumbers="false" samplingFrequency="5" timeType="1" monitorBlockedThreshold="200"
+                  monitorWaitingThreshold="50000" disableCPUProfiling="true" recordAllocOnStartup="true"
+                  enableTriggersOnStartup="true" allocTreeRecordingType="1" disableMonitorContentions="false"
+                  componentDetection="true" urlRetainedParameters="" chronoHeap="false" autoUpdatePeriodLong="5"
+                  autoUpdatePeriodShort="2" filteredAnnotations="false" allUrls="false" annotationCap="20"
+                  showSystemThreads="false" utilConcurrentHandling="true" libraryDebugParameters=""
+                  description="Only thread profiling is enabled. No stack traces are available, but the overhead is very low."
+                  system="true">
+            <annotations>
+                <annotation type="1" enabled="true"/>
+                <annotation type="2" enabled="true"/>
+                <annotation type="3" enabled="true"/>
+                <annotation type="4" enabled="true"/>
+                <annotation type="5" enabled="false"/>
+            </annotations>
+        </template>
+    </templates>
+    <customTemplates/>
+    <sessions>
+        <session id="111" name="Atlassian Performance - Dynamic" startFrozen="false" recordCPUOnStartup="false"
+                 vmCannotExit="false" instrumentationType="1" samplingNoFilters="false" lineNumbers="false"
+                 samplingFrequency="5" timeType="1" monitorBlockedThreshold="500" monitorWaitingThreshold="100000"
+                 disableCPUProfiling="false" recordAllocOnStartup="false" enableTriggersOnStartup="true"
+                 allocTreeRecordingType="1" disableMonitorContentions="false" componentDetection="true"
+                 urlRetainedParameters="" chronoHeap="false" autoUpdatePeriodLong="5" autoUpdatePeriodShort="2"
+                 filteredAnnotations="false" allUrls="false" annotationCap="20" showSystemThreads="false"
+                 utilConcurrentHandling="true" libraryDebugParameters="" templateId="50"
+                 autoUpdateAllocationViews="false" type="2" hidden="false" host="127.0.0.1" port="8849" timeout="20"
+                 isExecuteStartCommand="false" startCommand="" isExecuteStopCommand="false" stopCommand=""
+                 jvmConfigurationId="100" workingDirectory="" isStartupWorkingDirectory="true" openBrowser="false"
+                 browserUrl="" vmArguments="" mainClass="" arguments="" consoleBufferSize="1000" nativeConsole="false"
+                 consoleSizeWidth="80" consoleSizeHeight="25" configSyncMode="1" configSyncCopyTarget=""
+                 configSyncCommand="" appletURL="" jnlpURL="" jwsDir="">
+            <annotations>
+                <annotation type="1" enabled="true"/>
+                <annotation type="2" enabled="true"/>
+                <annotation type="3" enabled="true"/>
+                <annotation type="4" enabled="true"/>
+                <annotation type="5" enabled="false"/>
+            </annotations>
+            <filters>
+                <group type="exclusive" name="Default excludes">
+                    <filter type="exclusive" name="$Proxy"/>
+                    <filter type="exclusive" name="$java."/>
+                    <filter type="exclusive" name="$javax."/>
+                    <filter type="exclusive" name="AOPContainerProxy$"/>
+                    <filter type="exclusive" name="COM.cloudscape."/>
+                    <filter type="exclusive" name="COM.objectspace."/>
+                    <filter type="exclusive" name="COM.rsa."/>
+                    <filter type="exclusive" name="EDU.oswego."/>
+                    <filter type="exclusive" name="__"/>
+                    <filter type="exclusive" name="allaire.jrun"/>
+                    <filter type="exclusive" name="antlr."/>
+                    <filter type="exclusive" name="apple."/>
+                    <filter type="exclusive" name="atg"/>
+                    <filter type="exclusive" name="bsh"/>
+                    <filter type="exclusive" name="c8"/>
+                    <filter type="exclusive" name="com.acumenat."/>
+                    <filter type="exclusive" name="com.adventnet."/>
+                    <filter type="exclusive" name="com.apple."/>
+                    <filter type="exclusive" name="com.asn1c."/>
+                    <filter type="exclusive" name="com.bea"/>
+                    <filter type="exclusive" name="com.caucho"/>
+                    <filter type="exclusive" name="com.certicom."/>
+                    <filter type="exclusive" name="com.ebay."/>
+                    <filter type="exclusive" name="com.evermind"/>
+                    <filter type="exclusive" name="com.ibm."/>
+                    <filter type="exclusive" name="com.incors."/>
+                    <filter type="exclusive" name="com.informix"/>
+                    <filter type="exclusive" name="com.intellij.rt."/>
+                    <filter type="exclusive" name="com.iplanet."/>
+                    <filter type="exclusive" name="com.jprofiler.agent."/>
+                    <filter type="exclusive" name="com.linar."/>
+                    <filter type="exclusive" name="com.netscape.server.http"/>
+                    <filter type="exclusive" name="com.octetstring."/>
+                    <filter type="exclusive" name="com.orionserver"/>
+                    <filter type="exclusive" name="com.phaos."/>
+                    <filter type="exclusive" name="com.pointbase."/>
+                    <filter type="exclusive" name="com.pramati"/>
+                    <filter type="exclusive" name="com.rsa."/>
+                    <filter type="exclusive" name="com.saxon."/>
+                    <filter type="exclusive" name="com.solarmetric."/>
+                    <filter type="exclusive" name="com.sssw"/>
+                    <filter type="exclusive" name="com.sun."/>
+                    <filter type="exclusive" name="com.swiftmq."/>
+                    <filter type="exclusive" name="com.sybase"/>
+                    <filter type="exclusive" name="com.tivoli."/>
+                    <filter type="exclusive" name="com.unify"/>
+                    <filter type="exclusive" name="compressionFilters."/>
+                    <filter type="exclusive" name="filters."/>
+                    <filter type="exclusive" name="fr.dyade"/>
+                    <filter type="exclusive" name="gnu."/>
+                    <filter type="exclusive" name="interceptors."/>
+                    <filter type="exclusive" name="javassist."/>
+                    <filter type="exclusive" name="javelinx."/>
+                    <filter type="exclusive" name="jrockit."/>
+                    <filter type="exclusive" name="jrun."/>
+                    <filter type="exclusive" name="jrun__"/>
+                    <filter type="exclusive" name="jrunx."/>
+                    <filter type="exclusive" name="jsp_servlet."/>
+                    <filter type="exclusive" name="junit."/>
+                    <filter type="exclusive" name="kodo."/>
+                    <filter type="exclusive" name="mx4j."/>
+                    <filter type="exclusive" name="net.sf.cglib."/>
+                    <filter type="exclusive" name="netscape."/>
+                    <filter type="exclusive" name="newatlanta.servletexec"/>
+                    <filter type="exclusive" name="oracle."/>
+                    <filter type="exclusive" name="org.bouncycastle"/>
+                    <filter type="exclusive" name="org.eclipse."/>
+                    <filter type="exclusive" name="org.enhydra"/>
+                    <filter type="exclusive" name="org.ietf."/>
+                    <filter type="exclusive" name="org.jboss"/>
+                    <filter type="exclusive" name="org.jcp.xml"/>
+                    <filter type="exclusive" name="org.jdom."/>
+                    <filter type="exclusive" name="org.jnp."/>
+                    <filter type="exclusive" name="org.mozilla."/>
+                    <filter type="exclusive" name="org.netbeans."/>
+                    <filter type="exclusive" name="org.objectweb."/>
+                    <filter type="exclusive" name="org.omg."/>
+                    <filter type="exclusive" name="org.openide."/>
+                    <filter type="exclusive" name="org.quartz."/>
+                    <filter type="exclusive" name="org.tranql."/>
+                    <filter type="exclusive" name="schema.system"/>
+                    <filter type="exclusive" name="schemacom_bea"/>
+                    <filter type="exclusive" name="schemaorg_apache_xmlbeans.system."/>
+                    <filter type="exclusive" name="serp."/>
+                    <filter type="exclusive" name="solid."/>
+                    <filter type="exclusive" name="ssa."/>
+                    <filter type="exclusive" name="sunw."/>
+                    <filter type="exclusive" name="weblogic."/>
+                    <filter type="exclusive" name="workshop."/>
+                </group>
+            </filters>
+            <triggers logTarget="stdout" logFile="">
+                <jvmStart enabled="true" groupId="" useGroupId="false" descriptionType="manual"
+                          manualDescription="Start CPU Profiling on JVM Startup">
+                    <actions>
+                        <startRecording>
+                            <cpu enabled="true" resetData="false"/>
+                            <allocation enabled="false" resetData="false"/>
+                            <thread enabled="true"/>
+                            <telemetry enabled="true"/>
+                        </startRecording>
+                    </actions>
+                </jvmStart>
+                <jvmStop enabled="true" groupId="" useGroupId="false" descriptionType="manual"
+                         manualDescription="Save CPU Snapshot">
+                    <actions>
+                        <saveSnapshot file="@project-dir@/cpusnapshot" number="true"/>
+                    </actions>
+                </jvmStop>
+            </triggers>
+            <viewSettings>
+                <invocationView showTime="true" showInherentTime="false" showInvocationCount="true" showAverage="false"
+                                isUsePercentageThreshold="false" percentageThreshold="0.01" showPercentageBar="true"
+                                alwaysShowFQN="true" alwaysShowSignature="false" percentageBase="2" scale="1"/>
+                <hotspotsView showTime="true" showInherentTime="false" showInvocationCount="true" showAverage="false"
+                              isUsePercentageThreshold="false" percentageThreshold="0.01" showPercentageBar="true"
+                              alwaysShowFQN="true" alwaysShowSignature="false" percentageBase="2" scale="1"/>
+                <callTracer percentageThreshold="100000" recordFiltered="true" timeDisplay="relativeToFirstTrace"
+                            showSignature="true" showClassNamesForMethods="false"/>
+                <threadsHistoryView timeGridlines="3" bookmarks="3" scaleToFit="false" background="2"/>
+                <threadsMonitorView showRunnable="true" showWaitingOnCondition="true" showWaitingOnMonitor="true"
+                                    showNetIo="true" showDead="false"/>
+                <methodGraph colorInformation="1" colorScaleBase="1" showSignature="false"
+                             usePercentageThreshold="false" percentageThreshold="0.01" showAverageTimes="false"/>
+                <classMonitorView primaryMeasure="1" sizeScale="1" diffColumnOrder="2" differenceDisplayType="1"/>
+                <allocationsMonitor cumulate="true" showPercentageBar="true" alwaysShowFQN="true"
+                                    alwaysShowSignature="false" percentageBase="2" scale="1"/>
+                <allocationHotspots diffColumnOrder="2" differenceDisplayType="1" showPercentageBar="true"
+                                    alwaysShowFQN="true" alwaysShowSignature="false" percentageBase="2" scale="1"/>
+                <heapWalkerView showViewHelperDialog="true" showSelectionSteps="false"/>
+                <heapWalkerClassesView primaryMeasure="1" sizeScale="1"/>
+                <heapWalkerAllocationsView cumulate="true" showPercentageBar="true" alwaysShowFQN="true"
+                                           alwaysShowSignature="false" percentageBase="2" scale="1"/>
+                <heapWalkerBiggestObjectsView sizeScale="1" showObjectIds="false" showRetainedSizeBar="true"
+                                              percentageBase="topLevel"/>
+                <heapWalkerReferencesView primaryMeasure="1" sizeScale="1" showObjectIds="false"
+                                          showObjectIdsInTree="true" showDeclaringClassesInTree="true"/>
+                <heapWalkerChronoView timeGridlines="3" bookmarks="3" scaleToFit="false" verticalGridlines="3"/>
+                <classTracker timeGridlines="3" bookmarks="3" scaleToFit="false" verticalGridlines="3"
+                              objectScopeSelection="all" livenessTypeSelection="Live objects">
+                    <selections/>
+                </classTracker>
+                <objectStatistics timeGridlines="3" bookmarks="3" scaleToFit="false" verticalGridlines="3"
+                                  graphType="1"/>
+                <classStatistics timeGridlines="3" bookmarks="3" scaleToFit="false" verticalGridlines="3"
+                                 graphType="1"/>
+                <recordedThroughput timeGridlines="3" bookmarks="3" scaleToFit="false" verticalGridlines="3"/>
+                <heapStatistics timeGridlines="3" bookmarks="3" scaleToFit="false" verticalGridlines="3" graphType="1"/>
+                <threadsStatistics timeGridlines="3" bookmarks="3" scaleToFit="false" verticalGridlines="3"
+                                   graphType="1"/>
+                <gcActivity timeGridlines="3" bookmarks="3" scaleToFit="false" verticalGridlines="3" graphType="1"/>
+                <cpuLoad timeGridlines="3" bookmarks="3" scaleToFit="false" verticalGridlines="3" graphType="1"/>
+            </viewSettings>
+            <viewFilters/>
+            <threadFilters/>
+            <classPath/>
+            <sourcePath/>
+            <libraryPath/>
+        </session>
+    </sessions>
+    <mementos/>
+</config>
+

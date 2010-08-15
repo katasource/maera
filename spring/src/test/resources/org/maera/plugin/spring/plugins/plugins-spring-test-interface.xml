@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:plugin="http://atlassian.com/schema/spring/plugin"
+       xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+http://atlassian.com/schema/spring/plugin http://atlassian.com/schema/spring/plugin.xsd
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean name="foo" class="com.atlassian.plugin.spring.FooableBean" plugin:available="true">
+        <plugin:interface>org.springframework.beans.factory.BeanFactoryAware</plugin:interface>
+    </bean>
+
+    <bean name="fooMultipleInterface" class="com.atlassian.plugin.spring.FooableBean" plugin:available="true">
+        <plugin:interface>org.springframework.beans.factory.BeanFactoryAware</plugin:interface>
+        <plugin:interface>com.atlassian.plugin.spring.Barable</plugin:interface>
+    </bean>
+
+</beans>

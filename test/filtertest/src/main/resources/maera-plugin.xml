@@ -1,0 +1,100 @@
+<atlassian-plugin name="Test Filter Plugin" key="test.atlassian.filter.plugin" pluginsVersion="2">
+    <plugin-info>
+        <version>${project.version}</version>
+        <application-version min="3.0" max="3.1"/>
+        <vendor name="Atlassian Software Systems Pty Ltd" url="http://www.atlassian.com"/>
+    </plugin-info>
+
+    <!-- the screwy/random ordering of definition the filters in this file is on purpose so we can be sure 
+         the order in which they are discovered isn't  affecting the order in which they are processed  -->
+
+    <servlet-filter name="filter.top.20" key="filter.top.20"
+                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    weight="20" location="top">
+        <url-pattern>/*</url-pattern>
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>plugin filter - top - 20</param-value>
+        </init-param>
+    </servlet-filter>
+
+    <servlet-filter name="filter.bottom.20" key="filter.bottom.20"
+                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    weight="20" location="bottom">
+        <url-pattern>/*</url-pattern>
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>plugin filter - bottom - 20</param-value>
+        </init-param>
+    </servlet-filter>
+
+    <servlet-filter name="filter.top.30" key="filter.top.30"
+                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    weight="30" location="top">
+        <url-pattern>/*</url-pattern>
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>plugin filter - top - 30</param-value>
+        </init-param>
+    </servlet-filter>
+
+    <servlet-filter name="filter.middle.20" key="filter.middle.20"
+                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    weight="20" location="middle">
+        <url-pattern>/*</url-pattern>
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>plugin filter - middle - 20</param-value>
+        </init-param>
+    </servlet-filter>
+
+    <servlet-filter name="filter.top.10" key="filter.top.10"
+                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    weight="10" location="top">
+        <url-pattern>/*</url-pattern>
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>plugin filter - top - 10</param-value>
+        </init-param>
+    </servlet-filter>
+
+    <servlet-filter name="filter.bottom.10" key="filter.bottom.10"
+                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    weight="10" location="bottom">
+        <url-pattern>/*</url-pattern>
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>plugin filter - bottom - 10</param-value>
+        </init-param>
+    </servlet-filter>
+
+    <servlet-filter name="filter.middle.30" key="filter.middle.30"
+                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    weight="30" location="middle">
+        <url-pattern>/*</url-pattern>
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>plugin filter - middle - 30</param-value>
+        </init-param>
+    </servlet-filter>
+
+    <servlet-filter name="filter.bottom.30" key="filter.bottom.30"
+                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    weight="30" location="bottom">
+        <url-pattern>/*</url-pattern>
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>plugin filter - bottom - 30</param-value>
+        </init-param>
+    </servlet-filter>
+
+    <servlet-filter name="filter.middle.10" key="filter.middle.10"
+                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    weight="10" location="middle">
+        <url-pattern>/*</url-pattern>
+        <init-param>
+            <param-name>name</param-name>
+            <param-value>plugin filter - middle - 10</param-value>
+        </init-param>
+    </servlet-filter>
+</atlassian-plugin>

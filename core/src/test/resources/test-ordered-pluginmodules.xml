@@ -1,0 +1,5 @@
+<atlassian-plugin name="Test Plugin" i18n-name-key="test.atlassian.plugin.i18n" key="test.atlassian.plugin">
+    <animal key="yogi1" name="Bear Animal" class="com.atlassian.plugin.mock.MockBear"/>
+    <animal key="yogi2" name="Bear Animal" class="com.atlassian.plugin.mock.MockBear"/>
+    <animal key="yogi3" name="Bear Animal" class="com.atlassian.plugin.mock.MockBear"/>
+</atlassian-plugin>

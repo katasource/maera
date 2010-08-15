@@ -1,0 +1,4 @@
+# Simple test file
+foo.bar
+foo.baz
+

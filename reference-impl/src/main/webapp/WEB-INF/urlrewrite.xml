@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE urlrewrite PUBLIC "-//tuckey.org//DTD UrlRewrite 2.3//EN" "http://tuckey.org/res/dtds/urlrewrite2.3.dtd">
+
+<urlrewrite>
+    <rule>
+        <from>^/s/(.*)/_/(.*)</from>
+        <run class="com.atlassian.plugin.servlet.ResourceDownloadUtils" method="addCachingHeaders"/>
+        <to type="forward">/$2</to>
+    </rule>
+</urlrewrite>
+    

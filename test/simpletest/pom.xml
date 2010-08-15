@@ -1,0 +1,45 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.maera</groupId>
+        <artifactId>maera-test</artifactId>
+        <version>0.1</version>
+    </parent>
+
+    <artifactId>maera-test-simpletest</artifactId>
+    <name>Maera :: Test :: Simple Test Plugin</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.maera</groupId>
+            <artifactId>maera-test-innerjarone</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.maera</groupId>
+            <artifactId>maera-test-innerjartwo</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/META-INF/lib</outputDirectory>
+                            <includeArtifactIds>maera-test-innerjarone,maera-test-innerjartwo</includeArtifactIds>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

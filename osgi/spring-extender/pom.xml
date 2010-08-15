@@ -1,0 +1,86 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.maera</groupId>
+        <artifactId>maera-root</artifactId>
+        <version>0.1</version>
+    </parent>
+
+    <artifactId>maera-osgi-spring-extender</artifactId>
+    <name>Maera :: OSGi :: Spring DM Extender</name>
+    <description>
+        Extends Spring DM extender to integrate with plugin event system. To be replaced when Felix supports fragments.
+    </description>
+    <packaging>bundle</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.osgi</groupId>
+            <artifactId>spring-osgi-extender</artifactId>
+            <version>${springDmVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.maera</groupId>
+            <artifactId>maera-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.maera</groupId>
+            <artifactId>maera-osgi-events</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.main</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.shell</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.shell</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.shell.tui</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.bundlerepository</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.0.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Fragment-Host>org.springframework.osgi.extender</Fragment-Host>
+                        <Bundle-SymbolicName>org.maera.plugin.osgi.spring</Bundle-SymbolicName>
+                        <Import-Package>
+                            org.slf4j;version="[1.5,2.0)",
+                            org.osgi.framework;version=1.3,
+                            org.springframework.context*;version="[2.5.6,4.0)",
+                            org.springframework.util;version="[2.5.6,4.0)",
+                            org.springframework.beans.factory.xml;version="[2.5.6,4.0)",
+                            org.springframework.core*;version="[2.5.6,4.0)",
+                            org.springframework.osgi*;version="[1.2.1,1.2.1]",
+                        </Import-Package>
+                        <Export-Package/>
+                        <Private-Package>org.maera.plugin.osgi.spring,org.springframework.osgi.maera</Private-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

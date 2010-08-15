@@ -1,0 +1,5 @@
+<atlassian-plugin key="test.bad.plugin" name="Bad Plugin">
+    <mineral key="gold" name="Bar" class="com.atlassian.plugin.loaders.DummyClassOne">
+        <weight>20</weight>
+    </mineral>
+</atlassian-plugin>

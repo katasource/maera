@@ -1,0 +1,19 @@
+<atlassian-plugin name="Test Class Loaded Plugin 2" key="test.atlassian.plugin.classloaded2">
+    <plugin-info>
+        <description>This plugin descriptor is used for testing dynamic plugins!</description>
+        <version>1.0</version>
+        <application-version min="3.0" max="3.1"/>
+        <vendor name="Atlassian Software Systems Pty Ltd" url="http://www.atlassian.com"/>
+    </plugin-info>
+
+    <animal key="pooh" name="Pooh Bear" class="com.atlassian.plugin.mock.MockPooh">
+        <description>A plugin module to describe a special bear</description>
+
+        <param name="height" value="5"/>
+        <param name="colour">light brown</param>
+
+        <resource type="velocity" name="view" location="/bear/pooh.vm"/>
+    </animal>
+
+    <resource type="download" name="icon.gif" location="/icon.gif"/>
+</atlassian-plugin>

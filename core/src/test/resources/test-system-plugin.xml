@@ -1,0 +1,28 @@
+<atlassian-plugin name="Test Plugin" key="test.atlassian.plugin" system="true">
+    <plugin-info>
+        <description>This plugin descriptor is just used for test purposes!</description>
+        <version>1.0</version>
+        <application-version min="3.0" max="3.1"/>
+        <vendor name="Atlassian Software Systems Pty Ltd" url="http://www.atlassian.com"/>
+    </plugin-info>
+
+    <animal key="bear" name="Bear Animal" class="com.atlassian.plugin.mock.MockBear">
+        <description>A plugin module to describe a bear</description>
+
+        <param name="height" value="20"/>
+        <param name="colour">brown</param>
+
+        <resource type="velocity" name="view" location="/bear/display.vm"/>
+        <resource type="velocity" name="search" location="/bear/display.vm">
+            <param name="max-results" value="20"/>
+            <param name="sort">relevance</param>
+        </resource>
+        <resource type="velocity" name="edit">Show an input box here.</resource>
+    </animal>
+
+    <mineral key="gold" name="Bar" class="com.atlassian.plugin.mock.MockGold">
+        <weight>20</weight>
+    </mineral>
+
+    <resource type="download" name="icon.gif" location="/icon.gif"/>
+</atlassian-plugin>
