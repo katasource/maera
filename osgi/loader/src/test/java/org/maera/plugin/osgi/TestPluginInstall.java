@@ -37,13 +37,13 @@ public class TestPluginInstall extends PluginInContainerTestBase {
         factory.addModuleDescriptor("object", ObjectModuleDescriptor.class);
 
         final File pluginJar = new PluginJarBuilder("testUpgradeOfBundledPlugin")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.bundled.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.bundled.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <object key='obj' class='my.Foo'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.Foo",
                         "package my;",
                         "public class Foo {}")
@@ -54,13 +54,13 @@ public class TestPluginInstall extends PluginInContainerTestBase {
         assertEquals("my.Foo", pluginManager.getPlugin("test.bundled.plugin").getModuleDescriptor("obj").getModule().getClass().getName());
 
         final File pluginJar2 = new PluginJarBuilder("testUpgradeOfBundledPlugin")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.bundled.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.bundled.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <object key='obj' class='my.Bar'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.Bar",
                         "package my;",
                         "public class Bar {}")
@@ -76,13 +76,13 @@ public class TestPluginInstall extends PluginInContainerTestBase {
 
     public void testUpgradeOfBadPlugin() throws Exception {
         new PluginJarBuilder("testUpgradeOfBundledPlugin-old")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.bundled.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.bundled.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component key='obj' class='my.Foo'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.Foo",
                         "package my;",
                         "public class Foo {",
@@ -90,13 +90,13 @@ public class TestPluginInstall extends PluginInContainerTestBase {
                         "}")
                 .build(pluginsDir);
         new PluginJarBuilder("testUpgradeOfBundledPlugin-new")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.bundled.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.bundled.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>2.0</version>",
                         "    </plugin-info>",
                         "    <component key='obj' class='my.Foo'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.Foo",
                         "package my;",
                         "public class Foo {",
@@ -122,17 +122,17 @@ public class TestPluginInstall extends PluginInContainerTestBase {
         }, factory);
 
         final File pluginJar = new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component-import key='comp1' interface='org.maera.plugin.osgi.SomeInterface' />",
-                        "    <dummy key='dum1'/>", "</atlassian-plugin>")
+                        "    <dummy key='dum1'/>", "</maera-plugin>")
                 .build();
         final File pluginJar2 = new PluginJarBuilder("second")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
@@ -140,7 +140,7 @@ public class TestPluginInstall extends PluginInContainerTestBase {
                         "    <component-import key='comp2' interface='org.maera.plugin.osgi.AnotherInterface' />",
                         "    <dummy key='dum1'/>",
                         "    <dummy key='dum2'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
@@ -164,13 +164,13 @@ public class TestPluginInstall extends PluginInContainerTestBase {
         }, factory);
 
         final File pluginJar = new PluginJarBuilder("testUpgradeOfBundledPlugin")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='hostClass' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='hostClass' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <object key='hostClass' class='org.maera.plugin.osgi.HostClassUsingHostComponentConstructor'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
@@ -194,13 +194,13 @@ public class TestPluginInstall extends PluginInContainerTestBase {
         }, factory);
 
         final File pluginJar = new PluginJarBuilder("testUpgradeOfBundledPlugin")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='hostClass' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='hostClass' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <object key='hostClass' class='org.maera.plugin.osgi.HostClassUsingHostComponentSetter'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
@@ -251,25 +251,25 @@ public class TestPluginInstall extends PluginInContainerTestBase {
         }, factory);
 
         File pluginJar = new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component-import key='comp1' interface='org.maera.plugin.osgi.SomeInterface' />",
                         "    <dummy key='dum1'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
         final File pluginJar2 = new PluginJarBuilder("second")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component-import key='comp1' interface='org.maera.plugin.osgi.SomeInterface' />",
                         "    <dummy key='dum1'/>",
                         "    <dummy key='dum2'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
@@ -315,14 +315,14 @@ public class TestPluginInstall extends PluginInContainerTestBase {
             }
         }, factory);
 
-        final File pluginJar = new PluginJarBuilder("first").addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>", "    <plugin-info>", "        <version>1.0</version>",
+        final File pluginJar = new PluginJarBuilder("first").addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>", "    <plugin-info>", "        <version>1.0</version>",
                 "    </plugin-info>", "    <component key='comp1' interface='org.maera.plugin.osgi.SomeInterface' class='my.ServiceImpl' />",
-                "</atlassian-plugin>").addFormattedJava("my.ServiceImpl", "package my;",
+                "</maera-plugin>").addFormattedJava("my.ServiceImpl", "package my;",
                 "public class ServiceImpl implements org.maera.plugin.osgi.SomeInterface {}").build();
-        final File pluginJar2 = new PluginJarBuilder("second").addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>", "    <plugin-info>", "        <version>1.0</version>",
-                "    </plugin-info>", "</atlassian-plugin>").build();
+        final File pluginJar2 = new PluginJarBuilder("second").addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>", "    <plugin-info>", "        <version>1.0</version>",
+                "    </plugin-info>", "</maera-plugin>").build();
 
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
         assertEquals(1, pluginManager.getEnabledPlugins().size());
@@ -356,13 +356,13 @@ public class TestPluginInstall extends PluginInContainerTestBase {
                 .build();
 
         File pluginJar = new PluginJarBuilder("asecond")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='second' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='second' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions><Import-Package>javax.servlet.http;version='[2.3,2.3]',javax.servlet;version='[2.3,2.3]',*</Import-Package></bundle-instructions>",
                         "    </plugin-info>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("second.MyImpl",
                         "package second;",
                         "public class MyImpl {",
@@ -388,8 +388,8 @@ public class TestPluginInstall extends PluginInContainerTestBase {
     public void testPluginWithHostComponentUsingOldPackageImport() throws Exception {
         final PluginJarBuilder firstBuilder = new PluginJarBuilder("oldpkgfirst");
         firstBuilder
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='first' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='first' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions>",
@@ -399,7 +399,7 @@ public class TestPluginInstall extends PluginInContainerTestBase {
                         "    <servlet key='foo' class='second.MyServlet'>",
                         "       <url-pattern>/foo</url-pattern>",
                         "    </servlet>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("first.MyInterface",
                         "package first;",
                         "public interface MyInterface {}")
@@ -435,15 +435,15 @@ public class TestPluginInstall extends PluginInContainerTestBase {
                 .build(pluginsDir);
 
         new PluginJarBuilder("asecond", firstBuilder.getClassLoader())
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='asecond' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='asecond' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <servlet key='foo' class='second.MyServlet'>",
                         "       <url-pattern>/foo</url-pattern>",
                         "    </servlet>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("second.MyServlet",
                         "package second;",
                         "public class MyServlet extends javax.servlet.http.HttpServlet implements first.MyInterface {}")
@@ -472,15 +472,15 @@ public class TestPluginInstall extends PluginInContainerTestBase {
                 .build(pluginsDir);
 
         new PluginJarBuilder("asecond", firstBuilder.getClassLoader())
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='asecond' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='asecond' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <servlet key='foo' class='second.MyServlet'>",
                         "       <url-pattern>/foo</url-pattern>",
                         "    </servlet>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("second.MyServlet",
                         "package second;",
                         "import org.maera.plugin.osgi.Callable2;",
@@ -549,23 +549,23 @@ public class TestPluginInstall extends PluginInContainerTestBase {
 
     public void testLotsOfHostComponents() throws Exception {
         new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <dummy key='dum1'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build(pluginsDir);
         new PluginJarBuilder("second")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.plugin2' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin2' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <dummy key='dum1'/>",
                         "    <dummy key='dum2'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build(pluginsDir);
 
         final DefaultModuleDescriptorFactory factory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
@@ -587,13 +587,13 @@ public class TestPluginInstall extends PluginInContainerTestBase {
     public void testInstallWithManifestNoSpringContextAndComponents() throws Exception {
         final BooleanFlag flag = new DefaultBooleanFlag(false);
         new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='first' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='first' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component key='foo' class='first.MyClass' interface='first.MyInterface' public='true'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("first.MyInterface",
                         "package first;",
                         "public interface MyInterface {}")
@@ -633,12 +633,12 @@ public class TestPluginInstall extends PluginInContainerTestBase {
             pluginsDir.mkdir();
 
             new PluginJarBuilder("strangePath")
-                    .addFormattedResource("atlassian-plugin.xml",
-                            "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                    .addFormattedResource("maera-plugin.xml",
+                            "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                             "    <plugin-info>",
                             "        <version>1.0</version>",
                             "    </plugin-info>",
-                            "</atlassian-plugin>")
+                            "</maera-plugin>")
                     .build(pluginsDir);
 
             final DefaultModuleDescriptorFactory factory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
@@ -657,18 +657,18 @@ public class TestPluginInstall extends PluginInContainerTestBase {
 
     public void testInstallWithUnsatisifedDependency() throws Exception {
         File plugin = new PluginJarBuilder("unsatisifiedDependency")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component-import key='foo' interface='java.util.concurrent.Callable' />",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build(pluginsDir);
 
         long start = System.currentTimeMillis();
         // Set dev mode temporarily
-        System.setProperty("atlassian.dev.mode", "true");
+        System.setProperty("maera.dev.mode", "true");
         try {
             initPluginManager();
 
@@ -676,7 +676,7 @@ public class TestPluginInstall extends PluginInContainerTestBase {
         }
         finally {
             // Undo dev mode
-            System.setProperty("atlassian.dev.mode", "false");
+            System.setProperty("maera.dev.mode", "false");
         }
     }
 
@@ -703,18 +703,18 @@ public class TestPluginInstall extends PluginInContainerTestBase {
     }
 
     public void testInstallPluginTakesTooLong() throws Exception {
-        System.setProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT, "3");
+        System.setProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT, "3");
         try {
             final PluginJarBuilder builder = new PluginJarBuilder("first")
-                    .addFormattedResource("atlassian-plugin.xml",
-                            "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                    .addFormattedResource("maera-plugin.xml",
+                            "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                             "    <plugin-info>",
                             "        <version>1.0</version>",
                             "    </plugin-info>",
                             "    <component key='svc' class='my.ServiceImpl' public='true'>",
                             "    <interface>my.Service</interface>",
                             "    </component>",
-                            "</atlassian-plugin>")
+                            "</maera-plugin>")
                     .addFormattedJava("my.Service",
                             "package my;",
                             "public interface Service {",
@@ -739,12 +739,12 @@ public class TestPluginInstall extends PluginInContainerTestBase {
             assertEquals(0, pluginManager.getEnabledPlugins().size());
         }
         finally {
-            System.clearProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT);
+            System.clearProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT);
         }
     }
 
     public void testPersistTimeoutSystemProperty() throws Exception {
-        System.setProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT, "300");
+        System.setProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT, "300");
         try {
             final File propertiesFile = new File(cacheDir, ".properties");
 
@@ -792,12 +792,12 @@ public class TestPluginInstall extends PluginInContainerTestBase {
             assertTrue(testFile.exists());
         }
         finally {
-            System.clearProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT);
+            System.clearProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT);
         }
     }
 
     public void testDeleteTimeoutFileWhenNoSystemPropertySpecified() throws Exception {
-        System.setProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT, "300");
+        System.setProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT, "300");
         try {
             final File propertiesFile = new File(cacheDir, ".properties");
 
@@ -823,7 +823,7 @@ public class TestPluginInstall extends PluginInContainerTestBase {
 
             assertTrue(propertiesFile.exists());
 
-            System.clearProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT);
+            System.clearProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT);
             initPluginManager();
             pluginManager.installPlugin(new JarPluginArtifact(jar));
 
@@ -834,7 +834,7 @@ public class TestPluginInstall extends PluginInContainerTestBase {
             assertEquals("*;create-asynchrously:=false", headers.get("Spring-Context"));
         }
         finally {
-            System.clearProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT);
+            System.clearProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT);
         }
     }
 
@@ -850,7 +850,7 @@ public class TestPluginInstall extends PluginInContainerTestBase {
     }
 
     public void testPersistTimeoutSystemPropertyUpdateExistingTimeout() throws Exception {
-        System.setProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT, "300");
+        System.setProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT, "300");
         try {
             final File dummySpringXMLFile = File.createTempFile("temp", "account-data-context.xml", new File(System.getProperty("java.io.tmpdir")));
             FileWriter fileWriter = new FileWriter(dummySpringXMLFile);
@@ -903,7 +903,7 @@ public class TestPluginInstall extends PluginInContainerTestBase {
             assertTrue(testFile.createNewFile());
             assertTrue(testFile.exists());
 
-            System.setProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT, "301");
+            System.setProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT, "301");
 
             initPluginManager();
             pluginManager.installPlugin(new JarPluginArtifact(jar));
@@ -917,7 +917,7 @@ public class TestPluginInstall extends PluginInContainerTestBase {
             assertEquals("301", properties.getProperty("spring.timeout"));
         }
         finally {
-            System.clearProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT);
+            System.clearProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT);
         }
     }
 

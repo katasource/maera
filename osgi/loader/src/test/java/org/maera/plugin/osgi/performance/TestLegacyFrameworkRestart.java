@@ -11,13 +11,13 @@ import java.io.IOException;
 public class TestLegacyFrameworkRestart extends FrameworkRestartTestBase {
     protected void addPlugin(File dir, int x) throws IOException {
         new PluginJarBuilder("restart-test")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin" + x + "'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin" + x + "'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <dummy key='dum1'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build(dir);
     }
 

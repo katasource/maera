@@ -1,6 +1,6 @@
-<atlassian-plugin name="Test Plugin" i18n-name-key="test.atlassian.plugin.i18n" key="test.atlassian.plugin">
+<maera-plugin name="Test Plugin" i18n-name-key="test.maera.plugin.i18n" key="test.maera.plugin">
     <plugin-info>
-        <description key="test.atlassian.plugin.desc.i18n">This plugin descriptor is just used for test purposes!
+        <description key="test.maera.plugin.desc.i18n">This plugin descriptor is just used for test purposes!
         </description>
         <version>1.1</version>
         <application-version min="3.0" max="3.1"/>
@@ -8,7 +8,7 @@
         <param name="arbitrary.parameter">brown</param>
     </plugin-info>
 
-    <animal key="bear" name="Bear Animal" class="com.atlassian.plugin.mock.MockBear">
+    <animal key="bear" name="Bear Animal" class="org.maera.plugin.mock.MockBear">
         <description>A plugin module to describe a bear</description>
 
         <param name="height" value="20"/>
@@ -22,9 +22,9 @@
         <resource type="velocity" name="edit">Show an input box here.</resource>
     </animal>
 
-    <mineral key="gold" name="Bar" class="com.atlassian.plugin.mock.MockGold">
+    <mineral key="gold" name="Bar" class="org.maera.plugin.mock.MockGold">
         <weight>20</weight>
     </mineral>
 
     <resource type="download" name="icon.gif" location="/icon.gif"/>
-</atlassian-plugin>
+</maera-plugin>

@@ -40,11 +40,11 @@ public class TestSinglePluginLoader extends TestCase {
         // test the plugin information
         final Plugin plugin = plugins.iterator().next();
         assertTrue(plugin instanceof UnloadablePlugin);
-        assertEquals("test.atlassian.plugin", plugin.getKey());
+        assertEquals("test.maera.plugin", plugin.getKey());
     }
 
     public void testAtlassianPlugin() throws Exception {
-        final SinglePluginLoader loader = new SinglePluginLoader("test-atlassian-plugin.xml");
+        final SinglePluginLoader loader = new SinglePluginLoader("test-maera-plugin.xml");
         final DefaultModuleDescriptorFactory moduleDescriptorFactory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
@@ -57,11 +57,11 @@ public class TestSinglePluginLoader extends TestCase {
         final Plugin plugin = (Plugin) plugins.iterator().next();
         enableModules(plugin);
         assertEquals("Test Plugin", plugin.getName());
-        assertEquals("test.atlassian.plugin", plugin.getKey());
+        assertEquals("test.maera.plugin", plugin.getKey());
         assertNotNull(plugin.getPluginInformation());
         assertEquals("1.0", plugin.getPluginInformation().getVersion());
-        assertEquals("test.atlassian.plugin.i18n", plugin.getI18nNameKey());
-        assertEquals("test.atlassian.plugin.desc.i18n", plugin.getPluginInformation().getDescriptionKey());
+        assertEquals("test.maera.plugin.i18n", plugin.getI18nNameKey());
+        assertEquals("test.maera.plugin.desc.i18n", plugin.getPluginInformation().getDescriptionKey());
         assertEquals("This plugin descriptor is just used for test purposes!", plugin.getPluginInformation().getDescription());
         assertEquals("Atlassian Software Systems Pty Ltd", plugin.getPluginInformation().getVendorName());
         assertEquals("http://www.atlassian.com", plugin.getPluginInformation().getVendorUrl());
@@ -70,14 +70,14 @@ public class TestSinglePluginLoader extends TestCase {
         assertEquals(4, plugin.getModuleDescriptors().size());
 
         final ModuleDescriptor bearDescriptor = plugin.getModuleDescriptor("bear");
-        assertEquals("test.atlassian.plugin:bear", bearDescriptor.getCompleteKey());
+        assertEquals("test.maera.plugin:bear", bearDescriptor.getCompleteKey());
         assertEquals("bear", bearDescriptor.getKey());
         assertEquals("Bear Animal", bearDescriptor.getName());
         assertEquals(MockBear.class, bearDescriptor.getModuleClass());
         assertEquals("A plugin module to describe a bear", bearDescriptor.getDescription());
         assertTrue(bearDescriptor.isEnabledByDefault());
-        assertEquals("test.atlassian.module.bear.name", bearDescriptor.getI18nNameKey());
-        assertEquals("test.atlassian.module.bear.description", bearDescriptor.getDescriptionKey());
+        assertEquals("test.maera.module.bear.name", bearDescriptor.getI18nNameKey());
+        assertEquals("test.maera.module.bear.description", bearDescriptor.getDescriptionKey());
 
         final Iterable resources = bearDescriptor.getResourceDescriptors();
         assertEquals(3, Iterables.size(resources));
@@ -88,7 +88,7 @@ public class TestSinglePluginLoader extends TestCase {
         final List goldDescriptors = plugin.getModuleDescriptorsByModuleClass(MockGold.class);
         assertEquals(1, goldDescriptors.size());
         final ModuleDescriptor goldDescriptor = (ModuleDescriptor) goldDescriptors.get(0);
-        assertEquals("test.atlassian.plugin:gold", goldDescriptor.getCompleteKey());
+        assertEquals("test.maera.plugin:gold", goldDescriptor.getCompleteKey());
         assertEquals(new MockGold(20), goldDescriptor.getModule());
         assertEquals(goldDescriptors, plugin.getModuleDescriptorsByModuleClass(MockMineral.class));
 
@@ -169,13 +169,13 @@ public class TestSinglePluginLoader extends TestCase {
 
     public void testUnknownPluginModule() throws PluginParseException {
         final SinglePluginLoader loader = new SinglePluginLoader("test-bad-plugin.xml");
-        final Collection plugins = loader.loadAllPlugins(new DefaultModuleDescriptorFactory(new DefaultHostContainer()));
-        final List pluginsList = new ArrayList(plugins);
+        final Collection<Plugin> plugins = loader.loadAllPlugins(new DefaultModuleDescriptorFactory(new DefaultHostContainer()));
+        final List<Plugin> pluginsList = new ArrayList<Plugin>(plugins);
 
         assertEquals(1, pluginsList.size());
 
-        final Plugin plugin = (Plugin) plugins.iterator().next();
-        final List moduleList = new ArrayList(plugin.getModuleDescriptors());
+        final Plugin plugin = plugins.iterator().next();
+        final List<ModuleDescriptor<?>> moduleList = new ArrayList<ModuleDescriptor<?>>(plugin.getModuleDescriptors());
 
         // The module that had the problem should be an
         // UnrecognisedModuleDescriptor
@@ -185,7 +185,7 @@ public class TestSinglePluginLoader extends TestCase {
     // PLUG-5
 
     public void testPluginWithOnlyPermittedModules() throws PluginParseException {
-        final SinglePluginLoader loader = new SinglePluginLoader("test-atlassian-plugin.xml");
+        final SinglePluginLoader loader = new SinglePluginLoader("test-maera-plugin.xml");
 
         // Define the module descriptor factory
         final DefaultModuleDescriptorFactory moduleDescriptorFactory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
@@ -193,7 +193,7 @@ public class TestSinglePluginLoader extends TestCase {
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
 
         // Exclude mineral
-        final List permittedList = new ArrayList();
+        final List<String> permittedList = new ArrayList<String>();
         permittedList.add("animal");
         moduleDescriptorFactory.setPermittedModuleKeys(permittedList);
 
@@ -213,14 +213,14 @@ public class TestSinglePluginLoader extends TestCase {
     // PLUG-5
 
     public void testPluginWithOnlyPermittedModulesAndMissingModuleDescriptor() throws PluginParseException {
-        final SinglePluginLoader loader = new SinglePluginLoader("test-atlassian-plugin.xml");
+        final SinglePluginLoader loader = new SinglePluginLoader("test-maera-plugin.xml");
 
         // Define the module descriptor factory
         final DefaultModuleDescriptorFactory moduleDescriptorFactory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
 
         // Exclude mineral
-        final List permittedList = new ArrayList();
+        final List<String> permittedList = new ArrayList<String>();
         permittedList.add("animal");
         moduleDescriptorFactory.setPermittedModuleKeys(permittedList);
 

@@ -26,14 +26,14 @@ public class TestComponentImportSpringStage extends TestCase {
         final ComponentImportSpringStage stage = new ComponentImportSpringStage();
 
         // interface as attribute
-        Element pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element component = pluginRoot.addElement("component-import");
         component.addAttribute("key", "foo");
         component.addAttribute("interface", "my.Foo");
         SpringTransformerTestHelper.transform(stage, pluginRoot, "osgi:reference[@id='foo']/osgi:interfaces/beans:value/text()='my.Foo'");
 
         // interface as element
-        pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         component = pluginRoot.addElement("component-import");
         component.addAttribute("key", "foo");
         final Element inf = component.addElement("interface");
@@ -45,7 +45,7 @@ public class TestComponentImportSpringStage extends TestCase {
     public void testTransformWithCustomFilter() throws IOException, DocumentException {
         final ComponentImportSpringStage stage = new ComponentImportSpringStage();
 
-        Element pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element component = pluginRoot.addElement("component-import");
         component.addAttribute("key", "foo");
         component.addAttribute("interface", "my.Foo");
@@ -56,14 +56,14 @@ public class TestComponentImportSpringStage extends TestCase {
     public void testTransformForOneApp() throws IOException, DocumentException {
         final ComponentImportSpringStage stage = new ComponentImportSpringStage();
 
-        Element pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element component = pluginRoot.addElement("component-import");
         component.addAttribute("key", "foo");
         component.addAttribute("interface", "my.Foo");
         component.addAttribute("application", "bob");
         SpringTransformerTestHelper.transform(stage, pluginRoot, "not(osgi:reference[@id='foo']/osgi:interfaces/beans:value/text()='my.Foo')");
 
-        pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         component = pluginRoot.addElement("component-import");
         component.addAttribute("key", "foo");
         component.addAttribute("interface", "my.Foo");
@@ -73,8 +73,8 @@ public class TestComponentImportSpringStage extends TestCase {
 
     public void testTransformImportEvenUnusedPackages() throws Exception, DocumentException {
         final ComponentImportSpringStage stage = new ComponentImportSpringStage();
-        final File jar = new PluginJarBuilder().addFormattedResource("atlassian-plugin.xml", "<atlassian-plugin>",
-                "  <component-import key='foo' interface='org.maera.plugin.osgi.SomeInterface' />", "</atlassian-plugin>").build();
+        final File jar = new PluginJarBuilder().addFormattedResource("maera-plugin.xml", "<maera-plugin>",
+                "  <component-import key='foo' interface='org.maera.plugin.osgi.SomeInterface' />", "</maera-plugin>").build();
 
         OsgiContainerManager osgiContainerManager = mock(OsgiContainerManager.class);
         when(osgiContainerManager.getRegisteredServices()).thenReturn(new ServiceReference[0]);
@@ -88,8 +88,8 @@ public class TestComponentImportSpringStage extends TestCase {
         stage.log = mock(Logger.class);
         when(stage.log.isDebugEnabled()).thenReturn(true);
         final File jar = new PluginJarBuilder()
-                .addFormattedResource("atlassian-plugin.xml", "<atlassian-plugin>",
-                        "  <component-import key='foo' interface='my.UnknownService' />", "</atlassian-plugin>").build();
+                .addFormattedResource("maera-plugin.xml", "<maera-plugin>",
+                        "  <component-import key='foo' interface='my.UnknownService' />", "</maera-plugin>").build();
 
         ServiceReference serviceReference = mock(ServiceReference.class);
         when(serviceReference.getProperty(Constants.OBJECTCLASS)).thenReturn(new String[]{"my.Service"});
@@ -106,8 +106,8 @@ public class TestComponentImportSpringStage extends TestCase {
         final ComponentImportSpringStage stage = new ComponentImportSpringStage();
         stage.log = mock(Logger.class);
         final File jar = new PluginJarBuilder()
-                .addFormattedResource("atlassian-plugin.xml", "<atlassian-plugin>",
-                        "  <component-import key='foo' interface='my.Service' />", "</atlassian-plugin>").build();
+                .addFormattedResource("maera-plugin.xml", "<maera-plugin>",
+                        "  <component-import key='foo' interface='my.Service' />", "</maera-plugin>").build();
 
         ServiceReference serviceReference = mock(ServiceReference.class);
         when(serviceReference.getProperty(Constants.OBJECTCLASS)).thenReturn(new String[]{"my.Service"});

@@ -8,7 +8,7 @@ package org.maera.plugin.servlet.util;
  * or servlet is declared in.
  *
  * @since 2.1.0
- * @deprecated Moved to atlassian-plugins-core: org.maera.plugin.util.ClassLoaderStack. This impl delegates to the new impl.
+ * @deprecated Moved to maera-plugins-core: org.maera.plugin.util.ClassLoaderStack. This impl delegates to the new impl.
  */
 @Deprecated
 public class ClassLoaderStack {

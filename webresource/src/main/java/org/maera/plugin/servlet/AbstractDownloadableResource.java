@@ -29,7 +29,7 @@ abstract class AbstractDownloadableResource implements DownloadableResource {
      * This is a the system environment variable to set to disable the
      * minification naming strategy used to find web resources.
      */
-    private static final String ATLASSIAN_WEBRESOURCE_DISABLE_MINIFICATION = "atlassian.webresource.disable.minification";
+    private static final String MAERA_WEBRESOURCE_DISABLE_MINIFICATION = "maera.webresource.disable.minification";
 
     /* the following protected fields are marked final since 2.5 */
 
@@ -204,7 +204,7 @@ abstract class AbstractDownloadableResource implements DownloadableResource {
         // secondly CHECK if we have a System property set to true that DISABLES
         // the minification
         try {
-            if (Boolean.getBoolean(ATLASSIAN_WEBRESOURCE_DISABLE_MINIFICATION) || Boolean.getBoolean(PluginUtils.ATLASSIAN_DEV_MODE)) {
+            if (Boolean.getBoolean(MAERA_WEBRESOURCE_DISABLE_MINIFICATION) || Boolean.getBoolean(PluginUtils.MAERA_DEV_MODE)) {
                 return false;
             }
         }

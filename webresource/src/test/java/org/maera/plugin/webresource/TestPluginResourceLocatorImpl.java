@@ -62,28 +62,28 @@ public class TestPluginResourceLocatorImpl extends TestCase {
     public void testIsBatchingOff() {
         try {
             System.clearProperty(PluginResourceLocatorImpl.PLUGIN_WEBRESOURCE_BATCHING_OFF);
-            System.setProperty(PluginUtils.ATLASSIAN_DEV_MODE, "true");
+            System.setProperty(PluginUtils.MAERA_DEV_MODE, "true");
             assertTrue(pluginResourceLocator.isBatchingOff());
 
             System.setProperty(PluginResourceLocatorImpl.PLUGIN_WEBRESOURCE_BATCHING_OFF, "true");
-            System.clearProperty(PluginUtils.ATLASSIAN_DEV_MODE);
+            System.clearProperty(PluginUtils.MAERA_DEV_MODE);
             assertTrue(pluginResourceLocator.isBatchingOff());
 
             System.clearProperty(PluginResourceLocatorImpl.PLUGIN_WEBRESOURCE_BATCHING_OFF);
-            System.clearProperty(PluginUtils.ATLASSIAN_DEV_MODE);
+            System.clearProperty(PluginUtils.MAERA_DEV_MODE);
             assertFalse(pluginResourceLocator.isBatchingOff());
 
             System.clearProperty(PluginResourceLocatorImpl.PLUGIN_WEBRESOURCE_BATCHING_OFF);
-            System.setProperty(PluginUtils.ATLASSIAN_DEV_MODE, "false");
+            System.setProperty(PluginUtils.MAERA_DEV_MODE, "false");
             assertFalse(pluginResourceLocator.isBatchingOff());
 
             System.setProperty(PluginResourceLocatorImpl.PLUGIN_WEBRESOURCE_BATCHING_OFF, "false");
-            System.setProperty(PluginUtils.ATLASSIAN_DEV_MODE, "true");
+            System.setProperty(PluginUtils.MAERA_DEV_MODE, "true");
             assertFalse(pluginResourceLocator.isBatchingOff());
         }
         finally {
             System.clearProperty(PluginResourceLocatorImpl.PLUGIN_WEBRESOURCE_BATCHING_OFF);
-            System.clearProperty(PluginUtils.ATLASSIAN_DEV_MODE);
+            System.clearProperty(PluginUtils.MAERA_DEV_MODE);
         }
     }
 

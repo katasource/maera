@@ -19,10 +19,10 @@ public class PluginTestUtils {
 
     static {
         PROJECT_VERSION = System.getProperty("project.version");
-        SIMPLE_TEST_JAR = "atlassian-plugins-simpletest-" + PROJECT_VERSION + ".jar";
-        INNER1_TEST_JAR = "atlassian-plugins-innerjarone-" + PROJECT_VERSION + ".jar";
-        INNER2_TEST_JAR = "atlassian-plugins-innerjartwo-" + PROJECT_VERSION + ".jar";
-        FILTER_TEST_JAR = "atlassian-plugins-filtertest-" + PROJECT_VERSION + ".jar";
+        SIMPLE_TEST_JAR = "maera-test-simpletest-" + PROJECT_VERSION + ".jar";
+        INNER1_TEST_JAR = "maera-test-innerjarone-" + PROJECT_VERSION + ".jar";
+        INNER2_TEST_JAR = "maera-test-innerjartwo-" + PROJECT_VERSION + ".jar";
+        FILTER_TEST_JAR = "maera-test-filtertest-" + PROJECT_VERSION + ".jar";
     }
 
     public static File getFileForResource(final String resourceName) throws URISyntaxException {

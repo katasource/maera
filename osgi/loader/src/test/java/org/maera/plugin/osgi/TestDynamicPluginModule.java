@@ -32,15 +32,15 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         });
 
         final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component key='factory' class='foo.MyModuleDescriptorFactory' public='true'>",
                         "       <interface>org.maera.plugin.ModuleDescriptorFactory</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("foo.MyModuleDescriptor",
                         "package foo;",
                         "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
@@ -56,13 +56,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
                         "}")
                 .build();
         final File pluginJar2 = new PluginJarBuilder("fooUser")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <foo key='dum2'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
@@ -79,13 +79,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         initPluginManager();
 
         final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("foo.MyModuleDescriptor",
                         "package foo;",
                         "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
@@ -93,13 +93,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
                         "}")
                 .build();
         final File pluginJar2 = new PluginJarBuilder("fooUser")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <foo key='dum2'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
@@ -151,13 +151,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         initPluginManager();
 
         final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("foo.MyModuleDescriptor",
                         "package foo;",
                         "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
@@ -165,13 +165,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
                         "}")
                 .build();
         final File pluginJar2 = new PluginJarBuilder("fooUser")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <foo key='dum2'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
@@ -205,13 +205,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
 
     public void testUpgradeOfBundledPluginWithDynamicModule() throws Exception {
         final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("foo.MyModuleDescriptor",
                         "package foo;",
                         "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
@@ -224,22 +224,22 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         assertEquals(1, pluginManager.getEnabledPlugins().size());
 
         final File pluginClientOld = new PluginJarBuilder("fooUser")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <foo key='dum2'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
         final File pluginClientNew = new PluginJarBuilder("fooUser")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>2.0</version>",
                         "    </plugin-info>",
                         "    <foo key='dum2'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
         pluginManager.installPlugins(new JarPluginArtifact(pluginClientOld), new JarPluginArtifact(pluginClientNew));
 
@@ -261,13 +261,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
 
     public void testDynamicPluginModuleNotLinkToAllPlugins() throws Exception {
         new PluginJarBuilder("pluginType")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <module-type key='foo' class='foo.MyModuleDescriptor'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("foo.MyModuleDescriptor",
                         "package foo;",
                         "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
@@ -275,13 +275,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
                         "}")
                 .build(pluginsDir);
         new PluginJarBuilder("fooUser")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <foo key='dum2'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build(pluginsDir);
         new PluginJarBuilder("foootherUser")
                 .addPluginInformation("unusing.plugin", "Unusing plugin", "1.0")
@@ -324,13 +324,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         });
 
         final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("foo.MyModuleDescriptor",
                         "package foo;",
                         "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
@@ -338,13 +338,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
                         "}")
                 .build();
         final File pluginJar2 = new PluginJarBuilder("fooUser")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <foo key='dum2'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
@@ -374,14 +374,14 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         });
 
         final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component key='comp' class='foo.MyComponent' />",
                         "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("foo.MyComponent",
                         "package foo;",
                         "public class MyComponent {",
@@ -395,13 +395,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
 
                 .build();
         final File pluginJar2 = new PluginJarBuilder("fooUser")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <foo key='dum2'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
@@ -432,13 +432,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         });
 
         final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("foo.MyModuleDescriptor",
                         "package foo;",
                         "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
@@ -446,13 +446,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
                         "}")
                 .build();
         final File pluginJar2 = new PluginJarBuilder("fooUser")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <foo key='dum2'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
@@ -511,13 +511,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         });
 
         final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("foo.MyModuleDescriptor",
                         "package foo;",
                         "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
@@ -528,13 +528,13 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
                         "}")
                 .build();
         final File pluginJar2 = new PluginJarBuilder("fooUser")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <foo key='dum2'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
@@ -555,14 +555,14 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         });
 
         final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
                         "    <foo key='dum2' />",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("foo.MyModuleDescriptor",
                         "package foo;",
                         "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
@@ -592,14 +592,14 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         initPluginManager();
 
         final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
                         "    <foo key='dum2' />",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("foo.MyModuleDescriptor",
                         "package foo;",
                         "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",

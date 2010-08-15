@@ -34,13 +34,13 @@ public class TestScanDescriptorForHostClassesStage extends TestCase {
 
     public void testTransform() throws Exception {
         final File plugin = new PluginJarBuilder("plugin")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test Bundle instruction plugin 2' key='test.plugin'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test Bundle instruction plugin 2' key='test.plugin'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <foo key='bar' class='org.maera.plugin.osgi.Foo' />",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         ScanDescriptorForHostClassesStage stage = new ScanDescriptorForHostClassesStage();
@@ -53,15 +53,15 @@ public class TestScanDescriptorForHostClassesStage extends TestCase {
 
     public void testTransformButPackageInPlugin() throws Exception {
         final File plugin = new PluginJarBuilder("plugin")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test Bundle instruction plugin 2' key='test.plugin'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test Bundle instruction plugin 2' key='test.plugin'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <foo key='bar' class='org.maera.plugin.osgi.Foo' />",
-                        "</atlassian-plugin>")
-                .addResource("com/atlassian/plugin/osgi/", "")
-                .addResource("com/atlassian/plugin/osgi/Foo.class", "asd")
+                        "</maera-plugin>")
+                .addResource("org/maera/plugin/osgi/", "")
+                .addResource("org/maera/plugin/osgi/Foo.class", "asd")
                 .build();
 
         ScanDescriptorForHostClassesStage stage = new ScanDescriptorForHostClassesStage();
@@ -74,13 +74,13 @@ public class TestScanDescriptorForHostClassesStage extends TestCase {
 
     public void testTransformIgnoreUnknown() throws Exception {
         final File plugin = new PluginJarBuilder("plugin")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test Bundle instruction plugin 2' key='test.plugin'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test Bundle instruction plugin 2' key='test.plugin'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <foo key='bar' class='blat.Foo' />",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         ScanDescriptorForHostClassesStage stage = new ScanDescriptorForHostClassesStage();
@@ -97,13 +97,13 @@ public class TestScanDescriptorForHostClassesStage extends TestCase {
         registrations.add(registration);
 
         final File plugin = new PluginJarBuilder("testUpgradeOfBundledPlugin")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='hostClass' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='hostClass' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <object key='hostClass' class='org.maera.plugin.osgi.HostClassUsingHostComponentConstructor'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         ScanDescriptorForHostClassesStage stage = new ScanDescriptorForHostClassesStage();
@@ -121,13 +121,13 @@ public class TestScanDescriptorForHostClassesStage extends TestCase {
         registrations.add(registration);
 
         final File plugin = new PluginJarBuilder("testUpgradeOfBundledPlugin")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='hostClass' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='hostClass' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <object key='hostClass' class='org.maera.plugin.osgi.HostClassUsingHostComponentSetter'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build();
 
         ScanDescriptorForHostClassesStage stage = new ScanDescriptorForHostClassesStage();

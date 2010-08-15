@@ -24,7 +24,7 @@ public class TestSpringHostComponentProviderFactoryBeanWithXmlConfiguration exte
     private static final HashSet<Class> FOO_BARABLE_INTERFACES = new HashSet<Class>(Arrays.asList(Fooable.class, Barable.class));
 
     public void testProvide() {
-        XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("com/atlassian/plugin/spring/pluginns/plugins-spring-test.xml"));
+        XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("org/maera/plugin/spring/plugins/plugins-spring-test.xml"));
 
         HostComponentProvider provider = getHostProvider(factory);
 
@@ -41,7 +41,7 @@ public class TestSpringHostComponentProviderFactoryBeanWithXmlConfiguration exte
     }
 
     public void testProvideWithDeprecations() {
-        XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("com/atlassian/plugin/spring/pluginns/plugins-spring-deprecations.xml"));
+        XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("org/maera/plugin/spring/plugins/plugins-spring-deprecations.xml"));
 
         HostComponentProvider provider = getHostProvider(factory);
 
@@ -64,7 +64,7 @@ public class TestSpringHostComponentProviderFactoryBeanWithXmlConfiguration exte
     }
 
     public void testProvideWithPrototype() {
-        XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("com/atlassian/plugin/spring/pluginns/plugins-spring-test-prototype.xml"));
+        XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("org/maera/plugin/spring/plugins/plugins-spring-test-prototype.xml"));
 
         HostComponentProvider provider = getHostProvider(factory);
 
@@ -81,7 +81,7 @@ public class TestSpringHostComponentProviderFactoryBeanWithXmlConfiguration exte
     }
 
     public void testProvideWithCustomInterface() {
-        XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("com/atlassian/plugin/spring/pluginns/plugins-spring-test-interface.xml"));
+        XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("org/maera/plugin/spring/plugins/plugins-spring-test-interface.xml"));
 
         HostComponentProvider provider = getHostProvider(factory);
 
@@ -115,7 +115,7 @@ public class TestSpringHostComponentProviderFactoryBeanWithXmlConfiguration exte
     }
 
     public void testProvideWithInterfaceOnSuperClass() {
-        XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("com/atlassian/plugin/spring/pluginns/plugins-spring-test-super-interface.xml"));
+        XmlBeanFactory factory = new XmlBeanFactory(new ClassPathResource("org/maera/plugin/spring/plugins/plugins-spring-test-super-interface.xml"));
 
         HostComponentProvider provider = getHostProvider(factory);
 
@@ -131,8 +131,8 @@ public class TestSpringHostComponentProviderFactoryBeanWithXmlConfiguration exte
     }
 
     public void testProvideWithNestedContexts() {
-        XmlBeanFactory parentFactory = new XmlBeanFactory(new ClassPathResource("com/atlassian/plugin/spring/pluginns/plugins-spring-test.xml"));
-        XmlBeanFactory childFactory = new XmlBeanFactory(new ClassPathResource("com/atlassian/plugin/spring/pluginns/plugins-spring-test-child.xml"), parentFactory);
+        XmlBeanFactory parentFactory = new XmlBeanFactory(new ClassPathResource("org/maera/plugin/spring/plugins/plugins-spring-test.xml"));
+        XmlBeanFactory childFactory = new XmlBeanFactory(new ClassPathResource("org/maera/plugin/spring/plugins/plugins-spring-test-child.xml"), parentFactory);
 
         HostComponentProvider provider = getHostProvider(childFactory);
 

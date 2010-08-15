@@ -89,7 +89,7 @@ public class TestDefaultPluginTransformer extends TestCase {
 
         assertEquals("1.1", attrs.getValue(Constants.BUNDLE_VERSION));
 
-        assertNotNull(jar.getEntry("META-INF/spring/atlassian-plugins-host-components.xml"));
+        assertNotNull(jar.getEntry("META-INF/spring/maera-plugins-host-components.xml"));
     }
 
     public void testGenerateCacheName() throws IOException {

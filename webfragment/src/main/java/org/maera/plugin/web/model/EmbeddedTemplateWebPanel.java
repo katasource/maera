@@ -28,7 +28,7 @@ public class EmbeddedTemplateWebPanel extends AbstractWebPanel {
 
     /**
      * @param templateBody the body of the web panel (may contain any content type such as velocity or just static
-     *                     HTML) that was inlined in <code>atlassian-plugin.xml</code>
+     *                     HTML) that was inlined in <code>maera-plugin.xml</code>
      */
     public void setTemplateBody(String templateBody) {
         this.templateBody = templateBody;

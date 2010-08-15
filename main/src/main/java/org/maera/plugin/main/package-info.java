@@ -3,22 +3,20 @@
  *
  * <p>
  * To use the facade, construct a {@link PluginsConfiguration} instance using the {@link PluginsConfigurationBuilder}
- * builder class.  Then, pass that instance into the constructor for the {@link AtlassianPlugins} class, and call
- * {@link AtlassianPlugins.start()}.  For example:
+ * builder class.  Then, pass that instance into the constructor for the {@link MaeraPlugins} class, and call
+ * {@link MaeraPlugins.start()}.  For example:
  * </p>
  * <pre>
  * PluginsConfiguration config = new PluginsConfigurationBuilder()
  *    .setPluginDirectory(new File("/my/plugin/directory"))
- *    .setPackagesToInclude("org.apache.*", "com.atlassian.*", "org.dom4j*")
+ *    .setPackagesToInclude("org.apache.*", "org.maera.*", "org.dom4j*")
  *    .build();
- * final AtlassianPlugins plugins = new AtlassianPlugins(config);
+ * final MaeraPlugins plugins = new MaeraPlugins(config);
  * plugins.start();
  * </pre>
  * <p>
- * This code ensures only packages from Atlassian, Apache, and Dom4j are exposed to plugins. See the
+ * This code ensures only packages from Maera, Apache, and Dom4j are exposed to plugins. See the
  * {@link PluginsConfigurationBuilder} for more options.
  * </p>
- *
- * @since 2.2.0
  */
 package org.maera.plugin.main;

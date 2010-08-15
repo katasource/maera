@@ -27,7 +27,7 @@ import static org.maera.plugin.util.validation.ValidationPattern.test;
 
 /**
  * <p>
- * The web panel module declares a single web panel in atlassian-plugin.xml. Its
+ * The web panel module declares a single web panel in maera-plugin.xml. Its
  * XML element contains a location string that should match existing locations
  * in the host application where web panels can be embedded.
  * </p>
@@ -44,7 +44,7 @@ import static org.maera.plugin.util.validation.ValidationPattern.test;
  * </p>
  * <p>
  * A web panel's resource element can either contain its contents embedded in
- * the resource element itself, as part of the <code>atlassian-plugin.xml</code>
+ * the resource element itself, as part of the <code>maera-plugin.xml</code>
  * file, or it can link to a file on the classpath when the
  * <code>location</code> attribute is used.
  * </p>

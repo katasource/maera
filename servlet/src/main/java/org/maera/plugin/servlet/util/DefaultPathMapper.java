@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.regex.Pattern;
 
 /**
- * Originally opied from Atlassian Seraph 1.0
+ * Originally copied from Atlassian Seraph 1.0
  * <p/>
  * Modified to store a list of keys for a mapping rather than a single value.  This allows filters to be added that
  * listen on the same path.  The get() method will return the first value added if there are multiple keys matching the

@@ -35,7 +35,7 @@ public class HostComponentSpringStage implements TransformStage {
     /**
      * Path of generated Spring XML file
      */
-    static final String SPRING_XML = "META-INF/spring/atlassian-plugins-host-components.xml";
+    static final String SPRING_XML = "META-INF/spring/maera-plugins-host-components.xml";
 
     public void execute(TransformContext context) throws PluginTransformationException {
         if (SpringHelper.shouldGenerateFile(context, SPRING_XML)) {

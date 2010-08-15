@@ -180,7 +180,7 @@ public class TestAbstractDownloadableResource extends TestCase {
     }
 
     public void testMinificationStrategyNotMinimisedAndSystemDisabled() throws Exception {
-        System.setProperty("atlassian.webresource.disable.minification", "true");
+        System.setProperty("maera.webresource.disable.minification", "true");
 
         final ResourceLocation resourceLocation = new ResourceLocation("/flintstone/fred.js", "fred.js", "stuff", "stuff", "stuff", null);
         final MyDownloableResource myDownloableResource = new MyDownloableResource(resourceLocation, false);
@@ -190,7 +190,7 @@ public class TestAbstractDownloadableResource extends TestCase {
     }
 
     public void testMinificationStrategyNotMinimisedAndSystemEnabled() throws Exception {
-        System.setProperty("atlassian.webresource.disable.minification", "false");
+        System.setProperty("maera.webresource.disable.minification", "false");
 
         final ResourceLocation resourceLocation = new ResourceLocation("/flintstone/fred.js", "fred.js", "stuff", "stuff", "stuff", null);
         final MyDownloableResource myDownloableResource = new MyDownloableResource(resourceLocation, false);
@@ -211,11 +211,11 @@ public class TestAbstractDownloadableResource extends TestCase {
     }
 
     public void testWhenSystemPropertyIsSet() throws DownloadException {
-        verifySystemPropertyRespected("atlassian.webresource.disable.minification");
+        verifySystemPropertyRespected("maera.webresource.disable.minification");
     }
 
     public void testWhenDevModeSystemPropertyIsSet() throws DownloadException {
-        verifySystemPropertyRespected(PluginUtils.ATLASSIAN_DEV_MODE);
+        verifySystemPropertyRespected(PluginUtils.MAERA_DEV_MODE);
     }
 
     private void verifySystemPropertyRespected(String sysprop)
@@ -252,8 +252,8 @@ public class TestAbstractDownloadableResource extends TestCase {
                 fail("This should have barfed in NeverMinifiedFileServingDownloableResouce");
             }
             catch (final AssertionFailedError expected) {
-                // this is expected since the test class asserts tgat a -min file should never be called on it.
-                // and hence by inference the atlassian.webresource.disable.minification property is not taking effect
+                // this is expected since the test class asserts that a -min file should never be called on it.
+                // and hence by inference the maera.webresource.disable.minification property is not taking effect
             }
         }
         finally {

@@ -52,7 +52,7 @@ public class TestDirectoryPluginLoader extends AbstractTestClassLoader {
         super.tearDown();
     }
 
-    public void testAtlassianPlugin() throws Exception {
+    public void testMaeraPlugin() throws Exception {
         addTestModuleDecriptors();
         loader = new DirectoryPluginLoader(pluginsTestDir, DEFAULT_PLUGIN_FACTORIES, pluginEventManager);
         final Collection<Plugin> plugins = loader.loadAllPlugins(moduleDescriptorFactory);
@@ -65,7 +65,7 @@ public class TestDirectoryPluginLoader extends AbstractTestClassLoader {
             if (plugin.getName().equals("Test Class Loaded Plugin")) // asserts for first plugin
             {
                 assertEquals("Test Class Loaded Plugin", plugin.getName());
-                assertEquals("test.atlassian.plugin.classloaded", plugin.getKey());
+                assertEquals("test.maera.plugin.classloaded", plugin.getKey());
                 assertEquals(1, plugin.getModuleDescriptors().size());
                 final MockAnimalModuleDescriptor paddingtonDescriptor = (MockAnimalModuleDescriptor) plugin.getModuleDescriptor("paddington");
                 paddingtonDescriptor.enabled();
@@ -75,7 +75,7 @@ public class TestDirectoryPluginLoader extends AbstractTestClassLoader {
             } else if (plugin.getName().equals("Test Class Loaded Plugin 2")) // asserts for second plugin
             {
                 assertEquals("Test Class Loaded Plugin 2", plugin.getName());
-                assertEquals("test.atlassian.plugin.classloaded2", plugin.getKey());
+                assertEquals("test.maera.plugin.classloaded2", plugin.getKey());
                 assertEquals(1, plugin.getModuleDescriptors().size());
                 final MockAnimalModuleDescriptor poohDescriptor = (MockAnimalModuleDescriptor) plugin.getModuleDescriptor("pooh");
                 poohDescriptor.enabled();
@@ -207,7 +207,7 @@ public class TestDirectoryPluginLoader extends AbstractTestClassLoader {
         FileUtils.cleanDirectory(pluginsTestDir);
         final File plugin = new File(pluginsTestDir, "some-plugin.jar");
         new PluginJarBuilder("plugin").addPluginInformation("some.key", "My name", "1.0", 1).addResource("foo.txt", "foo").build().renameTo(plugin);
-        FileUtils.writeStringToFile(new File(pluginsTestDir, "foo.xml"), "<atlassian-plugin key=\"jim\"></atlassian-plugin>");
+        FileUtils.writeStringToFile(new File(pluginsTestDir, "foo.xml"), "<maera-plugin key=\"jim\"></maera-plugin>");
 
         loader = new DirectoryPluginLoader(pluginsTestDir, DEFAULT_PLUGIN_FACTORIES, pluginEventManager);
 
@@ -229,13 +229,13 @@ public class TestDirectoryPluginLoader extends AbstractTestClassLoader {
     public void testPluginWithModuleDescriptorWithNoKey() throws Exception, IOException, PluginParseException, InterruptedException {
         FileUtils.cleanDirectory(pluginsTestDir);
         new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <object/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build(pluginsTestDir);
 
         loader = new DirectoryPluginLoader(pluginsTestDir, DEFAULT_PLUGIN_FACTORIES, pluginEventManager);
@@ -249,8 +249,8 @@ public class TestDirectoryPluginLoader extends AbstractTestClassLoader {
     public void testPluginWithBadDescriptor() throws Exception, IOException, PluginParseException, InterruptedException {
         FileUtils.cleanDirectory(pluginsTestDir);
         File pluginJar = new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-pluasdfasdf")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-pluasdfasdf")
                 .build(pluginsTestDir);
 
         loader = new DirectoryPluginLoader(pluginsTestDir, DEFAULT_PLUGIN_FACTORIES, pluginEventManager);
@@ -271,5 +271,4 @@ public class TestDirectoryPluginLoader extends AbstractTestClassLoader {
         plugin1.flush();
         plugin1.close();
     }
-
 }

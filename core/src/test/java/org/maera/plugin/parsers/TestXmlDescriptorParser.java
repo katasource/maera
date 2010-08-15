@@ -52,33 +52,33 @@ public class TestXmlDescriptorParser extends TestCase {
 
     public void testPluginsApplicationVersionMinMax() {
         XmlDescriptorParser parser = parse(null,
-                "<atlassian-plugin key='foo'>",
+                "<maera-plugin key='foo'>",
                 "  <plugin-info>",
                 "    <application-version min='3' max='4' />",
                 "  </plugin-info>",
-                "</atlassian-plugin>");
+                "</maera-plugin>");
         assertEquals(3, (int) parser.getPluginInformation().getMinVersion());
         assertEquals(4, (int) parser.getPluginInformation().getMaxVersion());
     }
 
     public void testPluginsApplicationVersionMinMaxWithOnlyMin() {
         XmlDescriptorParser parser = parse(null,
-                "<atlassian-plugin key='foo'>",
+                "<maera-plugin key='foo'>",
                 "  <plugin-info>",
                 "    <application-version min='3' />",
                 "  </plugin-info>",
-                "</atlassian-plugin>");
+                "</maera-plugin>");
         assertEquals(3, (int) parser.getPluginInformation().getMinVersion());
         assertEquals(0, (int) parser.getPluginInformation().getMaxVersion());
     }
 
     public void testPluginsApplicationVersionMinMaxWithOnlyMax() {
         XmlDescriptorParser parser = parse(null,
-                "<atlassian-plugin key='foo'>",
+                "<maera-plugin key='foo'>",
                 "  <plugin-info>",
                 "    <application-version max='3' />",
                 "  </plugin-info>",
-                "</atlassian-plugin>");
+                "</maera-plugin>");
         assertEquals(3, (int) parser.getPluginInformation().getMaxVersion());
         assertEquals(0, (int) parser.getPluginInformation().getMinVersion());
     }
@@ -86,13 +86,13 @@ public class TestXmlDescriptorParser extends TestCase {
     // Also CONF-12680 test for missing "essential metadata"
 
     public void testPluginsVersion() {
-        String xml = "<atlassian-plugin key=\"foo\" pluginsVersion=\"2\" />";
+        String xml = "<maera-plugin key=\"foo\" pluginsVersion=\"2\" />";
         XmlDescriptorParser parser = new XmlDescriptorParser(new ByteArrayInputStream(xml.getBytes()));
         assertEquals(2, parser.getPluginsVersion());
     }
 
     public void testPluginsVersionAfterConfigure() {
-        XmlDescriptorParser parser = new XmlDescriptorParser(new ByteArrayInputStream("<atlassian-plugin key=\"foo\" plugins-version=\"2\" />".getBytes()));
+        XmlDescriptorParser parser = new XmlDescriptorParser(new ByteArrayInputStream("<maera-plugin key=\"foo\" plugins-version=\"2\" />".getBytes()));
         // mock up some supporting objects
         PluginClassLoader classLoader = new PluginClassLoader(new File(getTestFile("ap-plugins") + "/" + DUMMY_PLUGIN_FILE));
         Mock mockFactory = new Mock(ModuleDescriptorFactory.class);
@@ -106,9 +106,9 @@ public class TestXmlDescriptorParser extends TestCase {
 
     public void testPluginWithModules() {
         XmlDescriptorParser parser = parse(null,
-                "<atlassian-plugin key='foo'>",
+                "<maera-plugin key='foo'>",
                 "  <animal key='bear' />",
-                "</atlassian-plugin>");
+                "</maera-plugin>");
         // mock up some supporting objects
         PluginClassLoader classLoader = new PluginClassLoader(new File(getTestFile("ap-plugins") + "/" + DUMMY_PLUGIN_FILE));
         Mock mockFactory = new Mock(ModuleDescriptorFactory.class);
@@ -122,9 +122,9 @@ public class TestXmlDescriptorParser extends TestCase {
 
     public void testPluginWithModulesNoApplicationKey() {
         XmlDescriptorParser parser = parse(null,
-                "<atlassian-plugin key='foo'>",
+                "<maera-plugin key='foo'>",
                 "  <animal key='bear' application='foo'/>",
-                "</atlassian-plugin>");
+                "</maera-plugin>");
         // mock up some supporting objects
         PluginClassLoader classLoader = new PluginClassLoader(new File(getTestFile("ap-plugins") + "/" + DUMMY_PLUGIN_FILE));
         Mock mockFactory = new Mock(ModuleDescriptorFactory.class);
@@ -138,10 +138,10 @@ public class TestXmlDescriptorParser extends TestCase {
 
     public void testPluginWithSomeNonApplicationModules() {
         XmlDescriptorParser parser = parse("myapp",
-                "<atlassian-plugin key='foo'>",
+                "<maera-plugin key='foo'>",
                 "  <animal key='bear' application='myapp'/>",
                 "  <animal key='bear2' application='otherapp'/>",
-                "</atlassian-plugin>");
+                "</maera-plugin>");
         // mock up some supporting objects
         PluginClassLoader classLoader = new PluginClassLoader(new File(getTestFile("ap-plugins") + "/" + DUMMY_PLUGIN_FILE));
         Mock mockFactory = new Mock(ModuleDescriptorFactory.class);
@@ -156,8 +156,8 @@ public class TestXmlDescriptorParser extends TestCase {
 
     public void testPluginWithSystemAttribute() {
         XmlDescriptorParser parser = parse(null,
-                "<atlassian-plugin key='foo' system='true'>",
-                "</atlassian-plugin>");
+                "<maera-plugin key='foo' system='true'>",
+                "</maera-plugin>");
 
         // mock up some supporting objects
         PluginClassLoader classLoader = new PluginClassLoader(new File(getTestFile("ap-plugins") + "/" + DUMMY_PLUGIN_FILE));
@@ -173,8 +173,8 @@ public class TestXmlDescriptorParser extends TestCase {
 
     public void testPluginWithoutSystemAttribute() {
         XmlDescriptorParser parser = parse(null,
-                "<atlassian-plugin key='foo' >",
-                "</atlassian-plugin>");
+                "<maera-plugin key='foo' >",
+                "</maera-plugin>");
 
         // mock up some supporting objects
         PluginClassLoader classLoader = new PluginClassLoader(new File(getTestFile("ap-plugins") + "/" + DUMMY_PLUGIN_FILE));
@@ -188,23 +188,23 @@ public class TestXmlDescriptorParser extends TestCase {
     }
 
     public void testPluginsVersionWithDash() {
-        String xml = "<atlassian-plugin key=\"foo\" plugins-version=\"2\" />";
+        String xml = "<maera-plugin key=\"foo\" plugins-version=\"2\" />";
         XmlDescriptorParser parser = new XmlDescriptorParser(new ByteArrayInputStream(xml.getBytes()));
         assertEquals(2, parser.getPluginsVersion());
     }
 
     public void testPluginsVersionMissing() {
-        String xml = "<atlassian-plugin key=\"foo\" />";
+        String xml = "<maera-plugin key=\"foo\" />";
         XmlDescriptorParser parser = new XmlDescriptorParser(new ByteArrayInputStream(xml.getBytes()));
         assertEquals(1, parser.getPluginsVersion());
     }
 
     public void testPluginsResourcesAvailableToModuleDescriptors() {
         XmlDescriptorParser parser = parse(null,
-                "<atlassian-plugin key='foo'>",
+                "<maera-plugin key='foo'>",
                 "  <resource type='velocity' name='edit'>Show an input box here.</resource>",
                 "  <animal key='bear' />",
-                "</atlassian-plugin>");
+                "</maera-plugin>");
         // mock up some supporting objects
         PluginClassLoader classLoader = new PluginClassLoader(new File(getTestFile("ap-plugins") + "/" + DUMMY_PLUGIN_FILE));
         Mock mockFactory = new Mock(ModuleDescriptorFactory.class);

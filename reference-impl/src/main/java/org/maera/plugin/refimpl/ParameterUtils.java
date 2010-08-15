@@ -7,7 +7,7 @@ import java.net.URI;
 public class ParameterUtils {
     public static String getBaseUrl(UrlMode urlMode) {
         String port = System.getProperty("http.port", "8080");
-        String baseUrl = System.getProperty("baseurl", "http://localhost:" + port + "/atlassian-plugins-refimpl");
+        String baseUrl = System.getProperty("baseurl", "http://localhost:" + port + "/maera-plugins-refimpl");
         if (urlMode == UrlMode.ABSOLUTE) {
             return baseUrl;
         }

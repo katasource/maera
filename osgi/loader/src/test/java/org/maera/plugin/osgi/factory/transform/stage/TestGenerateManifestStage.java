@@ -44,8 +44,8 @@ public class TestGenerateManifestStage extends TestCase {
     public void testGenerateManifest() throws Exception {
         final File file = new PluginJarBuilder()
                 .addFormattedResource(
-                        "atlassian-plugin.xml",
-                        "<atlassian-plugin key='org.maera.plugins.example' name='Example Plugin'>",
+                        "maera-plugin.xml",
+                        "<maera-plugin key='org.maera.plugins.example' name='Example Plugin'>",
                         "  <plugin-info>",
                         "    <description>",
                         "      A sample plugin for demonstrating the file format.",
@@ -53,7 +53,7 @@ public class TestGenerateManifestStage extends TestCase {
                         "    <version>1.1</version>",
                         "    <vendor name='Atlassian Software Systems Pty Ltd' url='http://www.atlassian.com'/>",
                         "  </plugin-info>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava(
                         "com.mycompany.myapp.Foo",
                         "package com.mycompany.myapp; public class Foo {}")
@@ -72,7 +72,7 @@ public class TestGenerateManifestStage extends TestCase {
         assertEquals("http://www.atlassian.com", attrs.getValue(Constants.BUNDLE_DOCURL));
         assertEquals(null, attrs.getValue(Constants.EXPORT_PACKAGE));
         assertEquals(".", attrs.getValue(Constants.BUNDLE_CLASSPATH));
-        assertEquals("org.maera.plugins.example", attrs.getValue(OsgiPlugin.ATLASSIAN_PLUGIN_KEY));
+        assertEquals("org.maera.plugins.example", attrs.getValue(OsgiPlugin.MAERA_PLUGIN_KEY));
         assertEquals("*;timeout:=60", attrs.getValue("Spring-Context"));
         assertEquals(null, attrs.getValue(Constants.IMPORT_PACKAGE));
 
@@ -91,7 +91,7 @@ public class TestGenerateManifestStage extends TestCase {
 
     public void testGenerateManifestWithCustomTimeout() throws Exception {
         try {
-            System.setProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT, "333");
+            System.setProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT, "333");
             stage = new GenerateManifestStage();
             final File file = new PluginJarBuilder().addPluginInformation("someKey", "someName", "1.0").build();
             final TransformContext context = new TransformContext(null, SystemExports.NONE, new JarPluginArtifact(file), null, PluginAccessor.Descriptor.FILENAME, osgiContainerManager);
@@ -101,14 +101,14 @@ public class TestGenerateManifestStage extends TestCase {
             assertEquals("*;timeout:=333", attrs.getValue("Spring-Context"));
         }
         finally {
-            System.clearProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT);
+            System.clearProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT);
         }
 
     }
 
     public void testGenerateManifestWithExistingSpringContextTimeout() throws Exception {
         try {
-            System.setProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT, "333");
+            System.setProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT, "333");
             stage = new GenerateManifestStage();
             final File file = new PluginJarBuilder().addPluginInformation("someKey", "someName", "1.0")
                     .addFormattedResource("META-INF/MANIFEST.MF",
@@ -124,7 +124,7 @@ public class TestGenerateManifestStage extends TestCase {
             assertEquals("*;timeout:=333", attrs.getValue("Spring-Context"));
         }
         finally {
-            System.clearProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT);
+            System.clearProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT);
         }
     }
 
@@ -146,7 +146,7 @@ public class TestGenerateManifestStage extends TestCase {
 
     public void testGenerateManifestSpringContextTimeoutNoTimeoutInHeader() throws Exception {
         try {
-            System.setProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT, "789");
+            System.setProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT, "789");
             stage = new GenerateManifestStage();
             final File file = new PluginJarBuilder().addPluginInformation("someKey", "someName", "1.0")
                     .addFormattedResource("META-INF/MANIFEST.MF",
@@ -161,13 +161,13 @@ public class TestGenerateManifestStage extends TestCase {
             assertEquals("*;create-asynchronously:=false;timeout:=789", attrs.getValue("Spring-Context"));
         }
         finally {
-            System.clearProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT);
+            System.clearProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT);
         }
     }
 
     public void testGenerateManifestSpringContextTimeoutTimeoutAtTheBeginning() throws Exception {
         try {
-            System.setProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT, "789");
+            System.setProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT, "789");
             stage = new GenerateManifestStage();
             final File file = new PluginJarBuilder().addPluginInformation("someKey", "someName", "1.0")
                     .addFormattedResource("META-INF/MANIFEST.MF",
@@ -182,13 +182,13 @@ public class TestGenerateManifestStage extends TestCase {
             assertEquals("timeout:=789;config/account-data-context.xml;create-asynchrously:=false", attrs.getValue("Spring-Context"));
         }
         finally {
-            System.clearProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT);
+            System.clearProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT);
         }
     }
 
     public void testGenerateManifestSpringContextTimeoutTimeoutInTheMiddle() throws Exception {
         try {
-            System.setProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT, "789");
+            System.setProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT, "789");
             stage = new GenerateManifestStage();
             final File file = new PluginJarBuilder().addPluginInformation("someKey", "someName", "1.0")
                     .addFormattedResource("META-INF/MANIFEST.MF",
@@ -203,7 +203,7 @@ public class TestGenerateManifestStage extends TestCase {
             assertEquals("config/account-data-context.xml;timeout:=789;create-asynchrously:=false", attrs.getValue("Spring-Context"));
         }
         finally {
-            System.clearProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT);
+            System.clearProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT);
         }
     }
 
@@ -224,7 +224,7 @@ public class TestGenerateManifestStage extends TestCase {
         final Attributes attrs = executeStage(context);
         assertEquals("my.foo.symbolicName", attrs.getValue(Constants.BUNDLE_SYMBOLICNAME));
         assertEquals(".,foo", attrs.getValue(Constants.BUNDLE_CLASSPATH));
-        assertEquals("innerjarcp", attrs.getValue(OsgiPlugin.ATLASSIAN_PLUGIN_KEY));
+        assertEquals("innerjarcp", attrs.getValue(OsgiPlugin.MAERA_PLUGIN_KEY));
         final String importPackage = attrs.getValue(Constants.IMPORT_PACKAGE);
         assertTrue(importPackage.contains(AttributeSet.class.getPackage().getName() + ","));
         assertTrue(importPackage.contains("javax.swing"));
@@ -283,7 +283,7 @@ public class TestGenerateManifestStage extends TestCase {
 
         final TransformContext context = new TransformContext(null, SystemExports.NONE, new JarPluginArtifact(plugin), null, PluginAccessor.Descriptor.FILENAME, osgiContainerManager);
         final Attributes attrs = executeStage(context);
-        assertEquals("innerjarcp", attrs.getValue("Atlassian-Plugin-Key"));
+        assertEquals("innerjarcp", attrs.getValue("Maera-Plugin-Key"));
         assertNotNull(attrs.getValue("Spring-Context"));
 
     }
@@ -302,7 +302,7 @@ public class TestGenerateManifestStage extends TestCase {
 
         final TransformContext context = new TransformContext(null, SystemExports.NONE, new JarPluginArtifact(plugin), null, PluginAccessor.Descriptor.FILENAME, osgiContainerManager);
         final Attributes attrs = executeStage(context);
-        assertEquals("innerjarcp", attrs.getValue("Atlassian-Plugin-Key"));
+        assertEquals("innerjarcp", attrs.getValue("Maera-Plugin-Key"));
         assertEquals("*", attrs.getValue("Spring-Context"));
 
     }
@@ -315,7 +315,7 @@ public class TestGenerateManifestStage extends TestCase {
 
         final TransformContext context = new TransformContext(null, SystemExports.NONE, new JarPluginArtifact(plugin), null, PluginAccessor.Descriptor.FILENAME, osgiContainerManager);
         final Attributes attrs = executeStage(context);
-        assertEquals("innerjarcp", attrs.getValue("Atlassian-Plugin-Key"));
+        assertEquals("innerjarcp", attrs.getValue("Maera-Plugin-Key"));
         assertNotNull(attrs.getValue("Spring-Context"));
 
     }

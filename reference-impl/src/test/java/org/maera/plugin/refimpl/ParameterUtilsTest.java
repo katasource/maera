@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import org.maera.plugin.webresource.UrlMode;
 
 public class ParameterUtilsTest extends TestCase {
-    private static final String CONTEXT_PATH = "/atlassian-plugins-refimpl";
+    private static final String CONTEXT_PATH = "/maera-plugins-refimpl";
     private static final String BASE_URL = "http://localhost:8080" + CONTEXT_PATH;
     private String previousBaseUrl;
 

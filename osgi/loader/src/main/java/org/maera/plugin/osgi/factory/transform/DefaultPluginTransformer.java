@@ -80,7 +80,7 @@ public class DefaultPluginTransformer implements PluginTransformer {
 
     private void persistTimeout() {
         final File timeoutFile = new File(bundleCacheDir.getAbsoluteFile().getParentFile(), ".properties");
-        final String timeout = System.getProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT);
+        final String timeout = System.getProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT);
 
         if (timeout == null && !timeoutFile.exists()) {
             return;
@@ -127,7 +127,7 @@ public class DefaultPluginTransformer implements PluginTransformer {
             }
         }
         catch (Exception e) {
-            log.warn("Failed to set spring timeout using system property '" + PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT + "' .", e);
+            log.warn("Failed to set spring timeout using system property '" + PluginUtils.MAERA_PLUGINS_ENABLE_WAIT + "' .", e);
         }
     }
 

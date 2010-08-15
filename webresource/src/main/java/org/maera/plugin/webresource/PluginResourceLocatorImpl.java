@@ -325,7 +325,7 @@ public class PluginResourceLocatorImpl implements PluginResourceLocator {
         if (explicitSetting != null) {
             return Boolean.parseBoolean(explicitSetting);
         } else {
-            return Boolean.parseBoolean(System.getProperty(PluginUtils.ATLASSIAN_DEV_MODE));
+            return Boolean.parseBoolean(System.getProperty(PluginUtils.MAERA_DEV_MODE));
         }
 
     }

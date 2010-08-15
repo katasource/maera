@@ -5,6 +5,7 @@ import com.mockobjects.dynamic.Mock;
 import junit.framework.TestCase;
 import org.maera.plugin.Plugin;
 import org.maera.plugin.PluginAccessor;
+import org.maera.plugin.elements.ResourceDescriptor;
 
 import java.util.*;
 
@@ -98,9 +99,9 @@ public class TestDefaultResourceDependencyResolver extends TestCase {
         mockWebResourceIntegration.matchAndReturn("getSuperBatchVersion", "1.0");
 
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(superBatchResource1)),
-                TestUtils.createWebResourceModuleDescriptor(superBatchResource1, testPlugin, Collections.EMPTY_LIST, Arrays.asList(superBatchResource2)));
+                TestUtils.createWebResourceModuleDescriptor(superBatchResource1, testPlugin, Collections.<ResourceDescriptor>emptyList(), Arrays.asList(superBatchResource2)));
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(superBatchResource2)),
-                TestUtils.createWebResourceModuleDescriptor(superBatchResource2, testPlugin, Collections.EMPTY_LIST, Arrays.asList(superBatchResource1)));
+                TestUtils.createWebResourceModuleDescriptor(superBatchResource2, testPlugin, Collections.<ResourceDescriptor>emptyList(), Arrays.asList(superBatchResource1)));
 
         LinkedHashSet<String> resources = dependencyResolver.getSuperBatchDependencies();
         assertNotNull(resources);
@@ -108,18 +109,18 @@ public class TestDefaultResourceDependencyResolver extends TestCase {
     }
 
     public void testGetSuperBatchDependenciesWithDependencies() {
-        String superBatchResource1 = "test.atlassian:super1";
-        String superBatchResource2 = "test.atlassian:super2";
+        String superBatchResource1 = "test.maera:super1";
+        String superBatchResource2 = "test.maera:super2";
 
         superBatchKeys.add(superBatchResource1);
         superBatchKeys.add(superBatchResource2);
         mockWebResourceIntegration.matchAndReturn("getSuperBatchVersion", "1.0");
 
         // dependcies
-        String resourceA = "test.atlassian:a";
-        String resourceB = "test.atlassian:b";
-        String resourceC = "test.atlassian:c";
-        String resourceD = "test.atlassian:d";
+        String resourceA = "test.maera:a";
+        String resourceB = "test.maera:b";
+        String resourceC = "test.maera:c";
+        String resourceD = "test.maera:d";
 
         // super batch 1 depends on A, B
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(resourceA)),
@@ -127,15 +128,15 @@ public class TestDefaultResourceDependencyResolver extends TestCase {
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(resourceB)),
                 TestUtils.createWebResourceModuleDescriptor(resourceB, testPlugin));
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(superBatchResource1)),
-                TestUtils.createWebResourceModuleDescriptor(superBatchResource1, testPlugin, Collections.EMPTY_LIST, Arrays.asList(resourceA, resourceB)));
+                TestUtils.createWebResourceModuleDescriptor(superBatchResource1, testPlugin, Collections.<ResourceDescriptor>emptyList(), Arrays.asList(resourceA, resourceB)));
 
         // super batch 2 depends on C
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(resourceD)),
                 TestUtils.createWebResourceModuleDescriptor(resourceD, testPlugin));
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(resourceC)),
-                TestUtils.createWebResourceModuleDescriptor(resourceC, testPlugin, Collections.EMPTY_LIST, Arrays.asList(resourceD)));
+                TestUtils.createWebResourceModuleDescriptor(resourceC, testPlugin, Collections.<ResourceDescriptor>emptyList(), Arrays.asList(resourceD)));
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(superBatchResource2)),
-                TestUtils.createWebResourceModuleDescriptor(superBatchResource2, testPlugin, Collections.EMPTY_LIST, Collections.singletonList(resourceC)));
+                TestUtils.createWebResourceModuleDescriptor(superBatchResource2, testPlugin, Collections.<ResourceDescriptor>emptyList(), Collections.singletonList(resourceC)));
 
         LinkedHashSet<String> resources = dependencyResolver.getSuperBatchDependencies();
         assertNotNull(resources);
@@ -143,9 +144,9 @@ public class TestDefaultResourceDependencyResolver extends TestCase {
     }
 
     public void testGetDependenciesExcludesSuperBatch() {
-        String superBatchResource1 = "test.atlassian:super1";
-        String superBatchResource2 = "test.atlassian:super2";
-        String moduleKey = "test.atlassian:foo";
+        String superBatchResource1 = "test.maera:super1";
+        String superBatchResource2 = "test.maera:super2";
+        String moduleKey = "test.maera:foo";
 
         superBatchKeys.add(superBatchResource1);
         superBatchKeys.add(superBatchResource2);
@@ -153,7 +154,7 @@ public class TestDefaultResourceDependencyResolver extends TestCase {
 
         // module depends on super batch 1
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(moduleKey)),
-                TestUtils.createWebResourceModuleDescriptor(moduleKey, testPlugin, Collections.EMPTY_LIST, Arrays.asList(superBatchResource1)));
+                TestUtils.createWebResourceModuleDescriptor(moduleKey, testPlugin, Collections.<ResourceDescriptor>emptyList(), Arrays.asList(superBatchResource1)));
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(superBatchResource1)),
                 TestUtils.createWebResourceModuleDescriptor(superBatchResource1, testPlugin));
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(superBatchResource2)),
@@ -165,9 +166,9 @@ public class TestDefaultResourceDependencyResolver extends TestCase {
     }
 
     public void testGetDependenciesIncludesSuperBatch() {
-        String superBatchResource1 = "test.atlassian:super1";
-        String superBatchResource2 = "test.atlassian:super2";
-        String moduleKey = "test.atlassian:foo";
+        String superBatchResource1 = "test.maera:super1";
+        String superBatchResource2 = "test.maera:super2";
+        String moduleKey = "test.maera:foo";
 
         superBatchKeys.add(superBatchResource1);
         superBatchKeys.add(superBatchResource2);
@@ -175,7 +176,7 @@ public class TestDefaultResourceDependencyResolver extends TestCase {
 
         // module depends on super batch 1
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(moduleKey)),
-                TestUtils.createWebResourceModuleDescriptor(moduleKey, testPlugin, Collections.EMPTY_LIST, Arrays.asList(superBatchResource1)));
+                TestUtils.createWebResourceModuleDescriptor(moduleKey, testPlugin, Collections.<ResourceDescriptor>emptyList(), Arrays.asList(superBatchResource1)));
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(superBatchResource1)),
                 TestUtils.createWebResourceModuleDescriptor(superBatchResource1, testPlugin));
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(superBatchResource2)),

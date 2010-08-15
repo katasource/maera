@@ -41,7 +41,7 @@ public class TestPluginEnabler extends TestCase {
         };
 
         try {
-            System.setProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT, "1");
+            System.setProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT, "1");
             long start = System.currentTimeMillis();
             enabler = new PluginEnabler(mock(PluginAccessor.class), mock(PluginController.class));
             enabler.enable(Arrays.asList(plugin));
@@ -50,7 +50,7 @@ public class TestPluginEnabler extends TestCase {
             assertEquals(PluginState.ENABLING, plugin.getPluginState());
         }
         finally {
-            System.clearProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT);
+            System.clearProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT);
         }
     }
 

@@ -65,7 +65,7 @@ public class LastModifiedHandler {
     }
 
     private static boolean checkRequest(HttpServletRequest request, HttpServletResponse response, long lastModified, String etagString) {
-        if ("true".equals(System.getProperty("atlassian.disable.caches", "false")))
+        if ("true".equals(System.getProperty("maera.disable.caches", "false")))
             return false;
 
         response.setDateHeader("Last-Modified", lastModified);

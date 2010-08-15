@@ -25,14 +25,14 @@ public class TestPluginFrameworkWarmRestart extends PluginInContainerTestBase {
         };
 
         new PluginJarBuilder("testWarmRestart")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <object key='obj' class='my.Foo'/>",
                         "    <object key='obj-disabled' class='my.Foo'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.Foo",
                         "package my;",
                         "import java.util.concurrent.Callable;",

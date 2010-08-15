@@ -195,7 +195,7 @@ public class PluginsConfigurationBuilder {
      * Builds a {@link org.maera.plugin.main.PluginsConfiguration} instance by processing the configuration that
      * was previously set, validating the input, and setting any defaults where not explicitly specified.
      *
-     * @return A valid {@link PluginsConfiguration} instance to pass to {@link AtlassianPlugins}
+     * @return A valid {@link PluginsConfiguration} instance to pass to {@link MaeraPlugins}
      */
     public PluginsConfiguration build() {
         notNull("Plugin directory must be defined", pluginDirectory);
@@ -224,7 +224,7 @@ public class PluginsConfigurationBuilder {
         }
 
         if (osgiPersistentCache == null) {
-            osgiPersistentCache = createTempDir("atlassian-plugins-osgi-cache");
+            osgiPersistentCache = createTempDir("maera-plugins-osgi-cache");
         }
 
         if (bundledPluginUrl != null && bundledPluginCacheDirectory == null) {
@@ -236,7 +236,7 @@ public class PluginsConfigurationBuilder {
 
     private File createTempDir(final String prefix) {
         try {
-            final File directory = File.createTempFile(prefix, AtlassianPlugins.TEMP_DIRECTORY_SUFFIX);
+            final File directory = File.createTempFile(prefix, MaeraPlugins.TEMP_DIRECTORY_SUFFIX);
             directory.delete();
             directory.mkdir();
             return directory;

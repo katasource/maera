@@ -26,9 +26,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Facade interface to the Atlassian Plugins framework.  See the package Javadocs for usage information.
+ * Facade interface to Maera. See the package Javadocs for usage information.
  */
-public class AtlassianPlugins {
+public class MaeraPlugins {
     private OsgiContainerManager osgiContainerManager;
     private PluginEventManager pluginEventManager;
     private DefaultPluginManager pluginManager;
@@ -46,7 +46,7 @@ public class AtlassianPlugins {
      *
      * @param config The plugins configuration to use
      */
-    public AtlassianPlugins(PluginsConfiguration config) {
+    public MaeraPlugins(PluginsConfiguration config) {
         pluginEventManager = new DefaultPluginEventManager();
 
         osgiContainerManager = new FelixOsgiContainerManager(

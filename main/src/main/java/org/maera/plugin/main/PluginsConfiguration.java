@@ -10,8 +10,7 @@ import java.io.File;
 import java.net.URL;
 
 /**
- * Configuration for the Atlassian Plugins Framework.  Instances of this class should be created via the
- * {@link PluginsConfigurationBuilder}.
+ * Configuration for Maera. Instances of this class should be created via the {@link PluginsConfigurationBuilder}.
  */
 public interface PluginsConfiguration {
     /**

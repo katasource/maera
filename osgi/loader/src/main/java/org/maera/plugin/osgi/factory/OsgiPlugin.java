@@ -51,7 +51,7 @@ public class OsgiPlugin extends AbstractPlugin implements AutowireCapablePlugin,
     private volatile boolean treatSpringBeanFactoryCreationAsRefresh = false;
     private volatile OsgiPluginHelper helper;
     public static final String SPRING_CONTEXT = "Spring-Context";
-    public static final String ATLASSIAN_PLUGIN_KEY = "Atlassian-Plugin-Key";
+    public static final String MAERA_PLUGIN_KEY = "Maera-Plugin-Key";
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private final BundleListener bundleStopListener;
 

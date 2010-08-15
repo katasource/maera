@@ -150,7 +150,7 @@ public class PackageScannerConfigurationBuilder {
      * Builds a {@link PackageScannerConfiguration} instance by processing the configuration that
      * was previously set and setting any defaults where not explicitly specified.
      *
-     * @return A valid {@link PackageScannerConfiguration} instance to pass to {@link AtlassianPlugins}
+     * @return A valid {@link PackageScannerConfiguration} instance to pass to {@link MaeraPlugins}
      */
     public PackageScannerConfiguration build() {
         return new ImmutablePackageScannerConfiguration(this);

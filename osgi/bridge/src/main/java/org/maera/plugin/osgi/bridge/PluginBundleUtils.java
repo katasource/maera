@@ -22,7 +22,7 @@ class PluginBundleUtils {
     static String getPluginKey(Bundle bundle) {
         return getPluginKey(
                 bundle.getSymbolicName(),
-                bundle.getHeaders().get("Atlassian-Plugin-Key"),
+                bundle.getHeaders().get("Maera-Plugin-Key"),
                 bundle.getHeaders().get(Constants.BUNDLE_VERSION)
         );
     }

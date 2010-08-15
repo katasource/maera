@@ -128,7 +128,7 @@ class PluginEnabler {
                 }
 
                 private boolean isAtlassianDevMode() {
-                    return Boolean.getBoolean(PluginUtils.ATLASSIAN_DEV_MODE);
+                    return Boolean.getBoolean(PluginUtils.MAERA_DEV_MODE);
                 }
             }, PluginUtils.getDefaultEnablingWaitPeriod(), TimeUnit.SECONDS, 1);
 

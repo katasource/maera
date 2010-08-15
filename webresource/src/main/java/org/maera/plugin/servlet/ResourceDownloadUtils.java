@@ -36,7 +36,7 @@ public class ResourceDownloadUtils {
      * Note, this method resets the cache control headers if set previously.
      */
     public static void addCachingHeaders(final HttpServletResponse httpServletResponse, final String... cacheControls) {
-        if (!Boolean.getBoolean("atlassian.disable.caches")) {
+        if (!Boolean.getBoolean("maera.disable.caches")) {
             httpServletResponse.setDateHeader("Expires", System.currentTimeMillis() + TEN_YEARS);
             httpServletResponse.setHeader("Cache-Control", "max-age=" + TEN_YEARS);
             for (final String cacheControl : cacheControls) {

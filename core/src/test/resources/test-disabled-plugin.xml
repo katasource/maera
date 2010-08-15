@@ -1,6 +1,6 @@
-<atlassian-plugin key="test.disabled.plugin" name="Disabled Plugin" state="disabled">
+<maera-plugin key="test.disabled.plugin" name="Disabled Plugin" state="disabled">
 
-    <mineral key="gold" name="Bar" class="com.atlassian.plugin.mock.MockGold" state="disabled">
+    <mineral key="gold" name="Bar" class="org.maera.plugin.mock.MockGold" state="disabled">
         <weight>20</weight>
     </mineral>
-</atlassian-plugin>
+</maera-plugin>

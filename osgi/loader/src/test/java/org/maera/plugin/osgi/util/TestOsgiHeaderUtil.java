@@ -48,7 +48,7 @@ public class TestOsgiHeaderUtil extends TestCase {
 
         assertEquals("foo-1.0", OsgiHeaderUtil.getPluginKey(bundle));
 
-        headers.put(OsgiPlugin.ATLASSIAN_PLUGIN_KEY, "bar");
+        headers.put(OsgiPlugin.MAERA_PLUGIN_KEY, "bar");
         assertEquals("bar", OsgiHeaderUtil.getPluginKey(bundle));
     }
 
@@ -59,7 +59,7 @@ public class TestOsgiHeaderUtil extends TestCase {
 
         assertEquals("foo-1.0", OsgiHeaderUtil.getPluginKey(mf));
 
-        mf.getMainAttributes().putValue(OsgiPlugin.ATLASSIAN_PLUGIN_KEY, "bar");
+        mf.getMainAttributes().putValue(OsgiPlugin.MAERA_PLUGIN_KEY, "bar");
         assertEquals("bar", OsgiHeaderUtil.getPluginKey(mf));
     }
 }

@@ -18,8 +18,8 @@ import java.util.concurrent.Callable;
 public class TestPluginDependencies extends PluginInContainerTestBase {
     public void testPluginDependentOnPackageImport() throws Exception {
         PluginJarBuilder parentBuilder = new PluginJarBuilder("parent")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='parent' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='parent' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions>",
@@ -27,18 +27,18 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "            <Export-Package>foo</Export-Package>",
                         "        </bundle-instructions>",
                         "    </plugin-info>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("foo.Bar",
                         "package foo;",
                         "public interface Bar {}");
 
         new PluginJarBuilder("child", parentBuilder.getClassLoader())
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='child' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='child' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("second.MyImpl",
                         "package second;",
                         "public class MyImpl {",
@@ -55,8 +55,8 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
 
     public void testUninstallingPluginDependentOnPackageImport() throws Exception {
         PluginJarBuilder parentBuilder = new PluginJarBuilder("parent")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='parent' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='parent' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions>",
@@ -64,18 +64,18 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "            <Export-Package>foo</Export-Package>",
                         "        </bundle-instructions>",
                         "    </plugin-info>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("foo.Bar",
                         "package foo;",
                         "public interface Bar {}");
 
         new PluginJarBuilder("child", parentBuilder.getClassLoader())
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='child' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='child' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("second.MyImpl",
                         "package second;",
                         "public class MyImpl {",
@@ -104,15 +104,15 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         }, factory);
 
         final File pluginJar = new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component key='svc' class='my.ServiceImpl' public='true'>",
                         "    <interface>java.util.concurrent.Callable</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.ServiceImpl",
                         "package my;",
                         "import java.util.concurrent.Callable;",
@@ -121,8 +121,8 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "}")
                 .build();
         final File pluginJar2 = new PluginJarBuilder("second")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test2.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test2.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
@@ -130,7 +130,7 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "    <component key='del' class='my2.ServiceDelegate' public='true'>",
                         "    <interface>org.maera.plugin.osgi.Callable2</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my2.ServiceDelegate",
                         "package my2;",
                         "import org.maera.plugin.osgi.Callable2;",
@@ -155,15 +155,15 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         assertEquals(2, pluginManager.getEnabledPlugins().size());
 
         final File updatedJar = new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component key='svc' class='my.ServiceImpl' public='true'>",
                         "    <interface>java.util.concurrent.Callable</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.ServiceImpl",
                         "package my;",
                         "import java.util.concurrent.Callable;",
@@ -198,15 +198,15 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         }, factory);
 
         final PluginJarBuilder builder1 = new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component key='svc' class='my.ServiceImpl' public='true'>",
                         "    <interface>my.Service</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.Service",
                         "package my;",
                         "public interface Service {",
@@ -219,8 +219,8 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "}");
         final File pluginJar = builder1.build();
         final File pluginJar2 = new PluginJarBuilder("second", builder1.getClassLoader())
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test2.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test2.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
@@ -228,7 +228,7 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "    <component key='del' class='my2.ServiceDelegate' public='true'>",
                         "    <interface>java.util.concurrent.Callable</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my2.ServiceDelegate",
                         "package my2;",
                         "import my.Service;",
@@ -252,15 +252,15 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         assertEquals(2, pluginManager.getEnabledPlugins().size());
 
         final File updatedJar = new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component key='svc' class='my.Service2Impl' public='true'>",
                         "    <interface>my.Service</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.Service",
                         "package my;",
                         "public interface Service {",
@@ -287,8 +287,8 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         }, factory);
 
         PluginJarBuilder pluginBuilder = new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions><Export-Package>my</Export-Package></bundle-instructions>",
@@ -296,7 +296,7 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "    <component key='svc' class='my.ServiceImpl' public='true'>",
                         "    <interface>java.util.concurrent.Callable</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.ServiceImpl",
                         "package my;",
                         "import java.util.concurrent.Callable;",
@@ -306,8 +306,8 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         final File pluginJar = pluginBuilder.build();
 
         final File pluginJar2 = new PluginJarBuilder("second", pluginBuilder.getClassLoader())
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test2.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test2.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions><Import-Package>my,*</Import-Package></bundle-instructions>",
@@ -317,7 +317,7 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "    <component key='del' class='my2.ServiceDelegate' public='true'>",
                         "    <interface>org.maera.plugin.osgi.Callable2</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my2.ServiceDelegate",
                         "package my2;",
                         "import org.maera.plugin.osgi.Callable2;",
@@ -334,15 +334,15 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "}")
                 .build();
         final File otherSvcJar = new PluginJarBuilder("otherSvc")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.othersvc.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.othersvc.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component key='othersvc' class='othersvc.ServiceImpl' public='true'>",
                         "    <interface>org.maera.plugin.osgi.Callable3</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("othersvc.ServiceImpl",
                         "package othersvc;",
                         "import org.maera.plugin.osgi.Callable3;",
@@ -362,8 +362,8 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         assertEquals(3, pluginManager.getEnabledPlugins().size());
 
         final File updatedJar = new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions><Export-Package>my</Export-Package></bundle-instructions>",
@@ -371,7 +371,7 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "    <component key='svc' class='my.ServiceImpl' public='true'>",
                         "    <interface>java.util.concurrent.Callable</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.ServiceImpl",
                         "package my;",
                         "import java.util.concurrent.Callable;",
@@ -393,8 +393,8 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         }, factory);
 
         PluginJarBuilder pluginBuilder = new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions><Export-Package>my</Export-Package></bundle-instructions>",
@@ -402,7 +402,7 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "    <component key='svc' class='my.ServiceImpl' public='true'>",
                         "    <interface>java.util.concurrent.Callable</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.ServiceImpl",
                         "package my;",
                         "import java.util.concurrent.Callable;",
@@ -412,8 +412,8 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         final File pluginJar = pluginBuilder.build();
 
         final File pluginJar2 = new PluginJarBuilder("second", pluginBuilder.getClassLoader())
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test2.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test2.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions><Import-Package>my,*</Import-Package>",
@@ -424,7 +424,7 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "    <component key='del' class='my2.ServiceDelegate' public='true'>",
                         "    <interface>org.maera.plugin.osgi.Callable2</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my2.ServiceDelegate",
                         "package my2;",
                         "import org.maera.plugin.osgi.Callable2;",
@@ -446,15 +446,15 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "}")
                 .build();
         final File otherSvcJar = new PluginJarBuilder("otherSvc")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.othersvc.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.othersvc.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component key='othersvc' class='othersvc.ServiceImpl' public='true'>",
                         "    <interface>org.maera.plugin.osgi.Callable3</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("othersvc.ServiceImpl",
                         "package othersvc;",
                         "import org.maera.plugin.osgi.Callable3;",
@@ -474,8 +474,8 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         assertEquals(3, pluginManager.getEnabledPlugins().size());
 
         final File updatedJar = new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions><Export-Package>my</Export-Package></bundle-instructions>",
@@ -483,7 +483,7 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "    <component key='svc' class='my.ServiceImpl' public='true'>",
                         "    <interface>java.util.concurrent.Callable</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.ServiceImpl",
                         "package my;",
                         "import java.util.concurrent.Callable;",
@@ -508,8 +508,8 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         }, factory);
 
         PluginJarBuilder pluginBuilder = new PluginJarBuilder("first")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions><Export-Package>my</Export-Package></bundle-instructions>",
@@ -517,7 +517,7 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "    <component key='svc' class='my.ServiceImpl' public='true'>",
                         "    <interface>java.util.concurrent.Callable</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.ServiceImpl",
                         "package my;",
                         "import java.util.concurrent.Callable;",
@@ -527,8 +527,8 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         final File pluginJar = pluginBuilder.build();
 
         final File pluginJar2 = new PluginJarBuilder("second", pluginBuilder.getClassLoader())
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test2.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test2.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions><Import-Package>my,*</Import-Package>",
@@ -536,7 +536,7 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "    </plugin-info>",
                         "    <component-import key='svc' interface='java.util.concurrent.Callable' />",
                         "    <component key='del' class='my2.Consumer'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my2.Consumer",
                         "package my2;",
                         "import java.util.concurrent.Callable;",

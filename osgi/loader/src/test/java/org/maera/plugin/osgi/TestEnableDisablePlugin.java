@@ -33,13 +33,13 @@ public class TestEnableDisablePlugin extends PluginInContainerTestBase {
 
     public void testEnableDisableEnableWithPublicComponent() throws Exception {
         File pluginJar = new PluginJarBuilder("enabledisabletest")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='enabledisablewithcomponent' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='enabledisablewithcomponent' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component key='foo' class='my.Foo' public='true' interface='my.Fooable'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addJava("my.Fooable", "package my;" +
                         "public interface Fooable {}")
                 .addFormattedJava("my.Foo", "package my;",
@@ -65,13 +65,13 @@ public class TestEnableDisablePlugin extends PluginInContainerTestBase {
         final DefaultModuleDescriptorFactory factory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
         factory.addModuleDescriptor("requiresRestart", RequiresRestartModuleDescriptor.class);
         new PluginJarBuilder()
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test 2' key='test.restartrequired' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.restartrequired' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <requiresRestart key='foo' />",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .build(pluginsDir);
 
         initPluginManager(null, factory);
@@ -95,24 +95,24 @@ public class TestEnableDisablePlugin extends PluginInContainerTestBase {
 
     public void testEnableEnablesDependentPlugins() throws Exception {
         PluginJarBuilder builderProvider = new PluginJarBuilder("enabledisable-prov")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='provider' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='provider' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions><Export-Package>my</Export-Package></bundle-instructions>",
                         "    </plugin-info>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addJava("my.Foo", "package my;" +
                         "public interface Foo {}");
 
         PluginJarBuilder builderConsumer = new PluginJarBuilder("enabledisable-con", builderProvider.getClassLoader())
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='consumer' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='consumer' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions><Import-Package>my</Import-Package></bundle-instructions>",
                         "    </plugin-info>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addJava("my2.Bar", "package my2;" +
                         "public class Bar implements my.Foo {}");
 
@@ -227,7 +227,7 @@ public class TestEnableDisablePlugin extends PluginInContainerTestBase {
                 .addFormattedResource("META-INF/MANIFEST.MF",
                         "Manifest-Version: 1.0",
                         "Bundle-SymbolicName: my",
-                        "Atlassian-Plugin-Key: provider",
+                        "Maera-Plugin-Key: provider",
                         "Export-Package: my",
                         "")
                 .addJava("my.Foo", "package my;" +
@@ -235,13 +235,13 @@ public class TestEnableDisablePlugin extends PluginInContainerTestBase {
 
 
         PluginJarBuilder builderConsumer = new PluginJarBuilder("enabledisable-con", builderProvider.getClassLoader())
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='consumer' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='consumer' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "        <bundle-instructions><Import-Package>my</Import-Package></bundle-instructions>",
                         "    </plugin-info>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addJava("my2.Bar", "package my2;" +
                         "public class Bar implements my.Foo {}");
 
@@ -267,15 +267,15 @@ public class TestEnableDisablePlugin extends PluginInContainerTestBase {
 
     public void testDisableDoesNotKillLongRunningOperation() throws Exception {
         File pluginJar = new PluginJarBuilder("longrunning")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='longrunning' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='longrunning' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component key='comp' class='my.Foo' public='true'>",
                         "       <interface>org.maera.plugin.osgi.Callable3</interface>",
                         "    </component>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.Foo",
                         "package my;",
                         "import org.maera.plugin.osgi.*;",

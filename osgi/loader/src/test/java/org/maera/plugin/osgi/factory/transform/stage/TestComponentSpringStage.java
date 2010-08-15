@@ -25,14 +25,14 @@ public class TestComponentSpringStage extends TestCase {
         ComponentSpringStage transformer = new ComponentSpringStage();
 
         // private component
-        Element pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element component = pluginRoot.addElement("component");
         component.addAttribute("key", "foo");
         component.addAttribute("class", "my.Foo");
         SpringTransformerTestHelper.transform(transformer, pluginRoot, "beans:bean[@id='foo' and @class='my.Foo']");
 
         // public component, interface
-        pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         component = pluginRoot.addElement("component");
         component.addAttribute("key", "foo");
         component.addAttribute("class", "my.Foo");
@@ -45,7 +45,7 @@ public class TestComponentSpringStage extends TestCase {
                 "//beans:value[.='my.IFoo']");
 
         // public component, interface as attribute
-        pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         component = pluginRoot.addElement("component");
         component.addAttribute("key", "foo");
         component.addAttribute("class", "my.Foo");
@@ -61,7 +61,7 @@ public class TestComponentSpringStage extends TestCase {
     public void testTransformWithServiceProperties() throws IOException, DocumentException {
         ComponentSpringStage transformer = new ComponentSpringStage();
 
-        Element pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element component = pluginRoot.addElement("component");
         component.addAttribute("key", "foo");
         component.addAttribute("class", "my.Foo");
@@ -95,7 +95,7 @@ public class TestComponentSpringStage extends TestCase {
         ComponentSpringStage transformer = new ComponentSpringStage();
 
         // public component, interface
-        Element pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element component = pluginRoot.addElement("component");
         component.addAttribute("key", "foo");
         component.addAttribute("class", "my.Foo");
@@ -105,7 +105,7 @@ public class TestComponentSpringStage extends TestCase {
         inf.setText("my.IFoo");
         SpringTransformerTestHelper.transform(transformer, pluginRoot, "not(beans:bean[@id='foo' and @class='my.Foo'])");
 
-        pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         component = pluginRoot.addElement("component");
         component.addAttribute("key", "foo");
         component.addAttribute("class", "my.Foo");
@@ -119,7 +119,7 @@ public class TestComponentSpringStage extends TestCase {
 
     public void testExportsAdded() throws IOException {
         ComponentSpringStage transformer = new ComponentSpringStage();
-        Element pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element component = pluginRoot.addElement("component");
         component.addAttribute("key", "foo");
         component.addAttribute("class", "my.Foo");
@@ -143,7 +143,7 @@ public class TestComponentSpringStage extends TestCase {
 
     public void testExportsNotInJar() throws IOException {
         ComponentSpringStage transformer = new ComponentSpringStage();
-        Element pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element component = pluginRoot.addElement("component");
         component.addAttribute("key", "foo");
         component.addAttribute("class", "my.Foo");
@@ -167,7 +167,7 @@ public class TestComponentSpringStage extends TestCase {
 
     public void testExportsExist() throws IOException {
         ComponentSpringStage transformer = new ComponentSpringStage();
-        Element pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element component = pluginRoot.addElement("component");
         component.addAttribute("key", "foo");
         component.addAttribute("class", "my.Foo");

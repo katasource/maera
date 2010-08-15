@@ -1,4 +1,4 @@
-<atlassian-plugin name="Test Plugin" key="test.atlassian.plugin" pluginsVersion="2">
+<maera-plugin name="Test Plugin" key="test.maera.plugin" pluginsVersion="2">
     <plugin-info>
         <description>This plugin descriptor is just used for test purposes!</description>
         <version>1.0</version>
@@ -6,4 +6,4 @@
         <vendor name="Atlassian Software Systems Pty Ltd" url="http://www.atlassian.com"/>
     </plugin-info>
 
-</atlassian-plugin>
+</maera-plugin>

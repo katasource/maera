@@ -6,7 +6,7 @@ import org.maera.plugin.PluginInformation;
 import org.maera.plugin.PluginParseException;
 
 /**
- * Interface for parsing a plugin descriptor file, e.g. atlassian-plugin.xml.
+ * Interface for parsing a plugin descriptor file, e.g. maera-plugin.xml.
  *
  * @see XmlDescriptorParser
  * @see DescriptorParserFactory

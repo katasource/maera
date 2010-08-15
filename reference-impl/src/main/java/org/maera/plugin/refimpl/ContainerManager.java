@@ -13,7 +13,7 @@ import org.maera.plugin.*;
 import org.maera.plugin.event.PluginEventManager;
 import org.maera.plugin.hostcontainer.HostContainer;
 import org.maera.plugin.hostcontainer.SimpleConstructorHostContainer;
-import org.maera.plugin.main.AtlassianPlugins;
+import org.maera.plugin.main.MaeraPlugins;
 import org.maera.plugin.main.PluginsConfiguration;
 import org.maera.plugin.main.PluginsConfigurationBuilder;
 import org.maera.plugin.module.ClassPrefixModuleFactory;
@@ -53,7 +53,7 @@ public class ContainerManager {
     /**
      * the name of the bundled plugins zip file to use
      */
-    private static final String BUNDLED_PLUGINS_ZIP = "/atlassian-bundled-plugins.zip";
+    private static final String BUNDLED_PLUGINS_ZIP = "/maera-bundled-plugins.zip";
 
     private final ServletModuleManager servletModuleManager;
     private final SimpleWebResourceIntegration webResourceIntegration;
@@ -63,7 +63,7 @@ public class ContainerManager {
     private final HostComponentProvider hostComponentProvider;
     private final DefaultModuleDescriptorFactory moduleDescriptorFactory;
     private final Map<Class<?>, Object> publicContainer;
-    private final AtlassianPlugins plugins;
+    private final MaeraPlugins plugins;
 
     private final HostContainer hostContainer;
     private static ContainerManager instance;
@@ -128,7 +128,7 @@ public class ContainerManager {
                 .build();
 
         PrefixDelegatingModuleFactory moduleFactory = new PrefixDelegatingModuleFactory(ImmutableSet.<PrefixModuleFactory>of(new BeanPrefixModuleFactory()));
-        plugins = new AtlassianPlugins(config);
+        plugins = new MaeraPlugins(config);
 
         final PluginEventManager pluginEventManager = plugins.getPluginEventManager();
         osgiContainerManager = plugins.getOsgiContainerManager();
@@ -180,7 +180,7 @@ public class ContainerManager {
         InputStream in = null;
         final Properties props = new Properties();
         try {
-            in = getClass().getClassLoader().getResourceAsStream("META-INF/maven/org.maera.plugins/atlassian-plugins-core/pom.properties");
+            in = getClass().getClassLoader().getResourceAsStream("META-INF/maven/org.maera.plugins/maera-plugins-core/pom.properties");
             if (in != null) {
                 props.load(in);
                 return props.getProperty("version");

@@ -18,10 +18,10 @@ import static org.mockito.Mockito.when;
 
 public class TestAddBundleOverridesStage extends TestCase {
     public void testTransform() throws Exception {
-        final File plugin = new PluginJarBuilder("plugin").addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test Bundle instruction plugin 2' key='test.plugin'>", "    <plugin-info>", "        <version>1.0</version>",
+        final File plugin = new PluginJarBuilder("plugin").addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test Bundle instruction plugin 2' key='test.plugin'>", "    <plugin-info>", "        <version>1.0</version>",
                 "        <bundle-instructions>", "            <Export-Package>!*.internal.*,*</Export-Package>", "        </bundle-instructions>",
-                "    </plugin-info>", "</atlassian-plugin>").build();
+                "    </plugin-info>", "</maera-plugin>").build();
 
         final AddBundleOverridesStage stage = new AddBundleOverridesStage();
         OsgiContainerManager osgiContainerManager = mock(OsgiContainerManager.class);

@@ -8,7 +8,7 @@ import org.maera.plugin.Plugin;
 import java.util.List;
 
 public class TestWebResourceModuleDescriptor extends TestCase {
-    private static final String TEST_PLUGIN_KEY = "atlassian.test.plugin";
+    private static final String TEST_PLUGIN_KEY = "maera.test.plugin";
 
     private WebResourceModuleDescriptor descriptor;
     private Mock mockPlugin;
@@ -29,15 +29,15 @@ public class TestWebResourceModuleDescriptor extends TestCase {
 
     public void testInitWithDependencies() throws Exception {
         String xml = "<web-resource key=\"test-resources\">\n" +
-                "<dependency>atlassian.test.plugin:jquery</dependency>\n" +
-                "<dependency>atlassian.test.plugin:ajs</dependency>\n" +
+                "<dependency>maera.test.plugin:jquery</dependency>\n" +
+                "<dependency>maera.test.plugin:ajs</dependency>\n" +
                 "</web-resource>";
 
         descriptor.init((Plugin) mockPlugin.proxy(), DocumentHelper.parseText(xml).getRootElement());
 
         List<String> dependencies = descriptor.getDependencies();
         assertEquals(2, dependencies.size());
-        assertEquals("atlassian.test.plugin:jquery", dependencies.get(0));
-        assertEquals("atlassian.test.plugin:ajs", dependencies.get(1));
+        assertEquals("maera.test.plugin:jquery", dependencies.get(0));
+        assertEquals("maera.test.plugin:ajs", dependencies.get(1));
     }
 }

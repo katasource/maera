@@ -103,7 +103,7 @@ public class GenerateManifestStage implements TransformStage {
                 }
                 header(properties, Analyzer.BUNDLE_CLASSPATH, classpath.toString());
 
-                // Process any bundle instructions in atlassian-plugin.xml
+                // Process any bundle instructions in maera-plugin.xml
                 properties.putAll(context.getBndInstructions());
 
                 // Add extra imports to the imports list
@@ -138,7 +138,7 @@ public class GenerateManifestStage implements TransformStage {
 
     private Map<String, String> getRequiredOsgiHeaders(TransformContext context, String pluginKey) {
         Map<String, String> props = new HashMap<String, String>();
-        props.put(OsgiPlugin.ATLASSIAN_PLUGIN_KEY, pluginKey);
+        props.put(OsgiPlugin.MAERA_PLUGIN_KEY, pluginKey);
         String springHeader = getDesiredSpringContextValue(context);
         if (springHeader != null) {
             props.put(SPRING_CONTEXT, springHeader);
@@ -163,7 +163,7 @@ public class GenerateManifestStage implements TransformStage {
     }
 
     private String ensureDefaultTimeout(final String header) {
-        final boolean noTimeOutSpecified = StringUtils.isEmpty(System.getProperty(PluginUtils.ATLASSIAN_PLUGINS_ENABLE_WAIT));
+        final boolean noTimeOutSpecified = StringUtils.isEmpty(System.getProperty(PluginUtils.MAERA_PLUGINS_ENABLE_WAIT));
 
         if (noTimeOutSpecified) {
             return header;

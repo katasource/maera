@@ -16,7 +16,7 @@ public class TestUnloadableStaticPluginFactory extends TestCase {
         UnloadableStaticPluginFactory factory = new UnloadableStaticPluginFactory("foo.xml");
         PluginArtifact artifact = mock(PluginArtifact.class);
         when(artifact.getResourceAsStream("foo.xml")).thenReturn(new ByteArrayInputStream(
-                "<atlassian-plugin key=\"foo\" />".getBytes()
+                "<maera-plugin key=\"foo\" />".getBytes()
         ));
         assertEquals("foo", factory.canCreate(artifact));
     }
@@ -25,7 +25,7 @@ public class TestUnloadableStaticPluginFactory extends TestCase {
         UnloadableStaticPluginFactory factory = new UnloadableStaticPluginFactory("foo.xml");
         PluginArtifact artifact = mock(PluginArtifact.class);
         when(artifact.getResourceAsStream("foo.xml")).thenReturn(new ByteArrayInputStream(
-                "<atlassian-plugin key=\"foo\" plugins-version=\"2\"/>".getBytes()
+                "<maera-plugin key=\"foo\" plugins-version=\"2\"/>".getBytes()
         ));
         assertEquals(null, factory.canCreate(artifact));
     }
@@ -41,7 +41,7 @@ public class TestUnloadableStaticPluginFactory extends TestCase {
         UnloadableStaticPluginFactory factory = new UnloadableStaticPluginFactory("foo.xml");
         PluginArtifact artifact = mock(PluginArtifact.class);
         when(artifact.getResourceAsStream("foo.xml")).thenReturn(new ByteArrayInputStream(
-                "<atlassian-plugin key=\"foo\" />".getBytes()
+                "<maera-plugin key=\"foo\" />".getBytes()
         ));
         when(artifact.toString()).thenReturn("plugin.jar");
         UnloadablePlugin plugin = (UnloadablePlugin) factory.create(artifact, new DefaultModuleDescriptorFactory(new DefaultHostContainer()));
@@ -55,7 +55,7 @@ public class TestUnloadableStaticPluginFactory extends TestCase {
         UnloadableStaticPluginFactory factory = new UnloadableStaticPluginFactory("foo.xml");
         PluginArtifact artifact = mock(PluginArtifact.class);
         when(artifact.getResourceAsStream("foo.xml")).thenReturn(new ByteArrayInputStream(
-                "<atlassian-plugin />".getBytes()
+                "<maera-plugin />".getBytes()
         ));
         when(artifact.toString()).thenReturn("plugin.jar");
         UnloadablePlugin plugin = (UnloadablePlugin) factory.create(artifact, new DefaultModuleDescriptorFactory(new DefaultHostContainer()));

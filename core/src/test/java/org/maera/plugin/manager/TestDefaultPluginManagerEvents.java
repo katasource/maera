@@ -69,7 +69,7 @@ public class TestDefaultPluginManagerEvents extends TestCase {
 
     private List<PluginLoader> buildPluginLoaders(PluginEventManager pluginEventManager, File pluginTempDirectory) {
         List<PluginLoader> pluginLoaders = new ArrayList<PluginLoader>();
-        pluginLoaders.add(new SinglePluginLoader("test-atlassian-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
         pluginLoaders.add(new SinglePluginLoader("test-disabled-plugin.xml"));
         DirectoryPluginLoader directoryPluginLoader = new DirectoryPluginLoader(
                 pluginTempDirectory,
@@ -102,18 +102,18 @@ public class TestDefaultPluginManagerEvents extends TestCase {
                 PluginModuleEnabledEvent.class,
                 PluginEnabledEvent.class);
         assertListEquals(listener.getEventPluginOrModuleKeys(),
-                "test.atlassian.plugin:bear",
-                "test.atlassian.plugin:gold",
-                "test.atlassian.plugin:veg",
-                "test.atlassian.plugin",
-                "test.atlassian.plugin.classloaded:paddington",
-                "test.atlassian.plugin.classloaded",
-                "test.atlassian.plugin.classloaded2:pooh",
-                "test.atlassian.plugin.classloaded2");
+                "test.maera.plugin:bear",
+                "test.maera.plugin:gold",
+                "test.maera.plugin:veg",
+                "test.maera.plugin",
+                "test.maera.plugin.classloaded:paddington",
+                "test.maera.plugin.classloaded",
+                "test.maera.plugin.classloaded2:pooh",
+                "test.maera.plugin.classloaded2");
     }
 
     public void testDisablePlugin() throws Exception {
-        manager.disablePlugin("test.atlassian.plugin");
+        manager.disablePlugin("test.maera.plugin");
 
         assertListEquals(listener.getEventClasses(),
                 PluginModuleDisabledEvent.class,
@@ -121,16 +121,16 @@ public class TestDefaultPluginManagerEvents extends TestCase {
                 PluginModuleDisabledEvent.class,
                 PluginDisabledEvent.class);
         assertListEquals(listener.getEventPluginOrModuleKeys(),
-                "test.atlassian.plugin:veg",  // a  module that can't be individually disabled can still be disabled with the plugin
-                "test.atlassian.plugin:gold", // modules in reverse order to enable
-                "test.atlassian.plugin:bear",
-                "test.atlassian.plugin");
+                "test.maera.plugin:veg",  // a  module that can't be individually disabled can still be disabled with the plugin
+                "test.maera.plugin:gold", // modules in reverse order to enable
+                "test.maera.plugin:bear",
+                "test.maera.plugin");
     }
 
     public void testEnablePlugin() throws Exception {
-        manager.disablePlugin("test.atlassian.plugin");
+        manager.disablePlugin("test.maera.plugin");
         listener.reset();
-        manager.enablePlugin("test.atlassian.plugin");
+        manager.enablePlugin("test.maera.plugin");
 
         assertListEquals(listener.getEventClasses(),
                 PluginModuleEnabledEvent.class,
@@ -138,10 +138,10 @@ public class TestDefaultPluginManagerEvents extends TestCase {
                 PluginModuleEnabledEvent.class,
                 PluginEnabledEvent.class);
         assertListEquals(listener.getEventPluginOrModuleKeys(),
-                "test.atlassian.plugin:bear",
-                "test.atlassian.plugin:gold",
-                "test.atlassian.plugin:veg",
-                "test.atlassian.plugin");
+                "test.maera.plugin:bear",
+                "test.maera.plugin:gold",
+                "test.maera.plugin:veg",
+                "test.maera.plugin");
     }
 
     public void testEnableDisabledByDefaultPlugin() throws Exception {
@@ -158,29 +158,29 @@ public class TestDefaultPluginManagerEvents extends TestCase {
     }
 
     public void testDisableModule() throws Exception {
-        manager.disablePluginModule("test.atlassian.plugin:bear");
+        manager.disablePluginModule("test.maera.plugin:bear");
 
         assertListEquals(listener.getEventClasses(), PluginModuleDisabledEvent.class);
-        assertListEquals(listener.getEventPluginOrModuleKeys(), "test.atlassian.plugin:bear");
+        assertListEquals(listener.getEventPluginOrModuleKeys(), "test.maera.plugin:bear");
     }
 
     public void testDisableModuleWithCannotDisableDoesNotFireEvent() throws Exception {
-        manager.disablePluginModule("test.atlassian.plugin:veg");
+        manager.disablePluginModule("test.maera.plugin:veg");
         assertEquals(listener.getEventClasses().size(), 0);
     }
 
     public void testEnableModule() throws Exception {
-        manager.disablePluginModule("test.atlassian.plugin:bear");
+        manager.disablePluginModule("test.maera.plugin:bear");
         listener.reset();
-        manager.enablePluginModule("test.atlassian.plugin:bear");
+        manager.enablePluginModule("test.maera.plugin:bear");
 
         assertListEquals(listener.getEventClasses(), PluginModuleEnabledEvent.class);
-        assertListEquals(listener.getEventPluginOrModuleKeys(), "test.atlassian.plugin:bear");
+        assertListEquals(listener.getEventPluginOrModuleKeys(), "test.maera.plugin:bear");
     }
 
     public void testInstallPlugin() throws Exception {
         // have to uninstall one of the directory plugins
-        manager.uninstall(manager.getPlugin("test.atlassian.plugin.classloaded2"));
+        manager.uninstall(manager.getPlugin("test.maera.plugin.classloaded2"));
         listener.reset();
         File pluginJar = new File(DirectoryPluginLoaderUtils.getTestPluginsDirectory(),
                 "pooh-test-plugin.jar");
@@ -193,7 +193,7 @@ public class TestDefaultPluginManagerEvents extends TestCase {
 
     public void testUninstallPlugin() throws Exception {
         // have to uninstall one of the directory plugins
-        manager.uninstall(manager.getPlugin("test.atlassian.plugin.classloaded2"));
+        manager.uninstall(manager.getPlugin("test.maera.plugin.classloaded2"));
 
         assertListEquals(listener.getEventClasses(),
                 PluginModuleDisabledEvent.class,

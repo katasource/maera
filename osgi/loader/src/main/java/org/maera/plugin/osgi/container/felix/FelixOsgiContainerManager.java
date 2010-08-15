@@ -41,7 +41,7 @@ public class FelixOsgiContainerManager implements OsgiContainerManager {
 
     private static final org.slf4j.Logger log = LoggerFactory.getLogger(FelixOsgiContainerManager.class);
     private static final String OSGI_BOOTDELEGATION = "org.osgi.framework.bootdelegation";
-    private static final String ATLASSIAN_PREFIX = "atlassian.";
+    private static final String MAERA_PREFIX = "maera.";
 
     private final OsgiPersistentCache persistentCache;
     private final URL frameworkBundlesUrl;
@@ -396,7 +396,7 @@ public class FelixOsgiContainerManager implements OsgiContainerManager {
     }
 
     private String getAtlassianSpecificOsgiSystemProperty(final String originalSystemProperty) {
-        return System.getProperty(ATLASSIAN_PREFIX + originalSystemProperty);
+        return System.getProperty(MAERA_PREFIX + originalSystemProperty);
     }
 
     /**

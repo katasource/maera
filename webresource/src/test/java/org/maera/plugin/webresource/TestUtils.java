@@ -112,12 +112,12 @@ public class TestUtils {
         ResourceDescriptor pluginCssResource = TestUtils.createResourceDescriptor("plugin.css");
         ResourceDescriptor pluginJsResource = TestUtils.createResourceDescriptor("plugin.js");
 
-        WebResourceModuleDescriptor master = TestUtils.createWebResourceModuleDescriptor("test.atlassian:superbatch", testPlugin, Arrays.asList(masterCssResource, ieOnlyasterCssResource, masterJavascriptResource, irrelevantParameterCssResource));
-        WebResourceModuleDescriptor plugin = TestUtils.createWebResourceModuleDescriptor("test.atlassian:superbatch2", testPlugin, Arrays.asList(pluginCssResource, pluginJsResource));
+        WebResourceModuleDescriptor master = TestUtils.createWebResourceModuleDescriptor("test.maera:superbatch", testPlugin, Arrays.asList(masterCssResource, ieOnlyasterCssResource, masterJavascriptResource, irrelevantParameterCssResource));
+        WebResourceModuleDescriptor plugin = TestUtils.createWebResourceModuleDescriptor("test.maera:superbatch2", testPlugin, Arrays.asList(pluginCssResource, pluginJsResource));
 
-        mockPluginAccessor.matchAndReturn("getEnabledPluginModule", "test.atlassian:superbatch", master);
-        mockPluginAccessor.matchAndReturn("getEnabledPluginModule", "test.atlassian:superbatch2", plugin);
-        mockPluginAccessor.matchAndReturn("getEnabledPluginModule", "test.atlassian:missing-plugin", null);
+        mockPluginAccessor.matchAndReturn("getEnabledPluginModule", "test.maera:superbatch", master);
+        mockPluginAccessor.matchAndReturn("getEnabledPluginModule", "test.maera:superbatch2", plugin);
+        mockPluginAccessor.matchAndReturn("getEnabledPluginModule", "test.maera:missing-plugin", null);
     }
 
     private static String escapeXMLCharacters(String input) {
@@ -125,7 +125,7 @@ public class TestUtils {
     }
 
     static Plugin createTestPlugin() {
-        return createTestPlugin("test.atlassian", "1");
+        return createTestPlugin("test.maera", "1");
     }
 
     static Plugin createTestPlugin(String pluginKey, String version) {

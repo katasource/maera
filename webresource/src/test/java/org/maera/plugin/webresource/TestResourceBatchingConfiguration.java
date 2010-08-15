@@ -15,9 +15,9 @@ class TestResourceBatchingConfiguration implements ResourceBatchingConfiguration
 
     public List<String> getSuperBatchModuleCompleteKeys() {
         return Arrays.asList(
-                "test.atlassian:superbatch",
-                "test.atlassian:superbatch2",
-                "test.atlassian:missing-plugin"
+                "test.maera:superbatch",
+                "test.maera:superbatch2",
+                "test.maera:missing-plugin"
         );
     }
 }

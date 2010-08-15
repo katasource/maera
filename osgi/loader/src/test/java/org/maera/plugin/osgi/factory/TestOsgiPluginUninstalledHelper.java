@@ -26,7 +26,7 @@ public class TestOsgiPluginUninstalledHelper extends TestCase {
 
     public void testInstall() {
         Dictionary dict = new Hashtable();
-        dict.put(OsgiPlugin.ATLASSIAN_PLUGIN_KEY, key);
+        dict.put(OsgiPlugin.MAERA_PLUGIN_KEY, key);
         Bundle bundle = mock(Bundle.class);
         when(bundle.getHeaders()).thenReturn(dict);
         when(bundle.getSymbolicName()).thenReturn(key);
@@ -52,7 +52,7 @@ public class TestOsgiPluginUninstalledHelper extends TestCase {
 
     public void testInstallDifferentSymbolicNameButAltassianKeyFound() {
         Dictionary dict = new Hashtable();
-        dict.put(OsgiPlugin.ATLASSIAN_PLUGIN_KEY, key);
+        dict.put(OsgiPlugin.MAERA_PLUGIN_KEY, key);
         Bundle bundle = mock(Bundle.class);
         when(bundle.getHeaders()).thenReturn(dict);
         when(bundle.getSymbolicName()).thenReturn("bar");

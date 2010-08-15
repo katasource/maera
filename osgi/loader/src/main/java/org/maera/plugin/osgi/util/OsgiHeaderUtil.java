@@ -172,7 +172,7 @@ public class OsgiHeaderUtil {
     public static String getPluginKey(Bundle bundle) {
         return getPluginKey(
                 bundle.getSymbolicName(),
-                bundle.getHeaders().get(OsgiPlugin.ATLASSIAN_PLUGIN_KEY),
+                bundle.getHeaders().get(OsgiPlugin.MAERA_PLUGIN_KEY),
                 bundle.getHeaders().get(Constants.BUNDLE_VERSION)
         );
     }
@@ -187,7 +187,7 @@ public class OsgiHeaderUtil {
     public static String getPluginKey(Manifest mf) {
         return getPluginKey(
                 mf.getMainAttributes().getValue(Constants.BUNDLE_SYMBOLICNAME),
-                mf.getMainAttributes().getValue(OsgiPlugin.ATLASSIAN_PLUGIN_KEY),
+                mf.getMainAttributes().getValue(OsgiPlugin.MAERA_PLUGIN_KEY),
                 mf.getMainAttributes().getValue(Constants.BUNDLE_VERSION)
         );
     }

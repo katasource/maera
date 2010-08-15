@@ -6,13 +6,13 @@ public class TestPluginSpringInteraction extends PluginInContainerTestBase {
     public void testDisposable() throws Exception {
         StaticBooleanFlag.flag.set(false);
         new PluginJarBuilder("testDisposable")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <component key='obj' class='my.Foo'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.Foo",
                         "package my;",
                         "public class Foo implements org.springframework.beans.factory.DisposableBean{",

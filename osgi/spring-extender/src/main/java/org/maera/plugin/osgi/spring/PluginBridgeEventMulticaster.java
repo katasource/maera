@@ -29,7 +29,7 @@ public class PluginBridgeEventMulticaster extends OsgiBundleApplicationContextEv
     }
 
     /**
-     * Look for the application listener bridge from atlassian-plugins-osgi-bridge.  Can't use Spring DM stuff as it
+     * Look for the application listener bridge from maera-plugins-osgi-bridge.  Can't use Spring DM stuff as it
      * creates a circular dependency.
      *
      * @param bundleContext The bundle context for Spring DM extender

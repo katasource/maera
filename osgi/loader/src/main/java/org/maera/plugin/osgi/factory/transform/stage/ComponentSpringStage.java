@@ -23,7 +23,7 @@ public class ComponentSpringStage implements TransformStage {
     /**
      * Path of generated Spring XML file
      */
-    private static final String SPRING_XML = "META-INF/spring/atlassian-plugins-components.xml";
+    private static final String SPRING_XML = "META-INF/spring/maera-plugins-components.xml";
 
     public void execute(TransformContext context) throws PluginTransformationException {
         if (SpringHelper.shouldGenerateFile(context, SPRING_XML)) {

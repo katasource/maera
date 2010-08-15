@@ -113,7 +113,7 @@ public class TestDelegatingPluginFilter extends TestCase {
                                 "    }" +
                                 "    public void destroy() {}" +
                                 "}")
-                .addFile("atlassian-plugin.xml", getFileForResource("com/atlassian/plugin/servlet/filter/atlassian-plugin-filter.xml"))
+                .addFile("maera-plugin.xml", getFileForResource("org/maera/plugin/servlet/filter/maera-plugin-filter.xml"))
                 .build();
         final PluginClassLoader loader = new PluginClassLoader(pluginFile);
         Plugin plugin = new DefaultDynamicPlugin((PluginArtifact) new Mock(PluginArtifact.class).proxy(), loader);

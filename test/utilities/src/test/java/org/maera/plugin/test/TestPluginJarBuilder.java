@@ -18,16 +18,16 @@ public class TestPluginJarBuilder extends TestCase {
                 .build();
         assertNotNull(jar);
 
-        URLClassLoader cl = new URLClassLoader(new URL[]{jar.toURL()}, null);
+        URLClassLoader cl = new URLClassLoader(new URL[]{jar.toURI().toURL()}, null);
         Class cls = cl.loadClass("my.Foo");
         assertNotNull(cls);
         Object foo = cls.newInstance();
-        String result = (String) cls.getMethod("hi", new Class[0]).invoke(foo, new Object[0]);
+        String result = (String) cls.getMethod("hi").invoke(foo);
         assertEquals("hi", result);
         Assert.assertEquals("Some text", IOUtils.toString(cl.getResourceAsStream("foo.txt")));
         assertNotNull(cl.getResource("META-INF/MANIFEST.MF"));
 
-        String xml = IOUtils.toString(cl.getResourceAsStream("atlassian-plugin.xml"));
+        String xml = IOUtils.toString(cl.getResourceAsStream("maera-plugin.xml"));
         assertTrue(xml.indexOf("someKey") > 0);
         assertTrue(xml.indexOf("someName") > 0);
         assertTrue(xml.indexOf("1.33") > 0);

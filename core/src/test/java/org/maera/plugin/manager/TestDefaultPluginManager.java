@@ -84,7 +84,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
     }
 
     public void testRetrievePlugins() throws PluginParseException {
-        pluginLoaders.add(new SinglePluginLoader("test-atlassian-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
         pluginLoaders.add(new SinglePluginLoader("test-disabled-plugin.xml"));
 
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
@@ -207,7 +207,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
     }
 
     public void testDisablePluginModuleWithCannotDisableAnnotation() {
-        pluginLoaders.add(new SinglePluginLoader("test-atlassian-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("bullshit", MockUnusedModuleDescriptor.class);
@@ -215,7 +215,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
 
         manager.init();
 
-        final String pluginKey = "test.atlassian.plugin";
+        final String pluginKey = "test.maera.plugin";
         final String disablableModuleKey = pluginKey + ":bear";
         final String moduleKey = pluginKey + ":veg";
 
@@ -229,7 +229,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
     }
 
     public void testDisablePluginModuleWithCannotDisableAnnotationinSuperclass() {
-        pluginLoaders.add(new SinglePluginLoader("test-atlassian-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("bullshit", MockUnusedModuleDescriptor.class);
@@ -238,7 +238,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
 
         manager.init();
 
-        final String pluginKey = "test.atlassian.plugin";
+        final String pluginKey = "test.maera.plugin";
         final String disablableModuleKey = pluginKey + ":bear";
         final String moduleKey = pluginKey + ":vegSubclass";
 
@@ -252,7 +252,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
     }
 
     public void testEnabledDisabledRetrieval() throws PluginParseException {
-        pluginLoaders.add(new SinglePluginLoader("test-atlassian-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("bullshit", MockUnusedModuleDescriptor.class);
@@ -273,7 +273,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         assertTrue(manager.getEnabledModuleDescriptorsByClass(NothingModuleDescriptor.class).isEmpty());
         assertTrue(manager.getEnabledModuleDescriptorsByType("bullshit").isEmpty());
 
-        final String pluginKey = "test.atlassian.plugin";
+        final String pluginKey = "test.maera.plugin";
         final String moduleKey = pluginKey + ":bear";
 
         // retrieve everything when enabled
@@ -350,8 +350,8 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
     public void testLoadOlderDuplicatePlugin() throws PluginParseException {
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
-        pluginLoaders.add(new MultiplePluginLoader("test-atlassian-plugin-newer.xml"));
-        pluginLoaders.add(new MultiplePluginLoader("test-atlassian-plugin.xml", "test-another-plugin.xml"));
+        pluginLoaders.add(new MultiplePluginLoader("test-maera-plugin-newer.xml"));
+        pluginLoaders.add(new MultiplePluginLoader("test-maera-plugin.xml", "test-another-plugin.xml"));
         manager.init();
         assertEquals(2, manager.getEnabledPlugins().size());
     }
@@ -359,7 +359,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
     public void testLoadOlderDuplicatePluginDoesNotTryToEnableIt() {
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
-        pluginLoaders.add(new MultiplePluginLoader("test-atlassian-plugin-newer.xml"));
+        pluginLoaders.add(new MultiplePluginLoader("test-maera-plugin-newer.xml"));
         final Plugin plugin = new StaticPlugin() {
             @Override
             protected PluginState enableInternal() {
@@ -372,7 +372,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
                 fail("disable() must never be called on a earlier version of plugin when later version is installed");
             }
         };
-        plugin.setKey("test.atlassian.plugin");
+        plugin.setKey("test.maera.plugin");
         plugin.getPluginInformation().setVersion("1.0");
         manager.init();
         manager.addPlugins(null, Collections.singletonList(plugin));
@@ -381,14 +381,14 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
     public void testLoadNewerDuplicatePlugin() throws PluginParseException {
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
-        pluginLoaders.add(new SinglePluginLoader("test-atlassian-plugin.xml"));
-        pluginLoaders.add(new SinglePluginLoader("test-atlassian-plugin-newer.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin-newer.xml"));
         try {
             manager.init();
             fail("Should have died with duplicate key exception.");
         }
         catch (final PluginParseException e) {
-            assertEquals("Duplicate plugin found (installed version is the same or older) and could not be unloaded: 'test.atlassian.plugin'",
+            assertEquals("Duplicate plugin found (installed version is the same or older) and could not be unloaded: 'test.maera.plugin'",
                     e.getMessage());
         }
     }
@@ -397,54 +397,54 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
 
-        pluginLoaders.add(new SinglePluginLoaderWithRemoval("test-atlassian-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoaderWithRemoval("test-maera-plugin.xml"));
         manager.init();
 
-        pluginStateStore.save(PluginPersistentState.Builder.create(pluginStateStore.load()).setEnabled(manager.getPlugin("test.atlassian.plugin"),
+        pluginStateStore.save(PluginPersistentState.Builder.create(pluginStateStore.load()).setEnabled(manager.getPlugin("test.maera.plugin"),
                 false).toState());
 
-        assertFalse(manager.isPluginEnabled("test.atlassian.plugin"));
+        assertFalse(manager.isPluginEnabled("test.maera.plugin"));
         manager.shutdown();
 
-        pluginLoaders.add(new SinglePluginLoaderWithRemoval("test-atlassian-plugin-newer.xml"));
+        pluginLoaders.add(new SinglePluginLoaderWithRemoval("test-maera-plugin-newer.xml"));
         manager.init();
 
-        final Plugin plugin = manager.getPlugin("test.atlassian.plugin");
+        final Plugin plugin = manager.getPlugin("test.maera.plugin");
         assertEquals("1.1", plugin.getPluginInformation().getVersion());
-        assertFalse(manager.isPluginEnabled("test.atlassian.plugin"));
+        assertFalse(manager.isPluginEnabled("test.maera.plugin"));
     }
 
     public void testLoadNewerDuplicateDynamicPluginPreservesModuleState() throws PluginParseException {
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
 
-        pluginLoaders.add(new SinglePluginLoaderWithRemoval("test-atlassian-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoaderWithRemoval("test-maera-plugin.xml"));
         manager.init();
 
         pluginStateStore.save(PluginPersistentState.Builder.create(pluginStateStore.load()).setEnabled(
-                manager.getPluginModule("test.atlassian.plugin:bear"), false).toState());
+                manager.getPluginModule("test.maera.plugin:bear"), false).toState());
 
         manager.shutdown();
 
-        pluginLoaders.add(new SinglePluginLoaderWithRemoval("test-atlassian-plugin-newer.xml"));
+        pluginLoaders.add(new SinglePluginLoaderWithRemoval("test-maera-plugin-newer.xml"));
         manager.init();
 
-        final Plugin plugin = manager.getPlugin("test.atlassian.plugin");
+        final Plugin plugin = manager.getPlugin("test.maera.plugin");
         assertEquals("1.1", plugin.getPluginInformation().getVersion());
-        assertFalse(manager.isPluginModuleEnabled("test.atlassian.plugin:bear"));
-        assertTrue(manager.isPluginModuleEnabled("test.atlassian.plugin:gold"));
+        assertFalse(manager.isPluginModuleEnabled("test.maera.plugin:bear"));
+        assertTrue(manager.isPluginModuleEnabled("test.maera.plugin:gold"));
     }
 
     public void testLoadChangedDynamicPluginWithSameVersionNumberReplacesExisting() throws PluginParseException {
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
 
-        pluginLoaders.add(new SinglePluginLoaderWithRemoval("test-atlassian-plugin.xml"));
-        pluginLoaders.add(new SinglePluginLoaderWithRemoval("test-atlassian-plugin-changed-same-version.xml"));
+        pluginLoaders.add(new SinglePluginLoaderWithRemoval("test-maera-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoaderWithRemoval("test-maera-plugin-changed-same-version.xml"));
 
         manager.init();
 
-        final Plugin plugin = manager.getPlugin("test.atlassian.plugin");
+        final Plugin plugin = manager.getPlugin("test.maera.plugin");
         assertEquals("Test Plugin (Changed)", plugin.getName());
     }
 
@@ -627,23 +627,23 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
     }
 
     public void testGetPluginAndModules() throws PluginParseException {
-        pluginLoaders.add(new SinglePluginLoader("test-atlassian-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
 
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
 
         manager.init();
 
-        final Plugin plugin = manager.getPlugin("test.atlassian.plugin");
+        final Plugin plugin = manager.getPlugin("test.maera.plugin");
         assertNotNull(plugin);
         assertEquals("Test Plugin", plugin.getName());
 
         final ModuleDescriptor<?> bear = plugin.getModuleDescriptor("bear");
-        assertEquals(bear, manager.getPluginModule("test.atlassian.plugin:bear"));
+        assertEquals(bear, manager.getPluginModule("test.maera.plugin:bear"));
     }
 
     public void testGetModuleByModuleClassOneFound() throws PluginParseException {
-        pluginLoaders.add(new SinglePluginLoader("test-atlassian-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
 
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
@@ -664,7 +664,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
     }
 
     public void testGetModuleByModuleClassAndDescriptor() throws PluginParseException {
-        pluginLoaders.add(new SinglePluginLoader("test-atlassian-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
 
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
@@ -675,7 +675,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
                 new Class[]{MockAnimalModuleDescriptor.class, MockMineralModuleDescriptor.class}, MockBear.class);
         assertNotNull(bearModules);
         assertEquals(1, bearModules.size());
-        assertTrue(bearModules.iterator().next() instanceof MockBear);
+        assertTrue(bearModules.iterator().next() != null);
 
         final Collection<MockBear> noModules = manager.getEnabledModulesByClassAndDescriptor(new Class[]{}, MockBear.class);
         assertNotNull(noModules);
@@ -685,8 +685,8 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
                 new Class[]{MockAnimalModuleDescriptor.class, MockMineralModuleDescriptor.class}, MockThing.class);
         assertNotNull(mockThings);
         assertEquals(2, mockThings.size());
-        assertTrue(mockThings.iterator().next() instanceof MockThing);
-        assertTrue(mockThings.iterator().next() instanceof MockThing);
+        assertTrue(mockThings.iterator().next() != null);
+        assertTrue(mockThings.iterator().next() != null);
 
         final Collection<MockThing> mockThingsFromMineral = manager.getEnabledModulesByClassAndDescriptor(
                 new Class[]{MockMineralModuleDescriptor.class}, MockThing.class);
@@ -697,7 +697,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
     }
 
     public void testGetModuleByModuleClassNoneFound() throws PluginParseException {
-        pluginLoaders.add(new SinglePluginLoader("test-atlassian-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
 
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
@@ -716,7 +716,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
     }
 
     public void testGetModuleDescriptorsByType() throws PluginParseException {
-        pluginLoaders.add(new SinglePluginLoader("test-atlassian-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
 
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
@@ -748,7 +748,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
 
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
 
-        final InputStream is = manager.getPluginResourceAsStream("test.atlassian.plugin.classloaded", "atlassian-plugin.xml");
+        final InputStream is = manager.getPluginResourceAsStream("test.maera.plugin.classloaded", "maera-plugin.xml");
         assertNotNull(is);
         IOUtils.closeQuietly(is);
     }
@@ -775,20 +775,20 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
 
         assertEquals(1, manager.getPlugins().size());
-        assertNotNull(manager.getPlugin("test.atlassian.plugin.classloaded2"));
+        assertNotNull(manager.getPlugin("test.maera.plugin.classloaded2"));
 
         //restore paddington to test plugins dir
         FileUtils.copyDirectory(pluginsDirectory, pluginsTestDir);
 
         manager.scanForNewPlugins();
         assertEquals(2, manager.getPlugins().size());
-        assertNotNull(manager.getPlugin("test.atlassian.plugin.classloaded2"));
-        assertNotNull(manager.getPlugin("test.atlassian.plugin.classloaded"));
+        assertNotNull(manager.getPlugin("test.maera.plugin.classloaded2"));
+        assertNotNull(manager.getPlugin("test.maera.plugin.classloaded"));
 
         manager.scanForNewPlugins();
         assertEquals(2, manager.getPlugins().size());
-        assertNotNull(manager.getPlugin("test.atlassian.plugin.classloaded2"));
-        assertNotNull(manager.getPlugin("test.atlassian.plugin.classloaded"));
+        assertNotNull(manager.getPlugin("test.maera.plugin.classloaded2"));
+        assertNotNull(manager.getPlugin("test.maera.plugin.classloaded"));
     }
 
     public void testFindingNewPluginsNotLoadingRestartRequiredDescriptors() throws PluginParseException, IOException {
@@ -798,20 +798,20 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         moduleDescriptorFactory.addModuleDescriptor("requiresRestart", RequiresRestartModuleDescriptor.class);
 
         assertEquals(2, manager.getPlugins().size());
-        assertNotNull(manager.getPlugin("test.atlassian.plugin.classloaded2"));
+        assertNotNull(manager.getPlugin("test.maera.plugin.classloaded2"));
 
-        pluginLoaders.add(new DynamicSinglePluginLoader("test.atlassian.plugin", "test-requiresRestart-plugin.xml"));
+        pluginLoaders.add(new DynamicSinglePluginLoader("test.maera.plugin", "test-requiresRestart-plugin.xml"));
 
         manager.scanForNewPlugins();
         assertEquals(3, manager.getPlugins().size());
-        assertNotNull(manager.getPlugin("test.atlassian.plugin.classloaded2"));
-        assertNotNull(manager.getPlugin("test.atlassian.plugin"));
+        assertNotNull(manager.getPlugin("test.maera.plugin.classloaded2"));
+        assertNotNull(manager.getPlugin("test.maera.plugin"));
 
-        final Plugin plugin = manager.getPlugin("test.atlassian.plugin");
+        final Plugin plugin = manager.getPlugin("test.maera.plugin");
         assertTrue(plugin instanceof UnloadablePlugin);
         assertTrue(((UnloadablePlugin) plugin).getErrorText().contains("foo"));
 
-        assertEquals(PluginRestartState.INSTALL, manager.getPluginRestartState("test.atlassian.plugin"));
+        assertEquals(PluginRestartState.INSTALL, manager.getPluginRestartState("test.maera.plugin"));
     }
 
     /**
@@ -824,15 +824,15 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         moduleDescriptorFactory.addModuleDescriptor("requiresRestart", RequiresRestartModuleDescriptor.class);
 
         assertEquals(2, manager.getPlugins().size());
-        assertNotNull(manager.getPlugin("test.atlassian.plugin.classloaded2"));
+        assertNotNull(manager.getPlugin("test.maera.plugin.classloaded2"));
         assertEquals(0, manager.getEnabledModuleDescriptorsByClass(RequiresRestartModuleDescriptor.class).size());
 
-        pluginLoaders.add(new DynamicSinglePluginLoader("test.atlassian.plugin.classloaded2", "test-requiresRestartWithUpgrade-plugin.xml"));
+        pluginLoaders.add(new DynamicSinglePluginLoader("test.maera.plugin.classloaded2", "test-requiresRestartWithUpgrade-plugin.xml"));
 
         manager.scanForNewPlugins();
         assertEquals(2, manager.getPlugins().size());
-        assertNotNull(manager.getPlugin("test.atlassian.plugin.classloaded2"));
-        assertEquals(PluginRestartState.UPGRADE, manager.getPluginRestartState("test.atlassian.plugin.classloaded2"));
+        assertNotNull(manager.getPlugin("test.maera.plugin.classloaded2"));
+        assertEquals(PluginRestartState.UPGRADE, manager.getPluginRestartState("test.maera.plugin.classloaded2"));
         assertEquals(0, manager.getEnabledModuleDescriptorsByClass(RequiresRestartModuleDescriptor.class).size());
     }
 
@@ -842,9 +842,9 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
         assertEquals(2, manager.getPlugins().size());
 
-        new PluginJarBuilder().addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test 2' i18n-name-key='test.name' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
-                "    </plugin-info>", "    <requiresRestart key='foo' />", "</atlassian-plugin>").build(pluginsTestDir);
+        new PluginJarBuilder().addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test 2' i18n-name-key='test.name' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
+                "    </plugin-info>", "    <requiresRestart key='foo' />", "</maera-plugin>").build(pluginsTestDir);
         manager.scanForNewPlugins();
 
         assertEquals(3, manager.getPlugins().size());
@@ -875,9 +875,9 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         manager.setPluginInstaller(new FilePluginInstaller(pluginsTestDir));
         assertEquals(2, manager.getPlugins().size());
 
-        File pluginJar = new PluginJarBuilder().addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test 2' i18n-name-key='test.name' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
-                "    </plugin-info>", "    <requiresRestart key='foo' />", "</atlassian-plugin>").build();
+        File pluginJar = new PluginJarBuilder().addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test 2' i18n-name-key='test.name' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
+                "    </plugin-info>", "    <requiresRestart key='foo' />", "</maera-plugin>").build();
         manager.installPlugin(new JarPluginArtifact(pluginJar));
 
         assertEquals(3, manager.getPlugins().size());
@@ -906,9 +906,9 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         createFillAndCleanTempPluginDirectory();
         moduleDescriptorFactory.addModuleDescriptor("requiresRestart", RequiresRestartModuleDescriptor.class);
 
-        final File origFile = new PluginJarBuilder().addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
-                "    </plugin-info>", "    <requiresRestart key='foo' />", "</atlassian-plugin>").build(pluginsTestDir);
+        final File origFile = new PluginJarBuilder().addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
+                "    </plugin-info>", "    <requiresRestart key='foo' />", "</maera-plugin>").build(pluginsTestDir);
 
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
 
@@ -920,9 +920,9 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
 
         // Some filesystems only record last modified in seconds
         Thread.sleep(1000);
-        final File updateFile = new PluginJarBuilder().addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>2.0</version>",
-                "    </plugin-info>", "    <requiresRestart key='foo' />", "    <requiresRestart key='bar' />", "</atlassian-plugin>").build();
+        final File updateFile = new PluginJarBuilder().addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>2.0</version>",
+                "    </plugin-info>", "    <requiresRestart key='foo' />", "    <requiresRestart key='bar' />", "</maera-plugin>").build();
 
         origFile.delete();
         FileUtils.moveFile(updateFile, origFile);
@@ -948,9 +948,9 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         createFillAndCleanTempPluginDirectory();
         moduleDescriptorFactory.addModuleDescriptor("requiresRestart", RequiresRestartModuleDescriptor.class);
 
-        final File origFile = new PluginJarBuilder().addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
-                "    </plugin-info>", "    <requiresRestart key='foo' />", "</atlassian-plugin>").build(pluginsTestDir);
+        final File origFile = new PluginJarBuilder().addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
+                "    </plugin-info>", "    <requiresRestart key='foo' />", "</maera-plugin>").build(pluginsTestDir);
 
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
         manager.setPluginInstaller(new FilePluginInstaller(pluginsTestDir));
@@ -963,9 +963,9 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
 
         // Some filesystems only record last modified in seconds
         Thread.sleep(1000);
-        final File updateFile = new PluginJarBuilder().addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>2.0</version>",
-                "    </plugin-info>", "    <requiresRestart key='foo' />", "    <requiresRestart key='bar' />", "</atlassian-plugin>").build();
+        final File updateFile = new PluginJarBuilder().addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>2.0</version>",
+                "    </plugin-info>", "    <requiresRestart key='foo' />", "    <requiresRestart key='bar' />", "</maera-plugin>").build();
 
         manager.installPlugin(new JarPluginArtifact(updateFile));
 
@@ -992,9 +992,9 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         createFillAndCleanTempPluginDirectory();
         moduleDescriptorFactory.addModuleDescriptor("requiresRestart", RequiresRestartModuleDescriptor.class);
 
-        final File origFile = new PluginJarBuilder().addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
-                "    </plugin-info>", "    <requiresRestart key='foo' />", "</atlassian-plugin>").build(pluginsTestDir);
+        final File origFile = new PluginJarBuilder().addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
+                "    </plugin-info>", "    <requiresRestart key='foo' />", "</maera-plugin>").build(pluginsTestDir);
 
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
 
@@ -1006,9 +1006,9 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
 
         // Some filesystems only record last modified in seconds
         Thread.sleep(1000);
-        final File updateFile = new PluginJarBuilder().addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>2.0</version>",
-                "    </plugin-info>", "</atlassian-plugin>").build(pluginsTestDir);
+        final File updateFile = new PluginJarBuilder().addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>2.0</version>",
+                "    </plugin-info>", "</maera-plugin>").build(pluginsTestDir);
 
         origFile.delete();
         FileUtils.moveFile(updateFile, origFile);
@@ -1031,9 +1031,9 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         createFillAndCleanTempPluginDirectory();
         moduleDescriptorFactory.addModuleDescriptor("requiresRestart", RequiresRestartModuleDescriptor.class);
 
-        final File pluginFile = new PluginJarBuilder().addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
-                "    </plugin-info>", "    <requiresRestart key='foo' />", "</atlassian-plugin>").build(pluginsTestDir);
+        final File pluginFile = new PluginJarBuilder().addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
+                "    </plugin-info>", "    <requiresRestart key='foo' />", "</maera-plugin>").build(pluginsTestDir);
 
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
 
@@ -1063,9 +1063,9 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         createFillAndCleanTempPluginDirectory();
         moduleDescriptorFactory.addModuleDescriptor("requiresRestart", RequiresRestartModuleDescriptor.class);
 
-        final File pluginFile = new PluginJarBuilder().addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
-                "    </plugin-info>", "    <requiresRestart key='foo' />", "</atlassian-plugin>").build(pluginsTestDir);
+        final File pluginFile = new PluginJarBuilder().addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
+                "    </plugin-info>", "    <requiresRestart key='foo' />", "</maera-plugin>").build(pluginsTestDir);
 
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
 
@@ -1100,9 +1100,9 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         createFillAndCleanTempPluginDirectory();
         moduleDescriptorFactory.addModuleDescriptor("requiresRestartSubclass", RequiresRestartSubclassModuleDescriptor.class);
 
-        final File pluginFile = new PluginJarBuilder().addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
-                "    </plugin-info>", "    <requiresRestartSubclass key='foo' />", "</atlassian-plugin>").build(pluginsTestDir);
+        final File pluginFile = new PluginJarBuilder().addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
+                "    </plugin-info>", "    <requiresRestartSubclass key='foo' />", "</maera-plugin>").build(pluginsTestDir);
 
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
 
@@ -1132,9 +1132,9 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         createFillAndCleanTempPluginDirectory();
         moduleDescriptorFactory.addModuleDescriptor("requiresRestart", RequiresRestartModuleDescriptor.class);
 
-        new PluginJarBuilder().addFormattedResource("atlassian-plugin.xml",
-                "<atlassian-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
-                "    </plugin-info>", "    <requiresRestart key='foo' />", "</atlassian-plugin>").build(pluginsTestDir);
+        new PluginJarBuilder().addFormattedResource("maera-plugin.xml",
+                "<maera-plugin name='Test 2' key='test.restartrequired' pluginsVersion='1'>", "    <plugin-info>", "        <version>1.0</version>",
+                "    </plugin-info>", "    <requiresRestart key='foo' />", "</maera-plugin>").build(pluginsTestDir);
 
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
 
@@ -1167,13 +1167,13 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         manager.init();
 
         assertEquals(3, manager.getPlugins().size());
-        assertNotNull(manager.getPlugin("test.atlassian.plugin"));
-        assertTrue(manager.isPluginEnabled("test.atlassian.plugin"));
+        assertNotNull(manager.getPlugin("test.maera.plugin"));
+        assertTrue(manager.isPluginEnabled("test.maera.plugin"));
         assertEquals(1, manager.getEnabledModuleDescriptorsByClass(RequiresRestartModuleDescriptor.class).size());
-        assertEquals(PluginRestartState.NONE, manager.getPluginRestartState("test.atlassian.plugin"));
+        assertEquals(PluginRestartState.NONE, manager.getPluginRestartState("test.maera.plugin"));
 
         try {
-            manager.uninstall(manager.getPlugin("test.atlassian.plugin"));
+            manager.uninstall(manager.getPlugin("test.maera.plugin"));
             fail();
         }
         catch (final PluginException ex) {
@@ -1181,9 +1181,9 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         }
 
         assertEquals(3, manager.getPlugins().size());
-        assertNotNull(manager.getPlugin("test.atlassian.plugin"));
-        assertTrue(manager.isPluginEnabled("test.atlassian.plugin"));
-        assertEquals(PluginRestartState.NONE, manager.getPluginRestartState("test.atlassian.plugin"));
+        assertNotNull(manager.getPlugin("test.maera.plugin"));
+        assertTrue(manager.isPluginEnabled("test.maera.plugin"));
+        assertEquals(PluginRestartState.NONE, manager.getPluginRestartState("test.maera.plugin"));
         assertEquals(1, manager.getEnabledModuleDescriptorsByClass(RequiresRestartModuleDescriptor.class).size());
     }
 
@@ -1202,11 +1202,11 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
 
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
         assertEquals(2, manager.getPlugins().size());
-        final MockAnimalModuleDescriptor moduleDescriptor = (MockAnimalModuleDescriptor) manager.getPluginModule("test.atlassian.plugin.classloaded:paddington");
+        final MockAnimalModuleDescriptor moduleDescriptor = (MockAnimalModuleDescriptor) manager.getPluginModule("test.maera.plugin.classloaded:paddington");
         assertFalse(moduleDescriptor.disabled);
         final PassListener disabledListener = new PassListener(PluginDisabledEvent.class);
         pluginEventManager.register(disabledListener);
-        final Plugin plugin = manager.getPlugin("test.atlassian.plugin.classloaded");
+        final Plugin plugin = manager.getPlugin("test.maera.plugin.classloaded");
         manager.uninstall(plugin);
         assertTrue("Module must have had disable() called before being removed", moduleDescriptor.disabled);
 
@@ -1215,7 +1215,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
 
         assertEquals(1, manager.getPlugins().size());
         // plugin is no longer available though the plugin manager
-        assertNull(manager.getPlugin("test.atlassian.plugin.classloaded"));
+        assertNull(manager.getPlugin("test.maera.plugin.classloaded"));
         assertEquals(1, pluginsTestDir.listFiles().length);
         disabledListener.assertCalled();
     }
@@ -1366,16 +1366,16 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
     }
 
     public void testNonRemovablePlugins() throws PluginParseException {
-        pluginLoaders.add(new SinglePluginLoader("test-atlassian-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
 
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
 
         manager.init();
 
-        final Plugin plugin = manager.getPlugin("test.atlassian.plugin");
+        final Plugin plugin = manager.getPlugin("test.maera.plugin");
         assertFalse(plugin.isUninstallable());
-        assertNotNull(plugin.getResourceAsStream("test-atlassian-plugin.xml"));
+        assertNotNull(plugin.getResourceAsStream("test-maera-plugin.xml"));
 
         try {
             manager.uninstall(plugin);
@@ -1392,21 +1392,21 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         assertEquals(2, manager.getPlugins().size());
 
         // Set plugin file can't be deleted.
-        final Plugin pluginToRemove = new AbstractDelegatingPlugin(manager.getPlugin("test.atlassian.plugin.classloaded")) {
+        final Plugin pluginToRemove = new AbstractDelegatingPlugin(manager.getPlugin("test.maera.plugin.classloaded")) {
             public boolean isDeleteable() {
                 return false;
             }
         };
 
         // Disable plugin module before uninstall
-        final MockAnimalModuleDescriptor moduleDescriptor = (MockAnimalModuleDescriptor) manager.getPluginModule("test.atlassian.plugin.classloaded:paddington");
+        final MockAnimalModuleDescriptor moduleDescriptor = (MockAnimalModuleDescriptor) manager.getPluginModule("test.maera.plugin.classloaded:paddington");
         assertFalse(moduleDescriptor.disabled);
 
         manager.uninstall(pluginToRemove);
 
         assertTrue("Module must have had disable() called before being removed", moduleDescriptor.disabled);
         assertEquals(1, manager.getPlugins().size());
-        assertNull(manager.getPlugin("test.atlassian.plugin.classloaded"));
+        assertNull(manager.getPlugin("test.maera.plugin.classloaded"));
         assertEquals(2, pluginsTestDir.listFiles().length);
     }
 
@@ -1498,18 +1498,18 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
 
         checkResources(manager, true, true);
-        manager.disablePlugin("test.atlassian.plugin.classloaded");
+        manager.disablePlugin("test.maera.plugin.classloaded");
         checkResources(manager, false, false);
-        manager.enablePlugin("test.atlassian.plugin.classloaded");
+        manager.enablePlugin("test.maera.plugin.classloaded");
         checkResources(manager, true, true);
-        manager.uninstall(manager.getPlugin("test.atlassian.plugin.classloaded"));
+        manager.uninstall(manager.getPlugin("test.maera.plugin.classloaded"));
         checkResources(manager, false, false);
         //restore paddington to test plugins dir
         FileUtils.copyDirectory(pluginsDirectory, pluginsTestDir);
         manager.scanForNewPlugins();
         checkResources(manager, true, true);
         // Resources from disabled modules are still available
-        //manager.disablePluginModule("test.atlassian.plugin.classloaded:paddington");
+        //manager.disablePluginModule("test.maera.plugin.classloaded:paddington");
         //checkResources(manager, true, false);
     }
 
@@ -1555,11 +1555,11 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
 
         checkClasses(manager, true);
-        manager.disablePlugin("test.atlassian.plugin.classloaded");
+        manager.disablePlugin("test.maera.plugin.classloaded");
         checkClasses(manager, false);
-        manager.enablePlugin("test.atlassian.plugin.classloaded");
+        manager.enablePlugin("test.maera.plugin.classloaded");
         checkClasses(manager, true);
-        manager.uninstall(manager.getPlugin("test.atlassian.plugin.classloaded"));
+        manager.uninstall(manager.getPlugin("test.maera.plugin.classloaded"));
         checkClasses(manager, false);
         //restore paddington to test plugins dir
         FileUtils.copyDirectory(pluginsDirectory, pluginsTestDir);
@@ -1766,7 +1766,7 @@ public class TestDefaultPluginManager extends AbstractTestClassLoader {
         final DefaultPluginManager manager = makeClassLoadingPluginManager();
 
         checkClasses(manager, true);
-        final Plugin plugin = manager.getPlugin("test.atlassian.plugin.classloaded");
+        final Plugin plugin = manager.getPlugin("test.maera.plugin.classloaded");
 
         final ModuleDescriptor<?> module = plugin.getModuleDescriptor("paddington");
         assertTrue(manager.isPluginModuleEnabled(module.getCompleteKey()));

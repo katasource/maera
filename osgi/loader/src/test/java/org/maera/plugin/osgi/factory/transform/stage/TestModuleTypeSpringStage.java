@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class TestModuleTypeSpringStage extends TestCase {
     public void testTransform() throws IOException, DocumentException {
-        Element pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element moduleType = pluginRoot.addElement("module-type");
         moduleType.addAttribute("key", "foo");
         moduleType.addAttribute("class", "my.FooDescriptor");
@@ -23,7 +23,7 @@ public class TestModuleTypeSpringStage extends TestCase {
     }
 
     public void testTransformForOneApp() throws IOException, DocumentException {
-        Element pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element moduleType = pluginRoot.addElement("module-type");
         moduleType.addAttribute("key", "foo");
         moduleType.addAttribute("class", "my.FooDescriptor");
@@ -31,7 +31,7 @@ public class TestModuleTypeSpringStage extends TestCase {
         SpringTransformerTestHelper.transform(new ModuleTypeSpringStage(), pluginRoot,
                 "not(beans:bean[@id='moduleType-foo' and @class='" + SingleModuleDescriptorFactory.class.getName() + "'])");
 
-        pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         moduleType = pluginRoot.addElement("module-type");
         moduleType.addAttribute("key", "foo");
         moduleType.addAttribute("class", "my.FooDescriptor");
@@ -41,7 +41,7 @@ public class TestModuleTypeSpringStage extends TestCase {
     }
 
     public void testTransformOfBadElement() throws IOException, DocumentException {
-        Element pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element moduleType = pluginRoot.addElement("module-type");
         moduleType.addAttribute("key", "foo");
 
@@ -57,7 +57,7 @@ public class TestModuleTypeSpringStage extends TestCase {
     }
 
     public void testTransformOfBadElementKey() throws IOException, DocumentException {
-        Element pluginRoot = DocumentHelper.createDocument().addElement("atlassian-plugin");
+        Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element moduleType = pluginRoot.addElement("module-type");
 
         try {

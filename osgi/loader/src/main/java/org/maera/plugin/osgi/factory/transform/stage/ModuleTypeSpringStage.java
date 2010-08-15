@@ -22,7 +22,7 @@ public class ModuleTypeSpringStage implements TransformStage {
     /**
      * The name of the generated Spring XML file for this stage
      */
-    private static final String SPRING_XML = "META-INF/spring/atlassian-plugins-module-types.xml";
+    private static final String SPRING_XML = "META-INF/spring/maera-plugins-module-types.xml";
     static final String HOST_CONTAINER = "springHostContainer";
     static final String SPRING_HOST_CONTAINER = "org.maera.plugin.osgi.bridge.external.SpringHostContainer";
 

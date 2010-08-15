@@ -307,10 +307,10 @@ public class TestHostComponentSpringStage extends TestCase {
                         "public class Foo {",
                         "  public Foo(org.maera.plugin.osgi.SomeInterface bar) {}",
                         "}")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin>",
                         "  <component-import key='foo' class='Foo' interface='Foo'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addResource("META-INF/MANIFEST.MF",
                         "Manifest-Version: 1.0\n" +
                                 "Bundle-Version: 1.0\n" +
@@ -338,12 +338,12 @@ public class TestHostComponentSpringStage extends TestCase {
                         "public class Foo {",
                         "  public Foo(org.maera.plugin.osgi.SomeInterface bar) {}",
                         "}")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin>",
                         "  <component-import key='foobar'>",
                         "    <interface>org.maera.plugin.osgi.SomeInterface</interface>",
                         "  </component-import>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addResource("META-INF/MANIFEST.MF",
                         "Manifest-Version: 1.0\n" +
                                 "Bundle-Version: 1.0\n" +
@@ -371,12 +371,12 @@ public class TestHostComponentSpringStage extends TestCase {
                         "public class Foo {",
                         "  public Foo(org.maera.plugin.osgi.SomeInterface bar) {}",
                         "}")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin>",
                         "  <component-import key='foobar' application='notfoo'>",
                         "    <interface>org.maera.plugin.osgi.SomeInterface</interface>",
                         "  </component-import>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addResource("META-INF/MANIFEST.MF",
                         "Manifest-Version: 1.0\n" +
                                 "Bundle-Version: 1.0\n" +
@@ -404,12 +404,12 @@ public class TestHostComponentSpringStage extends TestCase {
                         "public class Foo {",
                         "  public Foo(org.maera.plugin.osgi.factory.transform.Barable bar) {}",
                         "}")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin>",
                         "  <component-import key='foobar'>",
                         "    <interface>org.maera.plugin.osgi.factory.transform.Barable</interface>",
                         "  </component-import>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addResource("META-INF/MANIFEST.MF",
                         "Manifest-Version: 1.0\n" +
                                 "Bundle-Version: 1.0\n" +

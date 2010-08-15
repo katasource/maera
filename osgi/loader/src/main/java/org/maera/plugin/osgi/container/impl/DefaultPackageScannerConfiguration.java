@@ -13,7 +13,7 @@ public class DefaultPackageScannerConfiguration implements PackageScannerConfigu
     private List<String> jarIncludes = Arrays.asList("*.jar");
     private List<String> jarExcludes = Collections.emptyList();
     private List<String> packageIncludes = Arrays.asList(
-            "com.atlassian.*", "com.google.common.*", "javax.*", "net.jcip.*", "org.jfree.*",
+            "org.maera.*", "com.google.common.*", "javax.*", "net.jcip.*", "org.jfree.*",
             "org.joda.*", "org.quartz", "org.quartz.*", "com.opensymphony.*", "org.apache.*", "org.ofbiz.*", "org.xml.*", "org.w3c.*", "webwork.*",
             "org.tuckey.web.filters.urlrewrite.*", "org.bouncycastle*", "org.dom4j*", "org.jdom*", "com.perforce*", "org.slf4j*");
     private List<String> packageExcludes = Arrays.asList("com.springframework*", "org.apache.tomcat.*",

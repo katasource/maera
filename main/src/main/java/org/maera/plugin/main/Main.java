@@ -17,7 +17,7 @@ import static org.maera.plugin.main.PluginsConfigurationBuilder.pluginsConfigura
  * Simple standalone class for starting the plugin framework.  Creates a directory called "plugins" in the current
  * directory and scans it every 5 seconds for new plugins.
  * <p/>
- * For embedded use, use the {@link AtlassianPlugins} facade directly
+ * For embedded use, use the {@link MaeraPlugins} facade directly
  */
 public class Main {
 
@@ -28,9 +28,9 @@ public class Main {
         System.out.println("Created plugins directory " + pluginDir.getAbsolutePath());
 
         final PluginsConfiguration config = pluginsConfiguration().pluginDirectory(pluginDir).packageScannerConfiguration(
-                packageScannerConfiguration().packagesToInclude("org.apache.*", "com.atlassian.*", "org.dom4j*").packagesVersions(
+                packageScannerConfiguration().packagesToInclude("org.apache.*", "org.maera.*", "org.dom4j*").packagesVersions(
                         Collections.singletonMap("org.apache.log4j", "1.2.15")).build()).build();
-        final AtlassianPlugins plugins = new AtlassianPlugins(config);
+        final MaeraPlugins plugins = new MaeraPlugins(config);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override

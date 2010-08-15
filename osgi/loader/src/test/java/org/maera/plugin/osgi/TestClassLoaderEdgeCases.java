@@ -24,13 +24,13 @@ public class TestClassLoaderEdgeCases extends PluginInContainerTestBase {
                 .build();
 
         File pluginJar = new PluginJarBuilder("privatejartest")
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Test' key='test.privatejar.plugin' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.privatejar.plugin' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
                         "    <object key='obj' class='my.Foo'/>",
-                        "</atlassian-plugin>")
+                        "</maera-plugin>")
                 .addFormattedJava("my.Foo",
                         "package my;",
                         "import org.maera.plugin.osgi.Callable2;",

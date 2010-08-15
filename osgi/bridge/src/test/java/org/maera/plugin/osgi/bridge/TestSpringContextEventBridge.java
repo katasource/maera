@@ -34,7 +34,7 @@ public class TestSpringContextEventBridge extends TestCase {
         bridge = new SpringContextEventBridge(eventManager);
 
         Dictionary<String, String> headers = new Hashtable<String, String>();
-        headers.put("Atlassian-Plugin-Key", "foo");
+        headers.put("Maera-Plugin-Key", "foo");
 
         bundle = mock(Bundle.class);
         when(bundle.getHeaders()).thenReturn(headers);

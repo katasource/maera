@@ -14,11 +14,11 @@ import java.util.zip.ZipOutputStream;
 
 import static org.maera.plugin.main.PluginsConfigurationBuilder.pluginsConfiguration;
 
-public class TestAtlassianPlugins extends TestCase {
+public class MaeraPluginsTest extends TestCase {
     private File pluginDir;
     private File bundledPluginDir;
     private File bundledPluginZip;
-    private AtlassianPlugins plugins;
+    private MaeraPlugins plugins;
 
     @Override
     public void setUp() throws IOException {
@@ -28,7 +28,7 @@ public class TestAtlassianPlugins extends TestCase {
         FileUtils.cleanDirectory(pluginDir);
         bundledPluginDir = new File(targetDir, "bundled-plugins");
         bundledPluginDir.mkdirs();
-        bundledPluginZip = new File(targetDir, "atlassian-bundled-plugins.zip");
+        bundledPluginZip = new File(targetDir, "maera-bundled-plugins.zip");
     }
 
     @Override
@@ -48,11 +48,11 @@ public class TestAtlassianPlugins extends TestCase {
                 .pluginDirectory(pluginDir)
                 .packageScannerConfiguration(
                         new PackageScannerConfigurationBuilder()
-                                .packagesToInclude("org.apache.*", "com.atlassian.*", "org.dom4j*")
+                                .packagesToInclude("org.apache.*", "org.maera.*", "org.dom4j*")
                                 .packagesVersions(Collections.singletonMap("org.apache.commons.logging", "1.1.1"))
                                 .build())
                 .build();
-        plugins = new AtlassianPlugins(config);
+        plugins = new MaeraPlugins(config);
         plugins.start();
         assertEquals(1, plugins.getPluginAccessor().getPlugins().size());
     }
@@ -60,27 +60,27 @@ public class TestAtlassianPlugins extends TestCase {
     public void testInstalledPluginCanDependOnBundledPlugin() throws Exception {
         PluginJarBuilder bundledJar = new PluginJarBuilder("bundled")
                 .addFormattedResource("META-INF/MANIFEST.MF",
-                        "Export-Package: com.atlassian.test.bundled",
+                        "Export-Package: org.maera.test.bundled",
                         "Bundle-SymbolicName: bundled",
                         "Bundle-Version: 1.0.0",
                         "Manifest-Version: 1.0",
                         "")
-                .addFormattedJava("com.atlassian.test.bundled.BundledInterface",
-                        "package com.atlassian.test.bundled;",
+                .addFormattedJava("org.maera.test.bundled.BundledInterface",
+                        "package org.maera.test.bundled;",
                         "public interface BundledInterface {}");
         bundledJar.build(bundledPluginDir);
 
         new PluginJarBuilder("installed", bundledJar.getClassLoader())
-                .addFormattedResource("atlassian-plugin.xml",
-                        "<atlassian-plugin name='Installed Plugin' key='installed' pluginsVersion='2'>",
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Installed Plugin' key='installed' pluginsVersion='2'>",
                         "    <plugin-info>",
                         "        <version>1.0</version>",
                         "    </plugin-info>",
-                        "    <component key='installed' class='com.atlassian.test.installed.InstalledClass'/>",
-                        "</atlassian-plugin>")
-                .addFormattedJava("com.atlassian.test.installed.InstalledClass",
-                        "package com.atlassian.test.installed;",
-                        "import com.atlassian.test.bundled.BundledInterface;",
+                        "    <component key='installed' class='org.maera.test.installed.InstalledClass'/>",
+                        "</maera-plugin>")
+                .addFormattedJava("org.maera.test.installed.InstalledClass",
+                        "package org.maera.test.installed;",
+                        "import org.maera.test.bundled.BundledInterface;",
                         "public class InstalledClass implements BundledInterface {}")
                 .build(pluginDir);
 
@@ -92,11 +92,11 @@ public class TestAtlassianPlugins extends TestCase {
                 .bundledPluginCacheDirectory(bundledPluginDir)
                 .packageScannerConfiguration(
                         new PackageScannerConfigurationBuilder()
-                                .packagesToInclude("com.atlassian.*", "org.slf4j", "org.apache.commons.logging")
+                                .packagesToInclude("org.maera.*", "org.slf4j", "org.apache.commons.logging")
                                 .packagesVersions(Collections.singletonMap("org.apache.commons.logging", "1.1.1"))
                                 .build())
                 .build();
-        plugins = new AtlassianPlugins(config);
+        plugins = new MaeraPlugins(config);
         plugins.start();
         assertEquals(2, plugins.getPluginAccessor().getEnabledPlugins().size());
 

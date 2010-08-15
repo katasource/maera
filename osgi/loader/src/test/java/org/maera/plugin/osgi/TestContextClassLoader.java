@@ -14,13 +14,13 @@ public class TestContextClassLoader extends PluginInContainerTestBase {
     public void testCorrectContextClassLoaderForHostComponents() throws Exception {
         final DummyHostComponentImpl comp = new DummyHostComponentImpl(TestCase.class.getName());
         File plugin = new PluginJarBuilder("ccltest")
-                .addResource("atlassian-plugin.xml",
-                        "<atlassian-plugin key=\"ccltest\" pluginsVersion=\"2\">\n" +
+                .addResource("maera-plugin.xml",
+                        "<maera-plugin key=\"ccltest\" pluginsVersion=\"2\">\n" +
                                 "    <plugin-info>\n" +
                                 "        <version>1.0</version>\n" +
                                 "    </plugin-info>\n" +
                                 "    <component key=\"foo\" class=\"my.FooImpl\" />\n" +
-                                "</atlassian-plugin>")
+                                "</maera-plugin>")
                 .addJava("my.Foo", "package my;public interface Foo {}")
                 .addJava("my.FooImpl", "package my;import org.maera.plugin.osgi.DummyHostComponent;" +
                         "public class FooImpl implements Foo {public FooImpl(DummyHostComponent comp) throws Exception { comp.evaluate(); }}")
@@ -43,13 +43,13 @@ public class TestContextClassLoader extends PluginInContainerTestBase {
     public void testCorrectContextClassLoaderForHostComponentsUsePluginStrategy() throws Exception {
         final DummyHostComponentImpl comp = new DummyHostComponentImpl(TestCase.class.getName());
         File plugin = new PluginJarBuilder("ccltest")
-                .addResource("atlassian-plugin.xml",
-                        "<atlassian-plugin key=\"ccltest\" pluginsVersion=\"2\">\n" +
+                .addResource("maera-plugin.xml",
+                        "<maera-plugin key=\"ccltest\" pluginsVersion=\"2\">\n" +
                                 "    <plugin-info>\n" +
                                 "        <version>1.0</version>\n" +
                                 "    </plugin-info>\n" +
                                 "    <component key=\"foo\" class=\"my.FooImpl\" />\n" +
-                                "</atlassian-plugin>")
+                                "</maera-plugin>")
                 .addJava("my.Foo", "package my;public interface Foo {}")
                 .addJava("my.FooImpl", "package my;import org.maera.plugin.osgi.DummyHostComponent;" +
                         "public class FooImpl implements Foo {public FooImpl(DummyHostComponent comp) throws Exception { comp.evaluate(); }}")
@@ -70,13 +70,13 @@ public class TestContextClassLoader extends PluginInContainerTestBase {
     public void testCorrectContextClassLoaderForHostComponentsUsePluginStrategyLoadingLocalClass() throws Exception {
         final DummyHostComponentImpl comp = new DummyHostComponentImpl("my.Foo");
         File plugin = new PluginJarBuilder("ccltest")
-                .addResource("atlassian-plugin.xml",
-                        "<atlassian-plugin key=\"ccltest\" pluginsVersion=\"2\">\n" +
+                .addResource("maera-plugin.xml",
+                        "<maera-plugin key=\"ccltest\" pluginsVersion=\"2\">\n" +
                                 "    <plugin-info>\n" +
                                 "        <version>1.0</version>\n" +
                                 "    </plugin-info>\n" +
                                 "    <component key=\"foo\" class=\"my.FooImpl\" />\n" +
-                                "</atlassian-plugin>")
+                                "</maera-plugin>")
                 .addJava("my.Foo", "package my;public interface Foo {}")
                 .addJava("my.FooImpl", "package my;import org.maera.plugin.osgi.DummyHostComponent;" +
                         "public class FooImpl implements Foo {public FooImpl(DummyHostComponent comp) throws Exception { comp.evaluate(); }}")
@@ -97,13 +97,13 @@ public class TestContextClassLoader extends PluginInContainerTestBase {
     public void testCorrectContextClassLoaderForHostComponentsUseHostStrategy() throws Exception {
         final DummyHostComponentImpl comp = new DummyHostComponentImpl(TestCase.class.getName());
         File plugin = new PluginJarBuilder("ccltest")
-                .addResource("atlassian-plugin.xml",
-                        "<atlassian-plugin key=\"ccltest\" pluginsVersion=\"2\">\n" +
+                .addResource("maera-plugin.xml",
+                        "<maera-plugin key=\"ccltest\" pluginsVersion=\"2\">\n" +
                                 "    <plugin-info>\n" +
                                 "        <version>1.0</version>\n" +
                                 "    </plugin-info>\n" +
                                 "    <component key=\"foo\" class=\"my.FooImpl\" />\n" +
-                                "</atlassian-plugin>")
+                                "</maera-plugin>")
                 .addJava("my.Foo", "package my;public interface Foo {}")
                 .addJava("my.FooImpl", "package my;import org.maera.plugin.osgi.DummyHostComponent;" +
                         "public class FooImpl implements Foo {public FooImpl(DummyHostComponent comp) throws Exception { comp.evaluate(); }}")

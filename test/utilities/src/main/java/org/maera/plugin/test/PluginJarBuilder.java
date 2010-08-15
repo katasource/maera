@@ -132,7 +132,7 @@ public class PluginJarBuilder {
 
     public PluginJarBuilder addPluginInformation(String key, String name, String version, int pluginsVersion, Map<String, String> params) {
         StringBuffer sb = new StringBuffer();
-        sb.append("<atlassian-plugin name=\"").append(name).append("\" key=\"").append(key).append("\" pluginsVersion=\"" + pluginsVersion + "\">\n");
+        sb.append("<maera-plugin name=\"").append(name).append("\" key=\"").append(key).append("\" pluginsVersion=\"").append(pluginsVersion).append("\">\n");
         sb.append("    <plugin-info>\n");
         sb.append("        <description>This plugin descriptor is used for testing plugins!</description>\n");
         sb.append("        <version>").append(version).append("</version>\n");
@@ -141,8 +141,8 @@ public class PluginJarBuilder {
             for (Map.Entry<String, String> param : params.entrySet())
                 sb.append("<param name=\"").append(param.getKey()).append("\">").append(param.getValue()).append("</param>\n");
         sb.append("    </plugin-info>");
-        sb.append("</atlassian-plugin>");
-        jarContents.put("atlassian-plugin.xml", sb.toString().getBytes());
+        sb.append("</maera-plugin>");
+        jarContents.put("maera-plugin.xml", sb.toString().getBytes());
         return this;
     }
 

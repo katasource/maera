@@ -11,7 +11,7 @@ import java.util.Collection;
 
 public class TestClassPathPluginLoader extends TestCase {
     public void testAtlassianPlugin() throws Exception {
-        ClassPathPluginLoader loader = new ClassPathPluginLoader("test-atlassian-plugin.xml");
+        ClassPathPluginLoader loader = new ClassPathPluginLoader("test-maera-plugin.xml");
         DefaultModuleDescriptorFactory moduleDescriptorFactory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
         moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
         moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
@@ -21,7 +21,7 @@ public class TestClassPathPluginLoader extends TestCase {
 
         Plugin plugin = (Plugin) plugins.iterator().next();
         assertEquals("Test Plugin", plugin.getName());
-        assertEquals("test.atlassian.plugin", plugin.getKey());
+        assertEquals("test.maera.plugin", plugin.getKey());
         assertEquals("This plugin descriptor is just used for test purposes!", plugin.getPluginInformation().getDescription());
         assertEquals(4, plugin.getModuleDescriptors().size());
 

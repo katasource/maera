@@ -16,12 +16,13 @@ public class TestOsgiNoCacheFrameworkRestart extends FrameworkRestartTestBase {
         PluginJarBuilder builder = new PluginJarBuilder("restart-test", null);
 
         StringBuilder apxml = new StringBuilder();
-        apxml.append("<atlassian-plugin name='Test' key='test.plugin" + pluginId + "' pluginsVersion='2'>\n" +
-                "    <plugin-info>\n" +
-                "        <version>1.0</version>\n" +
-                "    </plugin-info>\n" +
-                //"    <component-import key='host1' interface='org.maera.plugin.osgi.SomeInterface' />\n" +
-                "    <dummy key='dum1'/>\n");
+        apxml.append("<maera-plugin name='Test' key='test.plugin")
+                .append(pluginId)
+                .append("' pluginsVersion='2'>\n")
+                .append("    <plugin-info>\n")
+                .append("        <version>1.0</version>\n")
+                .append("    </plugin-info>\n")
+                .append("    <dummy key='dum1'/>\n");
 
         for (int x = 0; x < 50; x++) {
             String pkg = pkg(pluginId, x);
@@ -33,7 +34,13 @@ public class TestOsgiNoCacheFrameworkRestart extends FrameworkRestartTestBase {
                     "public class MyComponent implements MyInterface {",
                     "   public MyComponent() {}",
                     "}");
-            apxml.append("  <component key='comp" + x + "' interface='" + pkg + ".MyInterface' class='" + pkg + ".MyComponent' ");
+            apxml.append("  <component key='comp")
+                    .append(x)
+                    .append("' interface='")
+                    .append(pkg)
+                    .append(".MyInterface' class='")
+                    .append(pkg)
+                    .append(".MyComponent' ");
             if (x < 10) {
                 apxml.append("public='true'");
             }
@@ -48,11 +55,15 @@ public class TestOsgiNoCacheFrameworkRestart extends FrameworkRestartTestBase {
                 }
                 while (refid == pluginId);
 
-                apxml.append("  <component-import key='ref" + x + "' interface='" + pkg(refid, x) + ".MyInterface'/>\n");
+                apxml.append("  <component-import key='ref")
+                        .append(x)
+                        .append("' interface='")
+                        .append(pkg(refid, x))
+                        .append(".MyInterface'/>\n");
             }
         }
-        apxml.append("</atlassian-plugin>");
-        builder.addFormattedResource("atlassian-plugin.xml", apxml.toString());
+        apxml.append("</maera-plugin>");
+        builder.addFormattedResource("maera-plugin.xml", apxml.toString());
         builder.build(dir);
         System.out.println("plugin " + pluginId + " built");
     }

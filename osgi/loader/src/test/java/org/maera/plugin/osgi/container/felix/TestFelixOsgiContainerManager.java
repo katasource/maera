@@ -157,7 +157,7 @@ public class TestFelixOsgiContainerManager extends TestCase {
         felix.stop();
 
         // This system property exposes the JUnit TestCase class from the parent classloader to the bundle
-        System.setProperty("atlassian.org.osgi.framework.bootdelegation", "junit.framework,junit.framework.*");
+        System.setProperty("maera.org.osgi.framework.bootdelegation", "junit.framework,junit.framework.*");
         try {
             felix.start();
             serverBundle = felix.installBundle(pluginServer);
@@ -168,7 +168,7 @@ public class TestFelixOsgiContainerManager extends TestCase {
             felix.stop();
         }
         finally {
-            System.clearProperty("atlassian.org.osgi.framework.bootdelegation");
+            System.clearProperty("maera.org.osgi.framework.bootdelegation");
         }
     }
 
@@ -217,7 +217,7 @@ public class TestFelixOsgiContainerManager extends TestCase {
                         "Import-Package: javax.swing\n" +
                         "Bundle-Version: 1.0\n" +
                         "Bundle-SymbolicName: my.foo\n" +
-                        "Atlassian-Plugin-Key: my.foo.symbolicName\n" +
+                        "Maera-Plugin-Key: my.foo.symbolicName\n" +
                         "Bundle-ManifestVersion: 2\n")
                 .addResource("foo.txt", "foo")
                 .build();
@@ -226,7 +226,7 @@ public class TestFelixOsgiContainerManager extends TestCase {
                 .addResource("META-INF/MANIFEST.MF", "Manifest-Version: 1.0\n" +
                         "Import-Package: javax.swing\n" +
                         "Bundle-Version: 1.0\n" +
-                        "Atlassian-Plugin-Key: my.foo.symbolicName\n" +
+                        "Maera-Plugin-Key: my.foo.symbolicName\n" +
                         "Bundle-SymbolicName: my.bar\n" +
                         "Bundle-ManifestVersion: 2\n")
                 .addResource("bar.txt", "bar")

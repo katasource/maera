@@ -15,7 +15,7 @@ import java.util.Set;
  * @since 2.1
  */
 public class PluginUtils {
-    public static final String ATLASSIAN_DEV_MODE = "atlassian.dev.mode";
+    public static final String MAERA_DEV_MODE = "maera.dev.mode";
 
     /**
      * System property for storing and retrieving the time the plugin system will wait for the enabling of a plugin in
@@ -23,7 +23,7 @@ public class PluginUtils {
      *
      * @since 2.3.6
      */
-    public static final String ATLASSIAN_PLUGINS_ENABLE_WAIT = "atlassian.plugins.enable.wait";
+    public static final String MAERA_PLUGINS_ENABLE_WAIT = "maera.plugins.enable.wait";
 
     /**
      * Determines if a plugin requires a restart after being installed at runtime.  Looks for the annotation
@@ -35,7 +35,7 @@ public class PluginUtils {
      */
     public static boolean doesPluginRequireRestart(final Plugin plugin) {
         //PLUG-451: When in dev mode, plugins should not require a restart.
-        if (Boolean.getBoolean(ATLASSIAN_DEV_MODE)) {
+        if (Boolean.getBoolean(MAERA_DEV_MODE)) {
             return false;
         }
 
@@ -86,6 +86,6 @@ public class PluginUtils {
      * @since 2.3.6
      */
     public static int getDefaultEnablingWaitPeriod() {
-        return Integer.parseInt(System.getProperty(ATLASSIAN_PLUGINS_ENABLE_WAIT, "60"));
+        return Integer.parseInt(System.getProperty(MAERA_PLUGINS_ENABLE_WAIT, "60"));
     }
 }

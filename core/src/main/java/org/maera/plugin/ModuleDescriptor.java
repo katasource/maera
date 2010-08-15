@@ -67,14 +67,10 @@ public interface ModuleDescriptor<T> extends Resourced {
     T getModule();
 
     /**
-     * Initialise a module given it's parent plugin and the XML element
-     * representing the module.
+     * Initialise a module given it's parent plugin and the XML element representing the module.
      * <p/>
-     * Since atlassian-plugins v2.2, you can no longer load classes from the
-     * plugin in this method, because the OSGi bundle that they will live in is
-     * not built yet. Load classes in the
-     * {@link org.maera.plugin.descriptors.AbstractModuleDescriptor#enabled()}
-     * method instead.
+     * Note: You cannot load classes from the plugin in this method, because the OSGi bundle that they will live in is
+     * not built yet. Load classes in {@link org.maera.plugin.descriptors.AbstractModuleDescriptor#enabled()} instead.
      *
      * @param plugin  The plugin that the module belongs to. Must not be null.
      * @param element XML element representing the module. Must not be null.
