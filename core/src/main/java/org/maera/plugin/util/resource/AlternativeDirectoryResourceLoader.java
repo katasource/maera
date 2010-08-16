@@ -52,7 +52,7 @@ public class AlternativeDirectoryResourceLoader implements AlternativeResourceLo
             File file = new File(dir, path);
             if (file.exists()) {
                 try {
-                    return file.toURL();
+                    return file.toURI().toURL();
                 }
                 catch (MalformedURLException e) {
                     log.error("Malformed URL: " + file.toString(), e);

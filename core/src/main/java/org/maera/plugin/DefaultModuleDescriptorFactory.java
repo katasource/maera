@@ -22,9 +22,8 @@ import static java.util.Collections.unmodifiableMap;
 public class DefaultModuleDescriptorFactory implements ModuleDescriptorFactory {
     private static Logger log = LoggerFactory.getLogger(DefaultModuleDescriptorFactory.class);
 
-    @SuppressWarnings("unchecked")
-    private final Map<String, Class<? extends ModuleDescriptor>> moduleDescriptorClasses = CopyOnWriteMap.<String, Class<? extends ModuleDescriptor>>builder().stableViews()
-            .newHashMap();
+    private final Map<String, Class<? extends ModuleDescriptor>> moduleDescriptorClasses =
+            CopyOnWriteMap.<String, Class<? extends ModuleDescriptor>>builder().stableViews().newHashMap();
     private final List<String> permittedModuleKeys = new ArrayList<String>();
     private final HostContainer hostContainer;
 
@@ -109,7 +108,6 @@ public class DefaultModuleDescriptorFactory implements ModuleDescriptorFactory {
         return moduleDescriptorClasses.containsKey(type);
     }
 
-    @SuppressWarnings("unchecked")
     public void addModuleDescriptor(final String type, final Class<? extends ModuleDescriptor> moduleDescriptorClass) {
         moduleDescriptorClasses.put(type, moduleDescriptorClass);
     }
@@ -118,7 +116,6 @@ public class DefaultModuleDescriptorFactory implements ModuleDescriptorFactory {
         moduleDescriptorClasses.remove(type);
     }
 
-    @SuppressWarnings("unchecked")
     protected Map<String, Class<? extends ModuleDescriptor>> getDescriptorClassesMap() {
         return unmodifiableMap(moduleDescriptorClasses);
     }

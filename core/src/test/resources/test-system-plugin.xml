@@ -1,4 +1,4 @@
-<atlassian-plugin name="Test Plugin" key="test.atlassian.plugin" system="true">
+<maera-plugin name="Test Plugin" key="test.maera.plugin" system="true">
     <plugin-info>
         <description>This plugin descriptor is just used for test purposes!</description>
         <version>1.0</version>
@@ -6,7 +6,7 @@
         <vendor name="Atlassian Software Systems Pty Ltd" url="http://www.atlassian.com"/>
     </plugin-info>
 
-    <animal key="bear" name="Bear Animal" class="com.atlassian.plugin.mock.MockBear">
+    <animal key="bear" name="Bear Animal" class="org.maera.plugin.mock.MockBear">
         <description>A plugin module to describe a bear</description>
 
         <param name="height" value="20"/>
@@ -20,9 +20,9 @@
         <resource type="velocity" name="edit">Show an input box here.</resource>
     </animal>
 
-    <mineral key="gold" name="Bar" class="com.atlassian.plugin.mock.MockGold">
+    <mineral key="gold" name="Bar" class="org.maera.plugin.mock.MockGold">
         <weight>20</weight>
     </mineral>
 
     <resource type="download" name="icon.gif" location="/icon.gif"/>
-</atlassian-plugin>
+</maera-plugin>
