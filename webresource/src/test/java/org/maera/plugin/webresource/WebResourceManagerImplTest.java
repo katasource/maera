@@ -122,7 +122,7 @@ public class WebResourceManagerImplTest {
 
         final List<ResourceDescriptor> resources = TestUtils.createResourceDescriptors(
                 "foo.css", "foo-bar.js",
-                "atlassian.css", "atlassian-plugins.js");
+                "maera.css", "maera-plugins.js");
 
         setupRequestCache();
         mockPluginAccessor.matchAndReturn("getEnabledPluginModule", C.args(C.eq(completeModuleKey)),
@@ -134,8 +134,8 @@ public class WebResourceManagerImplTest {
             webResourceManager.requireResource(completeModuleKey);
             String maeraResources = webResourceManager.getRequiredResources(UrlMode.RELATIVE, maeraFilter);
             assertEquals(-1, maeraResources.indexOf("foo"));
-            assertTrue(maeraResources.contains("atlassian.css"));
-            assertTrue(maeraResources.contains("atlassian-plugins.js"));
+            assertTrue(maeraResources.contains("maera.css"));
+            assertTrue(maeraResources.contains("maera-plugins.js"));
 
             String allResources = webResourceManager.getRequiredResources(UrlMode.RELATIVE, bogusFilter);
             for (ResourceDescriptor resource : resources) {

@@ -61,10 +61,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <systemPropertyVariables>
-                        <property>
-                            <name>project.version</name>
-                            <value>${project.version}</value>
-                        </property>
+                        <project.version>${project.version}</project.version>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
