@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.maera</groupId>
         <artifactId>maera-test</artifactId>
-        <version>0.1</version>
+        <version>0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>maera-test-utilities</artifactId>
