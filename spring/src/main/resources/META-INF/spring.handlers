@@ -1,1 +1,1 @@
-http\://atlassian.com/schema/spring/plugin=com.atlassian.plugin.spring.pluginns.PluginNamespaceHandler
+http\://maera.org/schema/spring/plugin=org.maera.plugin.spring.pluginns.PluginNamespaceHandler

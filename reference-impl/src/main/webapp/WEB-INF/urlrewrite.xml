@@ -4,7 +4,7 @@
 <urlrewrite>
     <rule>
         <from>^/s/(.*)/_/(.*)</from>
-        <run class="com.atlassian.plugin.servlet.ResourceDownloadUtils" method="addCachingHeaders"/>
+        <run class="org.maera.plugin.servlet.ResourceDownloadUtils" method="addCachingHeaders"/>
         <to type="forward">/$2</to>
     </rule>
 </urlrewrite>

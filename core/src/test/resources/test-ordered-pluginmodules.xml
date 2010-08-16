@@ -1,5 +1,5 @@
 <maera-plugin name="Test Plugin" i18n-name-key="test.maera.plugin.i18n" key="test.maera.plugin">
-    <animal key="yogi1" name="Bear Animal" class="com.atlassian.plugin.mock.MockBear"/>
-    <animal key="yogi2" name="Bear Animal" class="com.atlassian.plugin.mock.MockBear"/>
-    <animal key="yogi3" name="Bear Animal" class="com.atlassian.plugin.mock.MockBear"/>
+    <animal key="yogi1" name="Bear Animal" class="org.maera.plugin.mock.MockBear"/>
+    <animal key="yogi2" name="Bear Animal" class="org.maera.plugin.mock.MockBear"/>
+    <animal key="yogi3" name="Bear Animal" class="org.maera.plugin.mock.MockBear"/>
 </maera-plugin>

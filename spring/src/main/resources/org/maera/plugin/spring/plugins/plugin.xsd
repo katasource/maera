@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 
-<xsd:schema xmlns="http://atlassian.com/schema/spring/plugin"
+<xsd:schema xmlns="http://maera.org/schema/spring/plugin"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-            targetNamespace="http://atlassian.com/schema/spring/plugin"
+            targetNamespace="http://maera.org/schema/spring/plugin"
             elementFormDefault="qualified">
 
     <xsd:attribute name="available" type="xsd:boolean">

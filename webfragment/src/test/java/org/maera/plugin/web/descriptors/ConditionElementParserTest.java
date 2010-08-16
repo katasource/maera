@@ -129,7 +129,6 @@ public class ConditionElementParserTest {
                 TYPE_CLOSE, true);//true AND ((false AND false) OR false OR (true AND (false OR true))) = true
     }
 
-    @Test
     public void assertConditions(String conditionElement, boolean expectedResult) throws DocumentException, PluginParseException {
         String rootElement = "<root>" + conditionElement + "</root>";
         Document document = DocumentHelper.parseText(rootElement);

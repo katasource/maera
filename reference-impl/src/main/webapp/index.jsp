@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
-<%@ page import="com.atlassian.plugin.Plugin" %>
-<%@ page import="com.atlassian.plugin.refimpl.ContainerManager" %>
+<%@ page import="org.maera.plugin.Plugin" %>
+<%@ page import="org.maera.plugin.refimpl.ContainerManager" %>
 <%@ page import="org.osgi.framework.Bundle" %>
 <%@ page import="org.osgi.framework.ServiceReference" %>
 <html>

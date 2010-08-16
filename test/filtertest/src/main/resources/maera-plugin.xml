@@ -9,7 +9,7 @@
          the order in which they are discovered isn't  affecting the order in which they are processed  -->
 
     <servlet-filter name="filter.top.20" key="filter.top.20"
-                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    class="org.maera.plugin.servlet.filter.test.SimpleFilter"
                     weight="20" location="top">
         <url-pattern>/*</url-pattern>
         <init-param>
@@ -19,7 +19,7 @@
     </servlet-filter>
 
     <servlet-filter name="filter.bottom.20" key="filter.bottom.20"
-                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    class="org.maera.plugin.servlet.filter.test.SimpleFilter"
                     weight="20" location="bottom">
         <url-pattern>/*</url-pattern>
         <init-param>
@@ -29,7 +29,7 @@
     </servlet-filter>
 
     <servlet-filter name="filter.top.30" key="filter.top.30"
-                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    class="org.maera.plugin.servlet.filter.test.SimpleFilter"
                     weight="30" location="top">
         <url-pattern>/*</url-pattern>
         <init-param>
@@ -39,7 +39,7 @@
     </servlet-filter>
 
     <servlet-filter name="filter.middle.20" key="filter.middle.20"
-                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    class="org.maera.plugin.servlet.filter.test.SimpleFilter"
                     weight="20" location="middle">
         <url-pattern>/*</url-pattern>
         <init-param>
@@ -49,7 +49,7 @@
     </servlet-filter>
 
     <servlet-filter name="filter.top.10" key="filter.top.10"
-                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    class="org.maera.plugin.servlet.filter.test.SimpleFilter"
                     weight="10" location="top">
         <url-pattern>/*</url-pattern>
         <init-param>
@@ -59,7 +59,7 @@
     </servlet-filter>
 
     <servlet-filter name="filter.bottom.10" key="filter.bottom.10"
-                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    class="org.maera.plugin.servlet.filter.test.SimpleFilter"
                     weight="10" location="bottom">
         <url-pattern>/*</url-pattern>
         <init-param>
@@ -69,7 +69,7 @@
     </servlet-filter>
 
     <servlet-filter name="filter.middle.30" key="filter.middle.30"
-                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    class="org.maera.plugin.servlet.filter.test.SimpleFilter"
                     weight="30" location="middle">
         <url-pattern>/*</url-pattern>
         <init-param>
@@ -79,7 +79,7 @@
     </servlet-filter>
 
     <servlet-filter name="filter.bottom.30" key="filter.bottom.30"
-                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    class="org.maera.plugin.servlet.filter.test.SimpleFilter"
                     weight="30" location="bottom">
         <url-pattern>/*</url-pattern>
         <init-param>
@@ -89,7 +89,7 @@
     </servlet-filter>
 
     <servlet-filter name="filter.middle.10" key="filter.middle.10"
-                    class="com.atlassian.plugin.servlet.filter.test.SimpleFilter"
+                    class="org.maera.plugin.servlet.filter.test.SimpleFilter"
                     weight="10" location="middle">
         <url-pattern>/*</url-pattern>
         <init-param>

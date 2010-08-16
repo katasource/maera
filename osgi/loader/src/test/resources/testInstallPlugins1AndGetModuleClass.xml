@@ -2,7 +2,7 @@
     <plugin-info>
         <version>1.0</version>
     </plugin-info>
-    <servlet key='foo' class='com.atlassian.plugin.osgi.test.TestServlet'>
+    <servlet key='foo' class='org.maera.plugin.osgi.test.TestServlet'>
         <url-pattern>/foo</url-pattern>
     </servlet>
 </atlassian-plugin>
