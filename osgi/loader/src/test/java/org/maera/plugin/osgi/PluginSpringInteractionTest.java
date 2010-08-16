@@ -1,8 +1,14 @@
 package org.maera.plugin.osgi;
 
+import org.junit.Test;
 import org.maera.plugin.test.PluginJarBuilder;
 
-public class TestPluginSpringInteraction extends PluginInContainerTestBase {
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class PluginSpringInteractionTest extends AbstractPluginInContainerTest {
+
+    @Test
     public void testDisposable() throws Exception {
         StaticBooleanFlag.flag.set(false);
         new PluginJarBuilder("testDisposable")

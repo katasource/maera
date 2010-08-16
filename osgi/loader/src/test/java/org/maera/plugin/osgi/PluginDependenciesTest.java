@@ -1,5 +1,6 @@
 package org.maera.plugin.osgi;
 
+import org.junit.Test;
 import org.maera.plugin.DefaultModuleDescriptorFactory;
 import org.maera.plugin.JarPluginArtifact;
 import org.maera.plugin.hostcontainer.DefaultHostContainer;
@@ -15,7 +16,12 @@ import java.io.File;
 import java.util.Collections;
 import java.util.concurrent.Callable;
 
-public class TestPluginDependencies extends PluginInContainerTestBase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+public class PluginDependenciesTest extends AbstractPluginInContainerTest {
+
+    @Test
     public void testPluginDependentOnPackageImport() throws Exception {
         PluginJarBuilder parentBuilder = new PluginJarBuilder("parent")
                 .addFormattedResource("maera-plugin.xml",
@@ -53,6 +59,76 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         assertEquals(Collections.singleton("parent"), pluginManager.getPlugin("child").getRequiredPlugins());
     }
 
+    @Test
+    public void testUninstallWithShutdownAffectingOtherPluginsWithClassLoadingOnShutdown() throws Exception {
+        final DefaultModuleDescriptorFactory factory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
+        initPluginManager(new HostComponentProvider() {
+
+            public void provide(final ComponentRegistrar registrar) {
+            }
+        }, factory);
+
+        PluginJarBuilder pluginBuilder = new PluginJarBuilder("first")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "        <bundle-instructions><Export-Package>my</Export-Package></bundle-instructions>",
+                        "    </plugin-info>",
+                        "    <component key='svc' class='my.ServiceImpl' public='true'>",
+                        "    <interface>java.util.concurrent.Callable</interface>",
+                        "    </component>",
+                        "</maera-plugin>")
+                .addFormattedJava("my.ServiceImpl",
+                        "package my;",
+                        "import java.util.concurrent.Callable;",
+                        "public class ServiceImpl implements Callable {",
+                        "    public Object call() throws Exception { return 'hi';}",
+                        "}");
+        final File pluginJar = pluginBuilder.build();
+
+        final File pluginJar2 = new PluginJarBuilder("second", pluginBuilder.getClassLoader())
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test2.plugin' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "        <bundle-instructions><Import-Package>my,*</Import-Package>",
+                        "          <DynamicImport-Package>foo</DynamicImport-Package></bundle-instructions>",
+                        "    </plugin-info>",
+                        "    <component-import key='svc' interface='java.util.concurrent.Callable' />",
+                        "    <component key='del' class='my2.Consumer'/>",
+                        "</maera-plugin>")
+                .addFormattedJava("my2.Consumer",
+                        "package my2;",
+                        "import java.util.concurrent.Callable;",
+                        "public class Consumer implements org.springframework.beans.factory.DisposableBean {",
+                        "    private final Callable delegate;",
+                        "    public Consumer(Callable foo) {",
+                        "        this.delegate = foo;",
+                        "    }",
+                        "    public void destroy() {",
+                        "       try {",
+                        "          getClass().getClassLoader().loadClass('foo.bar');",
+                        "       } catch (ClassNotFoundException ex) {}",
+                        "    }",
+                        "}")
+                .build();
+
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
+        assertEquals(1, pluginManager.getEnabledPlugins().size());
+
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
+
+        assertEquals(2, pluginManager.getEnabledPlugins().size());
+
+        long start = System.currentTimeMillis();
+        pluginManager.uninstall(pluginManager.getPlugin("test.plugin"));
+        long timeWaitingForRefresh = System.currentTimeMillis() - start;
+        assertTrue("Refresh seemed to have timed out, which is bad", timeWaitingForRefresh < FelixOsgiContainerManager.REFRESH_TIMEOUT * 1000);
+        assertEquals(0, pluginManager.getEnabledPlugins().size());
+    }
+
+    @Test
     public void testUninstallingPluginDependentOnPackageImport() throws Exception {
         PluginJarBuilder parentBuilder = new PluginJarBuilder("parent")
                 .addFormattedResource("maera-plugin.xml",
@@ -91,10 +167,12 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         assertEquals(0, pluginManager.getEnabledPlugins().size());
     }
 
+    @Test
     public void testUpgradeWithNewComponentImplementation() throws Exception {
         final DefaultModuleDescriptorFactory factory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
         factory.addModuleDescriptor("dummy", DummyModuleDescriptor.class);
         initPluginManager(new HostComponentProvider() {
+
             public void provide(final ComponentRegistrar registrar) {
                 registrar.register(SomeInterface.class).forInstance(new SomeInterface() {
                 });
@@ -174,6 +252,7 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
 
         pluginManager.installPlugin(new JarPluginArtifact(updatedJar));
         WaitUntil.invoke(new AbstractWaitCondition() {
+
             public boolean isFinished() {
                 return pluginManager.getEnabledPlugins().size() == 2;
             }
@@ -185,10 +264,12 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         }
     }
 
+    @Test
     public void testUpgradeWithNewComponentImplementationWithInterfaceInPlugin() throws Exception {
         final DefaultModuleDescriptorFactory factory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
         factory.addModuleDescriptor("dummy", DummyModuleDescriptor.class);
         initPluginManager(new HostComponentProvider() {
+
             public void provide(final ComponentRegistrar registrar) {
                 registrar.register(SomeInterface.class).forInstance(new SomeInterface() {
                 });
@@ -279,9 +360,11 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         assertEquals("bob", ((Callable) tracker.getService()).call());
     }
 
+    @Test
     public void testUpgradeWithRefreshingAffectingOtherPlugins() throws Exception {
         final DefaultModuleDescriptorFactory factory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
         initPluginManager(new HostComponentProvider() {
+
             public void provide(final ComponentRegistrar registrar) {
             }
         }, factory);
@@ -351,14 +434,13 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
                         "}")
                 .build();
 
-
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
         assertEquals(1, pluginManager.getEnabledPlugins().size());
 
         pluginManager.installPlugin(new JarPluginArtifact(otherSvcJar));
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
 
-        assertEquals("hi", ((OsgiPlugin) pluginManager.getPlugin("test2.plugin")).autowire(TestPluginInstall.Callable3Aware.class).call());
+        assertEquals("hi", ((OsgiPlugin) pluginManager.getPlugin("test2.plugin")).autowire(PluginInstallTest.Callable3Aware.class).call());
         assertEquals(3, pluginManager.getEnabledPlugins().size());
 
         final File updatedJar = new PluginJarBuilder("first")
@@ -382,12 +464,14 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
 
         pluginManager.installPlugin(new JarPluginArtifact(updatedJar));
         assertEquals(3, pluginManager.getEnabledPlugins().size());
-        assertEquals("hi", ((OsgiPlugin) pluginManager.getPlugin("test2.plugin")).autowire(TestPluginInstall.Callable3Aware.class).call());
+        assertEquals("hi", ((OsgiPlugin) pluginManager.getPlugin("test2.plugin")).autowire(PluginInstallTest.Callable3Aware.class).call());
     }
 
+    @Test
     public void testUpgradeWithRefreshingAffectingOtherPluginsWithClassLoadingOnShutdown() throws Exception {
         final DefaultModuleDescriptorFactory factory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
         initPluginManager(new HostComponentProvider() {
+
             public void provide(final ComponentRegistrar registrar) {
             }
         }, factory);
@@ -470,7 +554,7 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         pluginManager.installPlugin(new JarPluginArtifact(otherSvcJar));
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
 
-        assertEquals("hi", ((OsgiPlugin) pluginManager.getPlugin("test2.plugin")).autowire(TestPluginInstall.Callable3Aware.class).call());
+        assertEquals("hi", ((OsgiPlugin) pluginManager.getPlugin("test2.plugin")).autowire(PluginInstallTest.Callable3Aware.class).call());
         assertEquals(3, pluginManager.getEnabledPlugins().size());
 
         final File updatedJar = new PluginJarBuilder("first")
@@ -497,73 +581,6 @@ public class TestPluginDependencies extends PluginInContainerTestBase {
         long timeWaitingForRefresh = System.currentTimeMillis() - start;
         assertTrue("Refresh seemed to have timed out, which is bad", timeWaitingForRefresh < FelixOsgiContainerManager.REFRESH_TIMEOUT * 1000);
         assertEquals(3, pluginManager.getEnabledPlugins().size());
-        assertEquals("hi", ((OsgiPlugin) pluginManager.getPlugin("test2.plugin")).autowire(TestPluginInstall.Callable3Aware.class).call());
-    }
-
-    public void testUninstallWithShutdownAffectingOtherPluginsWithClassLoadingOnShutdown() throws Exception {
-        final DefaultModuleDescriptorFactory factory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
-        initPluginManager(new HostComponentProvider() {
-            public void provide(final ComponentRegistrar registrar) {
-            }
-        }, factory);
-
-        PluginJarBuilder pluginBuilder = new PluginJarBuilder("first")
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "        <bundle-instructions><Export-Package>my</Export-Package></bundle-instructions>",
-                        "    </plugin-info>",
-                        "    <component key='svc' class='my.ServiceImpl' public='true'>",
-                        "    <interface>java.util.concurrent.Callable</interface>",
-                        "    </component>",
-                        "</maera-plugin>")
-                .addFormattedJava("my.ServiceImpl",
-                        "package my;",
-                        "import java.util.concurrent.Callable;",
-                        "public class ServiceImpl implements Callable {",
-                        "    public Object call() throws Exception { return 'hi';}",
-                        "}");
-        final File pluginJar = pluginBuilder.build();
-
-        final File pluginJar2 = new PluginJarBuilder("second", pluginBuilder.getClassLoader())
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test 2' key='test2.plugin' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "        <bundle-instructions><Import-Package>my,*</Import-Package>",
-                        "          <DynamicImport-Package>foo</DynamicImport-Package></bundle-instructions>",
-                        "    </plugin-info>",
-                        "    <component-import key='svc' interface='java.util.concurrent.Callable' />",
-                        "    <component key='del' class='my2.Consumer'/>",
-                        "</maera-plugin>")
-                .addFormattedJava("my2.Consumer",
-                        "package my2;",
-                        "import java.util.concurrent.Callable;",
-                        "public class Consumer implements org.springframework.beans.factory.DisposableBean {",
-                        "    private final Callable delegate;",
-                        "    public Consumer(Callable foo) {",
-                        "        this.delegate = foo;",
-                        "    }",
-                        "    public void destroy() {",
-                        "       try {",
-                        "          getClass().getClassLoader().loadClass('foo.bar');",
-                        "       } catch (ClassNotFoundException ex) {}",
-                        "    }",
-                        "}")
-                .build();
-
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
-        assertEquals(1, pluginManager.getEnabledPlugins().size());
-
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
-
-        assertEquals(2, pluginManager.getEnabledPlugins().size());
-
-        long start = System.currentTimeMillis();
-        pluginManager.uninstall(pluginManager.getPlugin("test.plugin"));
-        long timeWaitingForRefresh = System.currentTimeMillis() - start;
-        assertTrue("Refresh seemed to have timed out, which is bad", timeWaitingForRefresh < FelixOsgiContainerManager.REFRESH_TIMEOUT * 1000);
-        assertEquals(0, pluginManager.getEnabledPlugins().size());
+        assertEquals("hi", ((OsgiPlugin) pluginManager.getPlugin("test2.plugin")).autowire(PluginInstallTest.Callable3Aware.class).call());
     }
 }

@@ -1,5 +1,6 @@
 package org.maera.plugin.osgi;
 
+import org.junit.Test;
 import org.maera.plugin.DefaultModuleDescriptorFactory;
 import org.maera.plugin.osgi.hostcomponents.ComponentRegistrar;
 import org.maera.plugin.osgi.hostcomponents.HostComponentProvider;
@@ -7,16 +8,22 @@ import org.maera.plugin.test.PluginJarBuilder;
 
 import java.util.concurrent.Callable;
 
-public class TestPluginFrameworkWarmRestart extends PluginInContainerTestBase {
+import static org.junit.Assert.*;
+
+public class PluginFrameworkWarmRestartTest extends AbstractPluginInContainerTest {
+
+    @Test
     public void testWarmRestart() throws Exception {
         final DefaultModuleDescriptorFactory factory = new DefaultModuleDescriptorFactory(hostContainer);
         factory.addModuleDescriptor("object", CallableModuleDescriptor.class);
 
         final HostComponentProvider prov = new HostComponentProvider() {
+
             private int count = 1;
 
             public void provide(ComponentRegistrar registrar) {
                 registrar.register(Callable.class).forInstance(new Callable() {
+
                     public Object call() {
                         return "count:" + (count++) + "-";
                     }
@@ -64,6 +71,5 @@ public class TestPluginFrameworkWarmRestart extends PluginInContainerTestBase {
         String id2 = value2.substring("count:2-".length());
 
         assertNotSame(id, id2);
-
     }
 }

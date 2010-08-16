@@ -1,5 +1,6 @@
 package org.maera.plugin.osgi;
 
+import org.junit.Test;
 import org.maera.plugin.DefaultModuleDescriptorFactory;
 import org.maera.plugin.JarPluginArtifact;
 import org.maera.plugin.ModuleDescriptor;
@@ -24,9 +25,74 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class TestDynamicPluginModule extends PluginInContainerTestBase {
+import static org.junit.Assert.*;
+
+public class DynamicPluginModuleTest extends AbstractPluginInContainerTest {
+
+    @Test
+    public void testDynamicModuleDescriptor() throws Exception {
+        initPluginManager(null);
+
+        final File pluginJar = new PluginJarBuilder("pluginType").addPluginInformation("test.plugin", "foo", "1.0")
+                .build();
+
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
+        final BundleContext ctx = ((OsgiPlugin) pluginManager.getPlugin("test.plugin")).getBundle()
+                .getBundleContext();
+        final ServiceRegistration reg = ctx.registerService(ModuleDescriptor.class.getName(), new DummyWebItemModuleDescriptor(), null);
+
+        final Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptors();
+        assertEquals(1, descriptors.size());
+        final ModuleDescriptor<?> descriptor = descriptors.iterator()
+                .next();
+        assertEquals("DummyWebItemModuleDescriptor", descriptor.getClass().getSimpleName());
+        List<WebItemModuleDescriptor> list = pluginManager.getEnabledModuleDescriptorsByClass(WebItemModuleDescriptor.class);
+        assertEquals(1, list.size());
+        reg.unregister();
+        list = pluginManager.getEnabledModuleDescriptorsByClass(WebItemModuleDescriptor.class);
+        assertEquals(0, list.size());
+    }
+
+    @Test
+    public void testDynamicModuleDescriptorIsolatedToPlugin() throws Exception {
+        initPluginManager(null);
+
+        final File pluginJar = new PluginJarBuilder("pluginType").addPluginInformation("test.plugin", "foo", "1.0")
+                .build();
+
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
+        final BundleContext ctx = ((OsgiPlugin) pluginManager.getPlugin("test.plugin")).getBundle()
+                .getBundleContext();
+        ctx.registerService(ModuleDescriptor.class.getName(), new DummyWebItemModuleDescriptor(), null);
+
+        final File pluginJar2 = new PluginJarBuilder("pluginType").addPluginInformation("test.plugin2", "foo", "1.0")
+                .build();
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
+        final BundleContext ctx2 = ((OsgiPlugin) pluginManager.getPlugin("test.plugin2")).getBundle()
+                .getBundleContext();
+        final ServiceRegistration reg2 = ctx2.registerService(ModuleDescriptor.class.getName(), new DummyWebItemModuleDescriptor(), null);
+
+        Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptors();
+        assertEquals(1, descriptors.size());
+        final ModuleDescriptor<?> descriptor = descriptors.iterator()
+                .next();
+        assertEquals("DummyWebItemModuleDescriptor", descriptor.getClass().getSimpleName());
+        List<WebItemModuleDescriptor> list = pluginManager.getEnabledModuleDescriptorsByClass(WebItemModuleDescriptor.class);
+        assertEquals(2, list.size());
+        reg2.unregister();
+        list = pluginManager.getEnabledModuleDescriptorsByClass(WebItemModuleDescriptor.class);
+        assertEquals(1, list.size());
+        descriptors = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptors();
+        assertEquals(1, descriptors.size());
+    }
+
+    @Test
     public void testDynamicPluginModule() throws Exception {
         initPluginManager(new HostComponentProvider() {
+
             public void provide(final ComponentRegistrar registrar) {
             }
         });
@@ -75,8 +141,54 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         assertEquals("MyModuleDescriptor", descriptor.getClass().getSimpleName());
     }
 
-    public void testDynamicPluginModuleUsingModuleTypeDescriptorWithReinstall() throws Exception {
-        initPluginManager();
+    @Test
+    public void testDynamicPluginModuleNotLinkToAllPlugins() throws Exception {
+        new PluginJarBuilder("pluginType")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "    </plugin-info>",
+                        "    <module-type key='foo' class='foo.MyModuleDescriptor'/>",
+                        "</maera-plugin>")
+                .addFormattedJava("foo.MyModuleDescriptor",
+                        "package foo;",
+                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
+                        "  public Object getModule(){return null;}",
+                        "}")
+                .build(pluginsDir);
+        new PluginJarBuilder("fooUser")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "    </plugin-info>",
+                        "    <foo key='dum2'/>",
+                        "</maera-plugin>")
+                .build(pluginsDir);
+        new PluginJarBuilder("foootherUser")
+                .addPluginInformation("unusing.plugin", "Unusing plugin", "1.0")
+                .build(pluginsDir);
+
+        initPluginManager(new HostComponentProvider() {
+
+            public void provide(final ComponentRegistrar registrar) {
+            }
+        });
+
+        assertEquals("MyModuleDescriptor", pluginManager.getPlugin("test.plugin").getModuleDescriptor("dum2").getClass().getSimpleName());
+        Set<String> deps = findDependentBundles(((OsgiPlugin) pluginManager.getPlugin("test.plugin.module")).getBundle());
+        assertTrue(deps.contains("test.plugin"));
+        assertFalse(deps.contains("unusing.plugin"));
+    }
+
+    @Test
+    public void testDynamicPluginModuleUsingModuleTypeDescriptor() throws Exception {
+        initPluginManager(new HostComponentProvider() {
+
+            public void provide(final ComponentRegistrar registrar) {
+            }
+        });
 
         final File pluginJar = new PluginJarBuilder("pluginType")
                 .addFormattedResource("maera-plugin.xml",
@@ -105,48 +217,323 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
         WaitUntil.invoke(new BasicWaitCondition() {
-            public boolean isFinished() {
-                return pluginManager.getPlugin("test.plugin")
-                        .getModuleDescriptors()
-                        .iterator()
-                        .next()
-                        .getClass()
-                        .getSimpleName()
-                        .equals("MyModuleDescriptor");
-            }
-        });
 
-        // uninstall the module - the test plugin modules should revert back to Unrecognised
-        pluginManager.uninstall(pluginManager.getPlugin("test.plugin.module"));
-        WaitUntil.invoke(new BasicWaitCondition() {
-            public boolean isFinished() {
-                ModuleDescriptor<?> descriptor = pluginManager.getPlugin("test.plugin")
-                        .getModuleDescriptors()
-                        .iterator()
-                        .next();
-                boolean enabled = pluginManager.isPluginModuleEnabled(descriptor.getCompleteKey());
-                return descriptor
-                        .getClass()
-                        .getSimpleName()
-                        .equals("UnrecognisedModuleDescriptor")
-                        && !enabled;
-            }
-        });
-        // reinstall the module - the test plugin modules should be correct again
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
-        WaitUntil.invoke(new BasicWaitCondition() {
             public boolean isFinished() {
                 return pluginManager.getPlugin("test.plugin")
-                        .getModuleDescriptors()
-                        .iterator()
-                        .next()
+                        .getModuleDescriptor("dum2")
                         .getClass()
                         .getSimpleName()
                         .equals("MyModuleDescriptor");
             }
         });
+        final Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptors();
+        assertEquals(1, descriptors.size());
+        final ModuleDescriptor<?> descriptor = descriptors.iterator()
+                .next();
+        assertEquals("MyModuleDescriptor", descriptor.getClass().getSimpleName());
     }
 
+    @Test
+    public void testDynamicPluginModuleUsingModuleTypeDescriptorAfterTheFact() throws Exception {
+        initPluginManager(new HostComponentProvider() {
+
+            public void provide(final ComponentRegistrar registrar) {
+            }
+        });
+
+        final File pluginJar = new PluginJarBuilder("pluginType")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "    </plugin-info>",
+                        "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
+                        "</maera-plugin>")
+                .addFormattedJava("foo.MyModuleDescriptor",
+                        "package foo;",
+                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
+                        "  public Object getModule(){return null;}",
+                        "}")
+                .build();
+        final File pluginJar2 = new PluginJarBuilder("fooUser")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "    </plugin-info>",
+                        "    <foo key='dum2'/>",
+                        "</maera-plugin>")
+                .build();
+
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
+        WaitUntil.invoke(new BasicWaitCondition() {
+
+            public boolean isFinished() {
+                return pluginManager.getPlugin("test.plugin")
+                        .getModuleDescriptors()
+                        .iterator()
+                        .next()
+                        .getClass()
+                        .getSimpleName()
+                        .equals("MyModuleDescriptor");
+            }
+        });
+
+        Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptors();
+        assertEquals(1, descriptors.size());
+        ModuleDescriptor<?> descriptor = descriptors.iterator()
+                .next();
+        assertEquals("MyModuleDescriptor", descriptor.getClass().getSimpleName());
+
+        pluginManager.uninstall(pluginManager.getPlugin("test.plugin.module"));
+        WaitUntil.invoke(new BasicWaitCondition() {
+
+            public boolean isFinished() {
+                return pluginManager.getPlugin("test.plugin")
+                        .getModuleDescriptors()
+                        .iterator()
+                        .next()
+                        .getClass()
+                        .getSimpleName()
+                        .equals("UnrecognisedModuleDescriptor");
+            }
+        });
+        descriptors = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptors();
+        assertEquals(1, descriptors.size());
+        descriptor = descriptors.iterator()
+                .next();
+        assertEquals("UnrecognisedModuleDescriptor", descriptor.getClass().getSimpleName());
+
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
+        descriptors = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptors();
+        assertEquals(1, descriptors.size());
+        descriptor = descriptors.iterator()
+                .next();
+        assertEquals("MyModuleDescriptor", descriptor.getClass().getSimpleName());
+    }
+
+    @Test
+    public void testDynamicPluginModuleUsingModuleTypeDescriptorAfterTheFactWithException() throws Exception {
+        initPluginManager(new HostComponentProvider() {
+
+            public void provide(final ComponentRegistrar registrar) {
+
+            }
+        });
+
+        final File pluginJar = new PluginJarBuilder("pluginType")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "    </plugin-info>",
+                        "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
+                        "</maera-plugin>")
+                .addFormattedJava("foo.MyModuleDescriptor",
+                        "package foo;",
+                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
+                        "  public MyModuleDescriptor() {",
+                        "    throw new RuntimeException('error loading module');",
+                        "  }",
+                        "  public Object getModule(){return null;}",
+                        "}")
+                .build();
+        final File pluginJar2 = new PluginJarBuilder("fooUser")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "    </plugin-info>",
+                        "    <foo key='dum2'/>",
+                        "</maera-plugin>")
+                .build();
+
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
+        assertTrue(WaitUntil.invoke(new BasicWaitCondition() {
+
+            public boolean isFinished() {
+                UnrecognisedModuleDescriptor des = (UnrecognisedModuleDescriptor) pluginManager.getPlugin("test.plugin").getModuleDescriptor("dum2");
+                return des.getErrorText().contains("error loading module");
+            }
+        }));
+    }
+
+    @Test
+    public void testDynamicPluginModuleUsingModuleTypeDescriptorAndComponentInjection() throws Exception {
+        initPluginManager(new HostComponentProvider() {
+
+            public void provide(final ComponentRegistrar registrar) {
+            }
+        });
+
+        final File pluginJar = new PluginJarBuilder("pluginType")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "    </plugin-info>",
+                        "    <component key='comp' class='foo.MyComponent' />",
+                        "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
+                        "</maera-plugin>")
+                .addFormattedJava("foo.MyComponent",
+                        "package foo;",
+                        "public class MyComponent {",
+                        "}")
+                .addFormattedJava("foo.MyModuleDescriptor",
+                        "package foo;",
+                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
+                        "  public MyModuleDescriptor(MyComponent comp) {}",
+                        "  public Object getModule(){return null;}",
+                        "}")
+
+                .build();
+        final File pluginJar2 = new PluginJarBuilder("fooUser")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "    </plugin-info>",
+                        "    <foo key='dum2'/>",
+                        "</maera-plugin>")
+                .build();
+
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
+        WaitUntil.invoke(new BasicWaitCondition() {
+
+            public boolean isFinished() {
+                return pluginManager.getPlugin("test.plugin")
+                        .getModuleDescriptors()
+                        .iterator()
+                        .next()
+                        .getClass()
+                        .getSimpleName()
+                        .equals("MyModuleDescriptor");
+            }
+        });
+        final Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptors();
+        assertEquals(1, descriptors.size());
+        final ModuleDescriptor<?> descriptor = descriptors.iterator()
+                .next();
+        assertEquals("MyModuleDescriptor", descriptor.getClass().getSimpleName());
+    }
+
+    @Test
+    public void testDynamicPluginModuleUsingModuleTypeDescriptorInSamePlugin() throws Exception {
+        initPluginManager(new HostComponentProvider() {
+
+            public void provide(final ComponentRegistrar registrar) {
+            }
+        });
+
+        final File pluginJar = new PluginJarBuilder("pluginType")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "    </plugin-info>",
+                        "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
+                        "    <foo key='dum2' />",
+                        "</maera-plugin>")
+                .addFormattedJava("foo.MyModuleDescriptor",
+                        "package foo;",
+                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
+                        "  public Object getModule(){return null;}",
+                        "}")
+                .build();
+
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
+        WaitUntil.invoke(new BasicWaitCondition() {
+
+            public boolean isFinished() {
+                return pluginManager.getPlugin("test.plugin")
+                        .getModuleDescriptor("dum2")
+                        .getClass()
+                        .getSimpleName()
+                        .equals("MyModuleDescriptor");
+            }
+        });
+        final Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptors();
+        assertEquals(2, descriptors.size());
+        final ModuleDescriptor<?> descriptor = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptor("dum2");
+        assertEquals("MyModuleDescriptor", descriptor.getClass().getSimpleName());
+    }
+
+    @Test
+    public void testDynamicPluginModuleUsingModuleTypeDescriptorInSamePluginWithRestart() throws Exception {
+        initPluginManager();
+
+        final File pluginJar = new PluginJarBuilder("pluginType")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "    </plugin-info>",
+                        "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
+                        "    <foo key='dum2' />",
+                        "</maera-plugin>")
+                .addFormattedJava("foo.MyModuleDescriptor",
+                        "package foo;",
+                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
+                        "  public Object getModule(){return null;}",
+                        "}")
+                .build();
+
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
+        WaitUntil.invoke(new BasicWaitCondition() {
+
+            public boolean isFinished() {
+                return pluginManager.getPlugin("test.plugin")
+                        .getModuleDescriptor("dum2")
+                        .getClass()
+                        .getSimpleName()
+                        .equals("MyModuleDescriptor");
+            }
+        });
+        Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptors();
+        assertEquals(2, descriptors.size());
+        ModuleDescriptor<?> descriptor = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptor("dum2");
+        assertEquals("MyModuleDescriptor", descriptor.getClass().getSimpleName());
+
+        PluginModuleDisabledListener disabledListener = new PluginModuleDisabledListener();
+        PluginModuleEnabledListener enabledListener = new PluginModuleEnabledListener();
+        pluginEventManager.register(disabledListener);
+        pluginEventManager.register(enabledListener);
+
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
+        WaitUntil.invoke(new BasicWaitCondition() {
+
+            public boolean isFinished() {
+                return pluginManager.getPlugin("test.plugin")
+                        .getModuleDescriptor("dum2")
+                        .getClass()
+                        .getSimpleName()
+                        .equals("MyModuleDescriptor");
+            }
+        });
+        descriptors = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptors();
+        assertEquals(2, descriptors.size());
+        ModuleDescriptor<?> newdescriptor = pluginManager.getPlugin("test.plugin")
+                .getModuleDescriptor("dum2");
+        assertEquals("MyModuleDescriptor", newdescriptor.getClass().getSimpleName());
+        assertTrue(descriptor.getClass() != newdescriptor.getClass());
+        assertTrue(disabledListener.called);
+        assertTrue(enabledListener.called);
+    }
+
+    @Test
     public void testDynamicPluginModuleUsingModuleTypeDescriptorWithImmediateReinstall() throws Exception {
         initPluginManager();
 
@@ -177,6 +564,7 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
         WaitUntil.invoke(new BasicWaitCondition() {
+
             public boolean isFinished() {
                 return pluginManager.getPlugin("test.plugin")
                         .getModuleDescriptors()
@@ -191,6 +579,7 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         // reinstall the module - the test plugin modules should be correct again
         pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
         WaitUntil.invoke(new BasicWaitCondition() {
+
             public boolean isFinished() {
                 return pluginManager.getPlugin("test.plugin")
                         .getModuleDescriptors()
@@ -203,6 +592,83 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         });
     }
 
+    @Test
+    public void testDynamicPluginModuleUsingModuleTypeDescriptorWithReinstall() throws Exception {
+        initPluginManager();
+
+        final File pluginJar = new PluginJarBuilder("pluginType")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "    </plugin-info>",
+                        "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
+                        "</maera-plugin>")
+                .addFormattedJava("foo.MyModuleDescriptor",
+                        "package foo;",
+                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
+                        "  public Object getModule(){return null;}",
+                        "}")
+                .build();
+        final File pluginJar2 = new PluginJarBuilder("fooUser")
+                .addFormattedResource("maera-plugin.xml",
+                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
+                        "    <plugin-info>",
+                        "        <version>1.0</version>",
+                        "    </plugin-info>",
+                        "    <foo key='dum2'/>",
+                        "</maera-plugin>")
+                .build();
+
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
+        WaitUntil.invoke(new BasicWaitCondition() {
+
+            public boolean isFinished() {
+                return pluginManager.getPlugin("test.plugin")
+                        .getModuleDescriptors()
+                        .iterator()
+                        .next()
+                        .getClass()
+                        .getSimpleName()
+                        .equals("MyModuleDescriptor");
+            }
+        });
+
+        // uninstall the module - the test plugin modules should revert back to Unrecognised
+        pluginManager.uninstall(pluginManager.getPlugin("test.plugin.module"));
+        WaitUntil.invoke(new BasicWaitCondition() {
+
+            public boolean isFinished() {
+                ModuleDescriptor<?> descriptor = pluginManager.getPlugin("test.plugin")
+                        .getModuleDescriptors()
+                        .iterator()
+                        .next();
+                boolean enabled = pluginManager.isPluginModuleEnabled(descriptor.getCompleteKey());
+                return descriptor
+                        .getClass()
+                        .getSimpleName()
+                        .equals("UnrecognisedModuleDescriptor")
+                        && !enabled;
+            }
+        });
+        // reinstall the module - the test plugin modules should be correct again
+        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
+        WaitUntil.invoke(new BasicWaitCondition() {
+
+            public boolean isFinished() {
+                return pluginManager.getPlugin("test.plugin")
+                        .getModuleDescriptors()
+                        .iterator()
+                        .next()
+                        .getClass()
+                        .getSimpleName()
+                        .equals("MyModuleDescriptor");
+            }
+        });
+    }
+
+    @Test
     public void testUpgradeOfBundledPluginWithDynamicModule() throws Exception {
         final File pluginJar = new PluginJarBuilder("pluginType")
                 .addFormattedResource("maera-plugin.xml",
@@ -244,6 +710,7 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         pluginManager.installPlugins(new JarPluginArtifact(pluginClientOld), new JarPluginArtifact(pluginClientNew));
 
         WaitUntil.invoke(new BasicWaitCondition() {
+
             public boolean isFinished() {
                 return pluginManager.getPlugin("test.plugin")
                         .getModuleDescriptors()
@@ -257,45 +724,6 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
 
         assertEquals(2, pluginManager.getEnabledPlugins().size());
         assertEquals("2.0", pluginManager.getPlugin("test.plugin").getPluginInformation().getVersion());
-    }
-
-    public void testDynamicPluginModuleNotLinkToAllPlugins() throws Exception {
-        new PluginJarBuilder("pluginType")
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "    </plugin-info>",
-                        "    <module-type key='foo' class='foo.MyModuleDescriptor'/>",
-                        "</maera-plugin>")
-                .addFormattedJava("foo.MyModuleDescriptor",
-                        "package foo;",
-                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
-                        "  public Object getModule(){return null;}",
-                        "}")
-                .build(pluginsDir);
-        new PluginJarBuilder("fooUser")
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "    </plugin-info>",
-                        "    <foo key='dum2'/>",
-                        "</maera-plugin>")
-                .build(pluginsDir);
-        new PluginJarBuilder("foootherUser")
-                .addPluginInformation("unusing.plugin", "Unusing plugin", "1.0")
-                .build(pluginsDir);
-
-        initPluginManager(new HostComponentProvider() {
-            public void provide(final ComponentRegistrar registrar) {
-            }
-        });
-
-        assertEquals("MyModuleDescriptor", pluginManager.getPlugin("test.plugin").getModuleDescriptor("dum2").getClass().getSimpleName());
-        Set<String> deps = findDependentBundles(((OsgiPlugin) pluginManager.getPlugin("test.plugin.module")).getBundle());
-        assertTrue(deps.contains("test.plugin"));
-        assertFalse(deps.contains("unusing.plugin"));
     }
 
     private Set<String> findDependentBundles(Bundle bundle) {
@@ -317,411 +745,22 @@ public class TestDynamicPluginModule extends PluginInContainerTestBase {
         return deps;
     }
 
-    public void testDynamicPluginModuleUsingModuleTypeDescriptor() throws Exception {
-        initPluginManager(new HostComponentProvider() {
-            public void provide(final ComponentRegistrar registrar) {
-            }
-        });
-
-        final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "    </plugin-info>",
-                        "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
-                        "</maera-plugin>")
-                .addFormattedJava("foo.MyModuleDescriptor",
-                        "package foo;",
-                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
-                        "  public Object getModule(){return null;}",
-                        "}")
-                .build();
-        final File pluginJar2 = new PluginJarBuilder("fooUser")
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "    </plugin-info>",
-                        "    <foo key='dum2'/>",
-                        "</maera-plugin>")
-                .build();
-
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
-        WaitUntil.invoke(new BasicWaitCondition() {
-            public boolean isFinished() {
-                return pluginManager.getPlugin("test.plugin")
-                        .getModuleDescriptor("dum2")
-                        .getClass()
-                        .getSimpleName()
-                        .equals("MyModuleDescriptor");
-            }
-        });
-        final Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptors();
-        assertEquals(1, descriptors.size());
-        final ModuleDescriptor<?> descriptor = descriptors.iterator()
-                .next();
-        assertEquals("MyModuleDescriptor", descriptor.getClass().getSimpleName());
-    }
-
-
-    public void testDynamicPluginModuleUsingModuleTypeDescriptorAndComponentInjection() throws Exception {
-        initPluginManager(new HostComponentProvider() {
-            public void provide(final ComponentRegistrar registrar) {
-            }
-        });
-
-        final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "    </plugin-info>",
-                        "    <component key='comp' class='foo.MyComponent' />",
-                        "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
-                        "</maera-plugin>")
-                .addFormattedJava("foo.MyComponent",
-                        "package foo;",
-                        "public class MyComponent {",
-                        "}")
-                .addFormattedJava("foo.MyModuleDescriptor",
-                        "package foo;",
-                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
-                        "  public MyModuleDescriptor(MyComponent comp) {}",
-                        "  public Object getModule(){return null;}",
-                        "}")
-
-                .build();
-        final File pluginJar2 = new PluginJarBuilder("fooUser")
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "    </plugin-info>",
-                        "    <foo key='dum2'/>",
-                        "</maera-plugin>")
-                .build();
-
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
-        WaitUntil.invoke(new BasicWaitCondition() {
-            public boolean isFinished() {
-                return pluginManager.getPlugin("test.plugin")
-                        .getModuleDescriptors()
-                        .iterator()
-                        .next()
-                        .getClass()
-                        .getSimpleName()
-                        .equals("MyModuleDescriptor");
-            }
-        });
-        final Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptors();
-        assertEquals(1, descriptors.size());
-        final ModuleDescriptor<?> descriptor = descriptors.iterator()
-                .next();
-        assertEquals("MyModuleDescriptor", descriptor.getClass().getSimpleName());
-    }
-
-    public void testDynamicPluginModuleUsingModuleTypeDescriptorAfterTheFact() throws Exception {
-        initPluginManager(new HostComponentProvider() {
-            public void provide(final ComponentRegistrar registrar) {
-            }
-        });
-
-        final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "    </plugin-info>",
-                        "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
-                        "</maera-plugin>")
-                .addFormattedJava("foo.MyModuleDescriptor",
-                        "package foo;",
-                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
-                        "  public Object getModule(){return null;}",
-                        "}")
-                .build();
-        final File pluginJar2 = new PluginJarBuilder("fooUser")
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "    </plugin-info>",
-                        "    <foo key='dum2'/>",
-                        "</maera-plugin>")
-                .build();
-
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
-        WaitUntil.invoke(new BasicWaitCondition() {
-            public boolean isFinished() {
-                return pluginManager.getPlugin("test.plugin")
-                        .getModuleDescriptors()
-                        .iterator()
-                        .next()
-                        .getClass()
-                        .getSimpleName()
-                        .equals("MyModuleDescriptor");
-            }
-        });
-
-        Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptors();
-        assertEquals(1, descriptors.size());
-        ModuleDescriptor<?> descriptor = descriptors.iterator()
-                .next();
-        assertEquals("MyModuleDescriptor", descriptor.getClass().getSimpleName());
-
-        pluginManager.uninstall(pluginManager.getPlugin("test.plugin.module"));
-        WaitUntil.invoke(new BasicWaitCondition() {
-            public boolean isFinished() {
-                return pluginManager.getPlugin("test.plugin")
-                        .getModuleDescriptors()
-                        .iterator()
-                        .next()
-                        .getClass()
-                        .getSimpleName()
-                        .equals("UnrecognisedModuleDescriptor");
-            }
-        });
-        descriptors = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptors();
-        assertEquals(1, descriptors.size());
-        descriptor = descriptors.iterator()
-                .next();
-        assertEquals("UnrecognisedModuleDescriptor", descriptor.getClass().getSimpleName());
-
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
-        descriptors = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptors();
-        assertEquals(1, descriptors.size());
-        descriptor = descriptors.iterator()
-                .next();
-        assertEquals("MyModuleDescriptor", descriptor.getClass().getSimpleName());
-    }
-
-    public void testDynamicPluginModuleUsingModuleTypeDescriptorAfterTheFactWithException() throws Exception {
-        initPluginManager(new HostComponentProvider() {
-            public void provide(final ComponentRegistrar registrar) {
-            }
-        });
-
-        final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test' key='test.plugin.module' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "    </plugin-info>",
-                        "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
-                        "</maera-plugin>")
-                .addFormattedJava("foo.MyModuleDescriptor",
-                        "package foo;",
-                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
-                        "  public MyModuleDescriptor() {",
-                        "    throw new RuntimeException('error loading module');",
-                        "  }",
-                        "  public Object getModule(){return null;}",
-                        "}")
-                .build();
-        final File pluginJar2 = new PluginJarBuilder("fooUser")
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test 2' key='test.plugin' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "    </plugin-info>",
-                        "    <foo key='dum2'/>",
-                        "</maera-plugin>")
-                .build();
-
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
-        assertTrue(WaitUntil.invoke(new BasicWaitCondition() {
-            public boolean isFinished() {
-                UnrecognisedModuleDescriptor des = (UnrecognisedModuleDescriptor) pluginManager.getPlugin("test.plugin").getModuleDescriptor("dum2");
-                return des.getErrorText().contains("error loading module");
-            }
-        }));
-
-    }
-
-    public void testDynamicPluginModuleUsingModuleTypeDescriptorInSamePlugin() throws Exception {
-        initPluginManager(new HostComponentProvider() {
-            public void provide(final ComponentRegistrar registrar) {
-            }
-        });
-
-        final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "    </plugin-info>",
-                        "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
-                        "    <foo key='dum2' />",
-                        "</maera-plugin>")
-                .addFormattedJava("foo.MyModuleDescriptor",
-                        "package foo;",
-                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
-                        "  public Object getModule(){return null;}",
-                        "}")
-                .build();
-
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
-        WaitUntil.invoke(new BasicWaitCondition() {
-            public boolean isFinished() {
-                return pluginManager.getPlugin("test.plugin")
-                        .getModuleDescriptor("dum2")
-                        .getClass()
-                        .getSimpleName()
-                        .equals("MyModuleDescriptor");
-            }
-        });
-        final Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptors();
-        assertEquals(2, descriptors.size());
-        final ModuleDescriptor<?> descriptor = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptor("dum2");
-        assertEquals("MyModuleDescriptor", descriptor.getClass().getSimpleName());
-    }
-
-    public void testDynamicPluginModuleUsingModuleTypeDescriptorInSamePluginWithRestart() throws Exception {
-        initPluginManager();
-
-        final File pluginJar = new PluginJarBuilder("pluginType")
-                .addFormattedResource("maera-plugin.xml",
-                        "<maera-plugin name='Test' key='test.plugin' pluginsVersion='2'>",
-                        "    <plugin-info>",
-                        "        <version>1.0</version>",
-                        "    </plugin-info>",
-                        "    <module-type key='foo' class='foo.MyModuleDescriptor' />",
-                        "    <foo key='dum2' />",
-                        "</maera-plugin>")
-                .addFormattedJava("foo.MyModuleDescriptor",
-                        "package foo;",
-                        "public class MyModuleDescriptor extends org.maera.plugin.descriptors.AbstractModuleDescriptor {",
-                        "  public Object getModule(){return null;}",
-                        "}")
-                .build();
-
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
-        WaitUntil.invoke(new BasicWaitCondition() {
-            public boolean isFinished() {
-                return pluginManager.getPlugin("test.plugin")
-                        .getModuleDescriptor("dum2")
-                        .getClass()
-                        .getSimpleName()
-                        .equals("MyModuleDescriptor");
-            }
-        });
-        Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptors();
-        assertEquals(2, descriptors.size());
-        ModuleDescriptor<?> descriptor = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptor("dum2");
-        assertEquals("MyModuleDescriptor", descriptor.getClass().getSimpleName());
-
-        PluginModuleDisabledListener disabledListener = new PluginModuleDisabledListener();
-        PluginModuleEnabledListener enabledListener = new PluginModuleEnabledListener();
-        pluginEventManager.register(disabledListener);
-        pluginEventManager.register(enabledListener);
-
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
-        WaitUntil.invoke(new BasicWaitCondition() {
-            public boolean isFinished() {
-                return pluginManager.getPlugin("test.plugin")
-                        .getModuleDescriptor("dum2")
-                        .getClass()
-                        .getSimpleName()
-                        .equals("MyModuleDescriptor");
-            }
-        });
-        descriptors = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptors();
-        assertEquals(2, descriptors.size());
-        ModuleDescriptor<?> newdescriptor = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptor("dum2");
-        assertEquals("MyModuleDescriptor", newdescriptor.getClass().getSimpleName());
-        assertTrue(descriptor.getClass() != newdescriptor.getClass());
-        assertTrue(disabledListener.called);
-        assertTrue(enabledListener.called);
-    }
-
-    public void testDynamicModuleDescriptor() throws Exception {
-        initPluginManager(null);
-
-        final File pluginJar = new PluginJarBuilder("pluginType").addPluginInformation("test.plugin", "foo", "1.0")
-                .build();
-
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
-        final BundleContext ctx = ((OsgiPlugin) pluginManager.getPlugin("test.plugin")).getBundle()
-                .getBundleContext();
-        final ServiceRegistration reg = ctx.registerService(ModuleDescriptor.class.getName(), new DummyWebItemModuleDescriptor(), null);
-
-        final Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptors();
-        assertEquals(1, descriptors.size());
-        final ModuleDescriptor<?> descriptor = descriptors.iterator()
-                .next();
-        assertEquals("DummyWebItemModuleDescriptor", descriptor.getClass().getSimpleName());
-        List<WebItemModuleDescriptor> list = pluginManager.getEnabledModuleDescriptorsByClass(WebItemModuleDescriptor.class);
-        assertEquals(1, list.size());
-        reg.unregister();
-        list = pluginManager.getEnabledModuleDescriptorsByClass(WebItemModuleDescriptor.class);
-        assertEquals(0, list.size());
-    }
-
-    public void testDynamicModuleDescriptorIsolatedToPlugin() throws Exception {
-        initPluginManager(null);
-
-        final File pluginJar = new PluginJarBuilder("pluginType").addPluginInformation("test.plugin", "foo", "1.0")
-                .build();
-
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar));
-        final BundleContext ctx = ((OsgiPlugin) pluginManager.getPlugin("test.plugin")).getBundle()
-                .getBundleContext();
-        ctx.registerService(ModuleDescriptor.class.getName(), new DummyWebItemModuleDescriptor(), null);
-
-        final File pluginJar2 = new PluginJarBuilder("pluginType").addPluginInformation("test.plugin2", "foo", "1.0")
-                .build();
-        pluginManager.installPlugin(new JarPluginArtifact(pluginJar2));
-        final BundleContext ctx2 = ((OsgiPlugin) pluginManager.getPlugin("test.plugin2")).getBundle()
-                .getBundleContext();
-        final ServiceRegistration reg2 = ctx2.registerService(ModuleDescriptor.class.getName(), new DummyWebItemModuleDescriptor(), null);
-
-        Collection<ModuleDescriptor<?>> descriptors = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptors();
-        assertEquals(1, descriptors.size());
-        final ModuleDescriptor<?> descriptor = descriptors.iterator()
-                .next();
-        assertEquals("DummyWebItemModuleDescriptor", descriptor.getClass().getSimpleName());
-        List<WebItemModuleDescriptor> list = pluginManager.getEnabledModuleDescriptorsByClass(WebItemModuleDescriptor.class);
-        assertEquals(2, list.size());
-        reg2.unregister();
-        list = pluginManager.getEnabledModuleDescriptorsByClass(WebItemModuleDescriptor.class);
-        assertEquals(1, list.size());
-        descriptors = pluginManager.getPlugin("test.plugin")
-                .getModuleDescriptors();
-        assertEquals(1, descriptors.size());
-    }
-
-    public static class PluginModuleEnabledListener {
-        public volatile boolean called;
-
-        @PluginEventListener
-        public void onEnable(PluginModuleEnabledEvent event) {
-            called = true;
-        }
-    }
-
     public static class PluginModuleDisabledListener {
+
         public volatile boolean called;
 
         @PluginEventListener
         public void onDisable(PluginModuleDisabledEvent event) {
+            called = true;
+        }
+    }
+
+    public static class PluginModuleEnabledListener {
+
+        public volatile boolean called;
+
+        @PluginEventListener
+        public void onEnable(PluginModuleEnabledEvent event) {
             called = true;
         }
     }

@@ -1,9 +1,12 @@
 package org.maera.plugin.osgi.performance;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.DefaultModuleDescriptorFactory;
 import org.maera.plugin.hostcontainer.DefaultHostContainer;
+import org.maera.plugin.osgi.AbstractPluginInContainerTest;
 import org.maera.plugin.osgi.DummyModuleDescriptor;
-import org.maera.plugin.osgi.PluginInContainerTestBase;
 import org.maera.plugin.osgi.SomeInterface;
 import org.maera.plugin.osgi.hostcomponents.ComponentRegistrar;
 import org.maera.plugin.osgi.hostcomponents.HostComponentProvider;
@@ -14,15 +17,18 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Tests the plugin framework handling restarts correctly
  */
-public abstract class FrameworkRestartTestBase extends PluginInContainerTestBase {
+public abstract class AbstractFrameworkRestartTest extends AbstractPluginInContainerTest {
     private static final int NUM_HOST_COMPONENTS = 200;
     private static final int NUM_PLUGINS = 50;
     HostComponentProvider prov = null;
     DefaultModuleDescriptorFactory factory = null;
 
+    @Before
     @Override
     public void setUp() throws Exception {
         super.setUp();
@@ -46,7 +52,7 @@ public abstract class FrameworkRestartTestBase extends PluginInContainerTestBase
                         addPlugin(pluginsDir, run);
                     }
                     catch (Exception e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        e.printStackTrace();
                     }
                 }
             });
@@ -69,11 +75,13 @@ public abstract class FrameworkRestartTestBase extends PluginInContainerTestBase
         }
     }
 
+    @After
     @Override
     public void tearDown() throws Exception {
         super.tearDown();
     }
 
+    @Test
     public void testMultiplePlugins() throws Exception {
         startPluginFramework();
         pluginManager.shutdown();

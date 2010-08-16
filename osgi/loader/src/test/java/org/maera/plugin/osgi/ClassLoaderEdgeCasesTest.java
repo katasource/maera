@@ -1,5 +1,6 @@
 package org.maera.plugin.osgi;
 
+import org.junit.Test;
 import org.maera.plugin.DefaultModuleDescriptorFactory;
 import org.maera.plugin.JarPluginArtifact;
 import org.maera.plugin.hostcontainer.DefaultHostContainer;
@@ -10,10 +11,15 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 /**
  * These tests are mainly here to demonstrate different edge cases you can encounter
  */
-public class TestClassLoaderEdgeCases extends PluginInContainerTestBase {
+public class ClassLoaderEdgeCasesTest extends AbstractPluginInContainerTest {
+
+    @Test
     public void testLinkageError() throws Exception {
         File privateJar = new PluginJarBuilder("private-jar")
                 .addFormattedJava("org.maera.plugin.osgi.Callable2",

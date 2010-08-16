@@ -8,7 +8,7 @@ import java.util.Random;
 /**
  * Tests the plugin framework handling restarts correctly
  */
-public class TestOsgiNoCacheFrameworkRestart extends FrameworkRestartTestBase {
+public class OsgiNoCacheFrameworkRestartTest extends AbstractFrameworkRestartTest {
     private final Random rnd = new Random(System.currentTimeMillis());
 
     protected void addPlugin(File dir, int pluginId) throws Exception {

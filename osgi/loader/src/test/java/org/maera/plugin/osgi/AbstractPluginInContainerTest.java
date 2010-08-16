@@ -1,9 +1,10 @@
 package org.maera.plugin.osgi;
 
 import com.google.common.collect.ImmutableSet;
-import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.maera.plugin.DefaultModuleDescriptorFactory;
 import org.maera.plugin.ModuleDescriptorFactory;
 import org.maera.plugin.PluginAccessor;
@@ -45,18 +46,19 @@ import java.util.zip.ZipOutputStream;
 /**
  * Base for in-container unit tests
  */
-public abstract class PluginInContainerTestBase extends TestCase {
-    protected OsgiContainerManager osgiContainerManager;
-    protected File tmpDir;
-    protected File cacheDir;
-    protected File pluginsDir;
-    protected ModuleDescriptorFactory moduleDescriptorFactory;
-    protected DefaultPluginManager pluginManager;
-    protected PluginEventManager pluginEventManager;
-    protected ModuleFactory moduleFactory;
-    protected SimpleConstructorHostContainer hostContainer;
+public abstract class AbstractPluginInContainerTest {
 
-    @Override
+    protected File cacheDir;
+    protected SimpleConstructorHostContainer hostContainer;
+    protected ModuleDescriptorFactory moduleDescriptorFactory;
+    protected ModuleFactory moduleFactory;
+    protected OsgiContainerManager osgiContainerManager;
+    protected PluginEventManager pluginEventManager;
+    protected DefaultPluginManager pluginManager;
+    protected File pluginsDir;
+    protected File tmpDir;
+
+    @Before
     public void setUp() throws Exception {
         tmpDir = new File("target/plugin-temp").getAbsoluteFile();
         if (tmpDir.exists()) {
@@ -74,13 +76,7 @@ public abstract class PluginInContainerTestBase extends TestCase {
         hostContainer = createHostContainer(new HashMap<Class<?>, Object>());
     }
 
-    protected SimpleConstructorHostContainer createHostContainer(Map<Class<?>, Object> originalContext) {
-        Map<Class<?>, Object> context = new HashMap<Class<?>, Object>(originalContext);
-        context.put(ModuleFactory.class, moduleFactory);
-        return new SimpleConstructorHostContainer(context);
-    }
-
-    @Override
+    @After
     public void tearDown() throws Exception {
         if (osgiContainerManager != null) {
             osgiContainerManager.stop();
@@ -96,42 +92,10 @@ public abstract class PluginInContainerTestBase extends TestCase {
         hostContainer = null;
     }
 
-    protected void initPluginManager() throws Exception {
-        initPluginManager(null, new DefaultModuleDescriptorFactory(hostContainer));
-    }
-
-    protected void initPluginManager(final HostComponentProvider hostComponentProvider) throws Exception {
-        initPluginManager(hostComponentProvider, new DefaultModuleDescriptorFactory(hostContainer));
-    }
-
-    protected void initPluginManager(final HostComponentProvider hostComponentProvider, final ModuleDescriptorFactory moduleDescriptorFactory, final String version)
-            throws Exception {
-        final PackageScannerConfiguration scannerConfig = buildScannerConfiguration(version);
-        HostComponentProvider requiredWrappingProvider = getWrappingHostComponentProvider(hostComponentProvider);
-        OsgiPersistentCache cache = new DefaultOsgiPersistentCache(cacheDir);
-        osgiContainerManager = new FelixOsgiContainerManager(cache, scannerConfig, requiredWrappingProvider, pluginEventManager);
-
-        final LegacyDynamicPluginFactory legacyFactory = new LegacyDynamicPluginFactory(PluginAccessor.Descriptor.FILENAME, tmpDir);
-        final OsgiPluginFactory osgiPluginDeployer = new OsgiPluginFactory(PluginAccessor.Descriptor.FILENAME, (String) null, cache, osgiContainerManager, pluginEventManager);
-        final OsgiBundleFactory osgiBundleFactory = new OsgiBundleFactory(osgiContainerManager, pluginEventManager);
-
-        final DirectoryPluginLoader loader = new DirectoryPluginLoader(pluginsDir, Arrays.asList(legacyFactory, osgiPluginDeployer, osgiBundleFactory),
-                new DefaultPluginEventManager());
-        initPluginManager(moduleDescriptorFactory, loader);
-    }
-
-    protected void initPluginManager(final HostComponentProvider hostComponentProvider, final ModuleDescriptorFactory moduleDescriptorFactory)
-            throws Exception {
-        initPluginManager(hostComponentProvider, moduleDescriptorFactory, (String) null);
-    }
-
-    protected void initPluginManager(final ModuleDescriptorFactory moduleDescriptorFactory, PluginLoader loader)
-            throws Exception {
-        this.moduleDescriptorFactory = moduleDescriptorFactory;
-        pluginManager = new DefaultPluginManager(new MemoryPluginPersistentStateStore(), Arrays.<PluginLoader>asList(loader), moduleDescriptorFactory,
-                pluginEventManager);
-        pluginManager.setPluginInstaller(new FilePluginInstaller(pluginsDir));
-        pluginManager.init();
+    protected SimpleConstructorHostContainer createHostContainer(Map<Class<?>, Object> originalContext) {
+        Map<Class<?>, Object> context = new HashMap<Class<?>, Object>(originalContext);
+        context.put(ModuleFactory.class, moduleFactory);
+        return new SimpleConstructorHostContainer(context);
     }
 
     protected void initBundlingPluginManager(final ModuleDescriptorFactory moduleDescriptorFactory, File... bundledPluginJars) throws Exception {
@@ -172,12 +136,62 @@ public abstract class PluginInContainerTestBase extends TestCase {
         pluginManager.init();
     }
 
+    protected void initPluginManager() throws Exception {
+        initPluginManager(null, new DefaultModuleDescriptorFactory(hostContainer));
+    }
+
+    protected void initPluginManager(final HostComponentProvider hostComponentProvider) throws Exception {
+        initPluginManager(hostComponentProvider, new DefaultModuleDescriptorFactory(hostContainer));
+    }
+
+    protected void initPluginManager(final HostComponentProvider hostComponentProvider, final ModuleDescriptorFactory moduleDescriptorFactory, final String version)
+            throws Exception {
+        final PackageScannerConfiguration scannerConfig = buildScannerConfiguration(version);
+        HostComponentProvider requiredWrappingProvider = getWrappingHostComponentProvider(hostComponentProvider);
+        OsgiPersistentCache cache = new DefaultOsgiPersistentCache(cacheDir);
+        osgiContainerManager = new FelixOsgiContainerManager(cache, scannerConfig, requiredWrappingProvider, pluginEventManager);
+
+        final LegacyDynamicPluginFactory legacyFactory = new LegacyDynamicPluginFactory(PluginAccessor.Descriptor.FILENAME, tmpDir);
+        final OsgiPluginFactory osgiPluginDeployer = new OsgiPluginFactory(PluginAccessor.Descriptor.FILENAME, (String) null, cache, osgiContainerManager, pluginEventManager);
+        final OsgiBundleFactory osgiBundleFactory = new OsgiBundleFactory(osgiContainerManager, pluginEventManager);
+
+        final DirectoryPluginLoader loader = new DirectoryPluginLoader(pluginsDir, Arrays.asList(legacyFactory, osgiPluginDeployer, osgiBundleFactory),
+                new DefaultPluginEventManager());
+        initPluginManager(moduleDescriptorFactory, loader);
+    }
+
+    protected void initPluginManager(final HostComponentProvider hostComponentProvider, final ModuleDescriptorFactory moduleDescriptorFactory)
+            throws Exception {
+        initPluginManager(hostComponentProvider, moduleDescriptorFactory, (String) null);
+    }
+
+    protected void initPluginManager(final ModuleDescriptorFactory moduleDescriptorFactory, PluginLoader loader)
+            throws Exception {
+        this.moduleDescriptorFactory = moduleDescriptorFactory;
+        pluginManager = new DefaultPluginManager(new MemoryPluginPersistentStateStore(), Arrays.<PluginLoader>asList(loader), moduleDescriptorFactory,
+                pluginEventManager);
+        pluginManager.setPluginInstaller(new FilePluginInstaller(pluginsDir));
+        pluginManager.init();
+    }
+
+    private PackageScannerConfiguration buildScannerConfiguration(String version) {
+        final PackageScannerConfiguration scannerConfig = new DefaultPackageScannerConfiguration(version);
+        scannerConfig.getPackageIncludes().add("org.maera.plugin*");
+        scannerConfig.getPackageIncludes().add("javax.servlet*");
+        scannerConfig.getPackageIncludes().add("com_cenqua_clover");
+        scannerConfig.getPackageExcludes().add("org.maera.plugin.osgi.bridge*");
+        scannerConfig.getPackageVersions().put("org.apache.commons.logging", "1.1.1");
+        return scannerConfig;
+    }
+
     private HostComponentProvider getWrappingHostComponentProvider(final HostComponentProvider hostComponentProvider) {
-        HostComponentProvider requiredWrappingProvider = new HostComponentProvider() {
+        return new HostComponentProvider() {
+
             public void provide(final ComponentRegistrar registrar) {
 
                 if (hostComponentProvider != null) {
                     hostComponentProvider.provide(new ComponentRegistrar() {
+
                         public InstanceBuilder register(Class<?>... mainInterfaces) {
                             if (!Arrays.asList(mainInterfaces).contains(PluginEventManager.class)) {
                                 return registrar.register(mainInterfaces);
@@ -189,16 +203,5 @@ public abstract class PluginInContainerTestBase extends TestCase {
                 registrar.register(PluginEventManager.class).forInstance(pluginEventManager);
             }
         };
-        return requiredWrappingProvider;
-    }
-
-    private PackageScannerConfiguration buildScannerConfiguration(String version) {
-        final PackageScannerConfiguration scannerConfig = new DefaultPackageScannerConfiguration(version);
-        scannerConfig.getPackageIncludes().add("org.maera.plugin*");
-        scannerConfig.getPackageIncludes().add("javax.servlet*");
-        scannerConfig.getPackageIncludes().add("com_cenqua_clover");
-        scannerConfig.getPackageExcludes().add("org.maera.plugin.osgi.bridge*");
-        scannerConfig.getPackageVersions().put("org.apache.commons.logging", "1.1.1");
-        return scannerConfig;
     }
 }
