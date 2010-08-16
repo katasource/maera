@@ -81,8 +81,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${frameworkBundleDirectory}</outputDirectory>
-                            <includeArtifactIds>atlassian-plugins-osgi-bridge,atlassian-plugins-osgi-spring-extender
-                            </includeArtifactIds>
+                            <includeArtifactIds>maera-osgi-bridge,maera-osgi-spring-extender</includeArtifactIds>
                         </configuration>
                     </execution>
                     <execution>
@@ -92,7 +91,7 @@
                         </goals>
                         <configuration>
                             <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
-                            <includeArtifactIds>atlassian-plugins-simpletest</includeArtifactIds>
+                            <includeArtifactIds>maera-test-simpletest</includeArtifactIds>
                         </configuration>
                     </execution>
                 </executions>
@@ -100,6 +99,7 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
+                    <finalName>osgi</finalName>
                     <descriptors>
                         <descriptor>src/main/assembly/framework-bundles.xml</descriptor>
                     </descriptors>

@@ -3,14 +3,12 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:plugin="http://atlassian.com/schema/spring/plugin"
-       xsi:schemaLocation="
-          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-          http://atlassian.com/schema/spring/plugin http://atlassian.com/schema/spring/plugin.xsd
-          http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                           http://atlassian.com/schema/spring/plugin http://atlassian.com/schema/spring/plugin.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <bean name="foo" class="com.atlassian.plugin.spring.FooableBean" plugin:available="true"
-          plugin:contextClassLoader="USE_PLUGIN"/>
-
-    <bean name="foo2" class="com.atlassian.plugin.spring.FooableBean" plugin:available="false"/>
+    <bean name="foo" class="org.maera.plugin.spring.FooableBean"
+          plugin:available="true" plugin:contextClassLoader="USE_PLUGIN"/>
+    <bean name="foo2" class="org.maera.plugin.spring.FooableBean" plugin:available="false"/>
 
 </beans>

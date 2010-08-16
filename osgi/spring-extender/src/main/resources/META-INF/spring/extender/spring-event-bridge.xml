@@ -9,12 +9,11 @@
        default-autowire="autodetect">
 
     <!-- Bridges the plugin event system with the Spring OSGi events -->
-    <bean id="osgiApplicationEventMulticaster" class="com.atlassian.plugin.osgi.spring.PluginBridgeEventMulticaster"/>
-
+    <bean id="osgiApplicationEventMulticaster" class="org.maera.plugin.osgi.spring.PluginBridgeEventMulticaster"/>
     <!-- Uses a cached thread pool instead of creating a new thread for every context creation -->
-    <bean id="taskExecutor" class="com.atlassian.plugin.osgi.spring.ThreadPoolAsyncTaskExecutor"/>
-
+    <bean id="taskExecutor" class="org.maera.plugin.osgi.spring.ThreadPoolAsyncTaskExecutor"/>
     <!-- Creates an application context that disables XML Schema validation -->
     <bean id="applicationContextCreator"
-          class="com.atlassian.plugin.osgi.spring.NonValidatingOsgiApplicationContextCreator"/>
+          class="org.maera.plugin.osgi.spring.NonValidatingOsgiApplicationContextCreator"/>
+
 </beans>
