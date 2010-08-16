@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestOsgiHeaderUtil {
+public class OsgiHeaderUtilTest {
 
     @Test
     public void testFindReferredPackages() throws IOException {

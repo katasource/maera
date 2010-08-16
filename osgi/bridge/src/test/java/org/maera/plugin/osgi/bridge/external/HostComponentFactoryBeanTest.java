@@ -1,6 +1,6 @@
 package org.maera.plugin.osgi.bridge.external;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
@@ -9,16 +9,19 @@ import org.osgi.framework.ServiceReference;
 
 import java.util.concurrent.Callable;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.*;
 
+public class HostComponentFactoryBeanTest {
 
-public class TestHostComponentFactoryBean extends TestCase {
+    @Test
     public void testGetService() throws Exception {
         BundleContext ctx = mock(BundleContext.class);
         ServiceReference ref = mock(ServiceReference.class);
         when(ctx.getServiceReferences(null, "(foo=bar)")).thenReturn(new ServiceReference[]{ref});
         when(ctx.getService(ref)).thenReturn(new Callable() {
+
             public Object call() throws Exception {
                 return "foo";
             }
@@ -38,6 +41,7 @@ public class TestHostComponentFactoryBean extends TestCase {
         verify(ctx).addServiceListener(serviceListener.capture(), (String) anyObject());
         ServiceReference updatedRef = mock(ServiceReference.class);
         when(ctx.getService(updatedRef)).thenReturn(new Callable() {
+
             public Object call() throws Exception {
                 return "boo";
             }
@@ -46,5 +50,4 @@ public class TestHostComponentFactoryBean extends TestCase {
 
         assertEquals("boo", ((Callable) bean.getObject()).call());
     }
-
 }

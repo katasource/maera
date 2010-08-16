@@ -1,10 +1,10 @@
 package org.maera.plugin.webresource;
 
-import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.junit.Test;
 import org.maera.plugin.PluginAccessor;
 import org.maera.plugin.elements.ResourceLocation;
 import org.maera.plugin.servlet.DownloadException;
@@ -20,10 +20,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestWebResourceTransformation extends TestCase {
+public class WebResourceTransformationTest {
+
+    @Test
     public void testMatches() throws DocumentException {
         WebResourceTransformation trans = new WebResourceTransformation(DocumentHelper.parseText(
                 "<transformation extension=\"js\">\n" +
@@ -34,16 +37,7 @@ public class TestWebResourceTransformation extends TestCase {
         assertTrue(trans.matches(loc));
     }
 
-    public void testNotMatches() throws DocumentException {
-        WebResourceTransformation trans = new WebResourceTransformation(DocumentHelper.parseText(
-                "<transformation extension=\"js\">\n" +
-                        "<transformer key=\"foo\" />\n" +
-                        "</transformation>").getRootElement());
-        ResourceLocation loc = mock(ResourceLocation.class);
-        when(loc.getName()).thenReturn("foo.cs");
-        assertFalse(trans.matches(loc));
-    }
-
+    @Test
     public void testNoExtension() throws DocumentException {
         try {
             new WebResourceTransformation(DocumentHelper.parseText(
@@ -57,6 +51,18 @@ public class TestWebResourceTransformation extends TestCase {
         }
     }
 
+    @Test
+    public void testNotMatches() throws DocumentException {
+        WebResourceTransformation trans = new WebResourceTransformation(DocumentHelper.parseText(
+                "<transformation extension=\"js\">\n" +
+                        "<transformer key=\"foo\" />\n" +
+                        "</transformation>").getRootElement());
+        ResourceLocation loc = mock(ResourceLocation.class);
+        when(loc.getName()).thenReturn("foo.cs");
+        assertFalse(trans.matches(loc));
+    }
+
+    @Test
     public void testTransformDownloadableResource() throws DocumentException {
         Element element = DocumentHelper.parseText(
                 "<transformation extension=\"js\">\n" +
@@ -81,6 +87,7 @@ public class TestWebResourceTransformation extends TestCase {
         assertEquals(transResource, testResource);
     }
 
+    @Test
     public void testTransformTwoDownloadableResources() throws DocumentException, DownloadException {
         Element element = DocumentHelper.parseText(
                 "<transformation extension=\"js\">\n" +
@@ -125,6 +132,7 @@ public class TestWebResourceTransformation extends TestCase {
 
         public DownloadableResource transform(Element configElement, ResourceLocation location, String filePath, DownloadableResource nextResource) {
             return new AbstractStringTransformedDownloadableResource(nextResource) {
+
                 protected String transform(String originalContent) {
                     return prefix + originalContent;
                 }
@@ -133,10 +141,15 @@ public class TestWebResourceTransformation extends TestCase {
     }
 
     private static class StringDownloadableResource implements DownloadableResource {
+
         final String value;
 
         public StringDownloadableResource(String value) {
             this.value = value;
+        }
+
+        public String getContentType() {
+            return "text/plain";
         }
 
         public boolean isResourceModified(HttpServletRequest request, HttpServletResponse response) {
@@ -152,13 +165,8 @@ public class TestWebResourceTransformation extends TestCase {
                 IOUtils.write(value, out);
             }
             catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
         }
-
-        public String getContentType() {
-            return "text/plain";
-        }
     }
-
 }

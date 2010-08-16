@@ -1,6 +1,7 @@
 package org.maera.plugin.osgi.factory;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.AutowireCapablePlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -13,43 +14,46 @@ import org.springframework.context.support.GenericApplicationContext;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestOsgiPluginInstalledHelper extends TestCase {
-    private Bundle bundle;
-    private BundleContext bundleContext;
-    private Dictionary dict;
-    private OsgiPluginHelper helper;
-    private PackageAdmin packageAdmin;
+public class OsgiPluginInstalledHelperTest {
 
-    @Override
+    private Bundle bundle;
+    private OsgiPluginHelper helper;
+
+    @Before
     public void setUp() {
         bundle = mock(Bundle.class);
-        dict = new Hashtable();
+        Dictionary<String, String> dict = new Hashtable<String, String>();
         dict.put(Constants.BUNDLE_DESCRIPTION, "desc");
         dict.put(Constants.BUNDLE_VERSION, "1.0");
         when(bundle.getHeaders()).thenReturn(dict);
-        bundleContext = mock(BundleContext.class);
+        BundleContext bundleContext = mock(BundleContext.class);
         when(bundle.getBundleContext()).thenReturn(bundleContext);
 
         helper = mock(OsgiPluginHelper.class);
         when(helper.getBundle()).thenReturn(bundle);
 
-        packageAdmin = mock(PackageAdmin.class);
-
+        PackageAdmin packageAdmin = mock(PackageAdmin.class);
         helper = new OsgiPluginInstalledHelper(bundle, packageAdmin);
     }
 
-    @Override
-    public void tearDown() {
-        bundle = null;
-        packageAdmin = null;
-        helper = null;
-        dict = null;
-        bundleContext = null;
+    @Test
+    public void testAutowireNoSpringButThereShouldBe() {
+        Object obj = new Object();
+        try {
+            helper.autowire(obj, AutowireCapablePlugin.AutowireStrategy.AUTOWIRE_AUTODETECT);
+            fail("Should throw exception");
+        }
+        catch (RuntimeException ignored) {
+
+        }
     }
 
+    @Test
     public void testAutowireObject() {
         StaticListableBeanFactory bf = new StaticListableBeanFactory();
         bf.addBean("child", new ChildBean());
@@ -62,32 +66,16 @@ public class TestOsgiPluginInstalledHelper extends TestCase {
         assertNotNull(bean.getChild());
     }
 
-    public void testAutowireNoSpringButThereShouldBe() {
-        Object obj = new Object();
-        try {
-            helper.autowire(obj, AutowireCapablePlugin.AutowireStrategy.AUTOWIRE_AUTODETECT);
-            fail("Should throw exception");
-        }
-        catch (RuntimeException ex) {
-            // test passed
-        }
-    }
-
+    @Test
     public void testOnDisableWithoutEnabling() {
-        // needs to work without onEnable being called first.
-        try {
-            helper.onDisable();
-        }
-        catch (NullPointerException e) {
-            fail("NullPointerException encountered.");
-        }
+        helper.onDisable();
     }
 
     public static class ChildBean {
     }
 
-
     public static class SetterInjectedBean {
+
         private ChildBean child;
 
         public ChildBean getChild() {

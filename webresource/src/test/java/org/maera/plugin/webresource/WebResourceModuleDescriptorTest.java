@@ -1,32 +1,30 @@
 package org.maera.plugin.webresource;
 
 import com.mockobjects.dynamic.Mock;
-import junit.framework.TestCase;
 import org.dom4j.DocumentHelper;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.Plugin;
 
 import java.util.List;
 
-public class TestWebResourceModuleDescriptor extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class WebResourceModuleDescriptorTest {
+
     private static final String TEST_PLUGIN_KEY = "maera.test.plugin";
 
     private WebResourceModuleDescriptor descriptor;
     private Mock mockPlugin;
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         descriptor = new WebResourceModuleDescriptor();
         mockPlugin = new Mock(Plugin.class);
         mockPlugin.matchAndReturn("getKey", TEST_PLUGIN_KEY);
     }
 
-    protected void tearDown() throws Exception {
-        descriptor = null;
-        mockPlugin = null;
-
-        super.tearDown();
-    }
-
+    @Test
     public void testInitWithDependencies() throws Exception {
         String xml = "<web-resource key=\"test-resources\">\n" +
                 "<dependency>maera.test.plugin:jquery</dependency>\n" +

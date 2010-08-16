@@ -1,6 +1,7 @@
 package org.maera.plugin.osgi.factory;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.PluginState;
 import org.maera.plugin.descriptors.AbstractModuleDescriptor;
 import org.maera.plugin.descriptors.RequiresRestart;
@@ -16,52 +17,38 @@ import org.osgi.framework.Constants;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class TestOsgiPlugin extends TestCase {
+public class OsgiPluginTest {
+
     private Bundle bundle;
     private OsgiPlugin plugin;
-    private BundleContext bundleContext;
-    private Dictionary dict;
-    private OsgiPluginHelper helper;
 
-    @Override
+    @Before
     public void setUp() {
-
-
         bundle = mock(Bundle.class);
-        dict = new Hashtable();
+        Dictionary<String, String> dict = new Hashtable<String, String>();
         dict.put(Constants.BUNDLE_DESCRIPTION, "desc");
         dict.put(Constants.BUNDLE_VERSION, "1.0");
         when(bundle.getHeaders()).thenReturn(dict);
-        bundleContext = mock(BundleContext.class);
+        BundleContext bundleContext = mock(BundleContext.class);
         when(bundle.getBundleContext()).thenReturn(bundleContext);
 
-        helper = mock(OsgiPluginHelper.class);
+        OsgiPluginHelper helper = mock(OsgiPluginHelper.class);
         when(helper.getBundle()).thenReturn(bundle);
 
         plugin = new OsgiPlugin(mock(PluginEventManager.class), helper);
     }
 
-    @Override
-    public void tearDown() {
-        bundle = null;
-        plugin = null;
-        bundleContext = null;
-    }
-
-    public void testEnabled() throws BundleException {
-        when(bundle.getState()).thenReturn(Bundle.RESOLVED);
-        plugin.enable();
-        verify(bundle).start();
-    }
-
+    @Test
     public void testDisabled() throws BundleException {
         when(bundle.getState()).thenReturn(Bundle.ACTIVE);
         plugin.disable();
         verify(bundle).stop();
     }
 
+    @Test
     public void testDisabledOnNonDynamicPlugin() throws BundleException {
         plugin.addModuleDescriptor(new StaticModuleDescriptor());
         when(bundle.getState()).thenReturn(Bundle.ACTIVE);
@@ -69,12 +56,14 @@ public class TestOsgiPlugin extends TestCase {
         verify(bundle, never()).stop();
     }
 
-    public void testUninstall() throws BundleException {
-        when(bundle.getState()).thenReturn(Bundle.ACTIVE);
-        plugin.uninstall();
-        assertEquals(plugin.getPluginState(), PluginState.UNINSTALLED);
+    @Test
+    public void testEnabled() throws BundleException {
+        when(bundle.getState()).thenReturn(Bundle.RESOLVED);
+        plugin.enable();
+        verify(bundle).start();
     }
 
+    @Test
     public void testOnSpringRefresh() {
         plugin.setKey("plugin-key");
         when(bundle.getState()).thenReturn(Bundle.RESOLVED);
@@ -84,12 +73,24 @@ public class TestOsgiPlugin extends TestCase {
         assertEquals(PluginState.ENABLED, plugin.getPluginState());
     }
 
+    @Test
+    public void testOnSpringRefreshNotEnabling() {
+        plugin.setKey("plugin-key");
+        PluginContainerRefreshedEvent event = new PluginContainerRefreshedEvent(new Object(), "plugin-key");
+        when(bundle.getState()).thenReturn(Bundle.ACTIVE);
+        plugin.disable();
+        plugin.onSpringContextRefresh(event);
+        assertEquals(PluginState.DISABLED, plugin.getPluginState());
+    }
+
+    @Test
     public void testQuickOnSpringRefresh() throws BundleException, InterruptedException {
         plugin.setKey("plugin-key");
         when(bundle.getState()).thenReturn(Bundle.RESOLVED);
 
         final ConcurrentStateEngine states = new ConcurrentStateEngine("bundle-starting", "spring-created", "bundle-started", "mid-start", "end");
         when(bundle.getBundleContext()).thenAnswer(new Answer() {
+
             public Object answer(InvocationOnMock invocation) throws Throwable {
                 states.tryNextState("bundle-started", "mid-start");
                 return mock(BundleContext.class);
@@ -114,27 +115,23 @@ public class TestOsgiPlugin extends TestCase {
 
         plugin.enable();
 
-
         states.tryNextState("mid-start", "end");
 
         assertEquals(PluginState.ENABLED, plugin.getPluginState());
     }
 
-    public void testOnSpringRefreshNotEnabling() {
-        plugin.setKey("plugin-key");
-        PluginContainerRefreshedEvent event = new PluginContainerRefreshedEvent(new Object(), "plugin-key");
+    @Test
+    public void testUninstall() throws BundleException {
         when(bundle.getState()).thenReturn(Bundle.ACTIVE);
-        plugin.disable();
-        plugin.onSpringContextRefresh(event);
-        assertEquals(PluginState.DISABLED, plugin.getPluginState());
+        plugin.uninstall();
+        assertEquals(plugin.getPluginState(), PluginState.UNINSTALLED);
     }
 
     @RequiresRestart
     public static class StaticModuleDescriptor<Object> extends AbstractModuleDescriptor {
+
         public Object getModule() {
             return null;
         }
     }
-
-
 }

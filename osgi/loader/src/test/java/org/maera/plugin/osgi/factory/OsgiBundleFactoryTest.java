@@ -2,7 +2,8 @@ package org.maera.plugin.osgi.factory;
 
 import com.mockobjects.dynamic.C;
 import com.mockobjects.dynamic.Mock;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.*;
 import org.maera.plugin.event.impl.DefaultPluginEventManager;
 import org.maera.plugin.impl.UnloadablePlugin;
@@ -17,22 +18,20 @@ import java.net.URISyntaxException;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-public class TestOsgiBundleFactory extends TestCase {
+import static org.junit.Assert.*;
 
-    OsgiBundleFactory deployer;
-    Mock mockOsgi;
+public class OsgiBundleFactoryTest {
 
-    @Override
+    private OsgiBundleFactory deployer;
+    private Mock mockOsgi;
+
+    @Before
     public void setUp() throws IOException, URISyntaxException {
         mockOsgi = new Mock(OsgiContainerManager.class);
         deployer = new OsgiBundleFactory((OsgiContainerManager) mockOsgi.proxy(), new DefaultPluginEventManager());
     }
 
-    @Override
-    public void tearDown() {
-        deployer = null;
-    }
-
+    @Test
     public void testCanDeploy() throws PluginParseException, IOException {
         File bundle = new PluginJarBuilder("someplugin")
                 .addResource("META-INF/MANIFEST.MF", "Manifest-Version: 1.0\n" +
@@ -43,29 +42,19 @@ public class TestOsgiBundleFactory extends TestCase {
         assertEquals("my.foo.symbolicName-1.0", deployer.canCreate(new JarPluginArtifact(bundle)));
     }
 
-    public void testCanDeployStaticPluginWithManifest() throws PluginParseException, IOException {
-        File bundle = new PluginJarBuilder("someplugin")
-                .addResource("META-INF/MANIFEST.MF", "Manifest-Version: 1.0\n" +
-                        "Import-Package: javax.swing\n" +
-                        "Bundle-SymbolicName: my.foo.symbolicName\n" +
-                        "Bundle-Version: 1.0\n")
-                .addPluginInformation("foo", "Foo", "1.0", 1)
-                .build();
-        assertEquals(null, deployer.canCreate(new JarPluginArtifact(bundle)));
-    }
-
+    @Test
     public void testCanDeployNoBundle() throws IOException, PluginParseException {
-
         File plugin = new PluginJarBuilder("someplugin")
                 .addPluginInformation("my.foo.symb", "name", "1.0")
                 .build();
         assertNull(deployer.canCreate(new JarPluginArtifact(plugin)));
     }
 
+    @Test
     public void testCanDeployNonJar() throws IOException, PluginParseException {
-
         final File tmp = File.createTempFile("foo", "bar");
         assertNull(deployer.canCreate(new PluginArtifact() {
+
             public boolean doesResourceExist(String name) {
                 return false;
             }
@@ -93,6 +82,19 @@ public class TestOsgiBundleFactory extends TestCase {
         }));
     }
 
+    @Test
+    public void testCanDeployStaticPluginWithManifest() throws PluginParseException, IOException {
+        File bundle = new PluginJarBuilder("someplugin")
+                .addResource("META-INF/MANIFEST.MF", "Manifest-Version: 1.0\n" +
+                        "Import-Package: javax.swing\n" +
+                        "Bundle-SymbolicName: my.foo.symbolicName\n" +
+                        "Bundle-Version: 1.0\n")
+                .addPluginInformation("foo", "Foo", "1.0", 1)
+                .build();
+        assertEquals(null, deployer.canCreate(new JarPluginArtifact(bundle)));
+    }
+
+    @Test
     public void testDeploy() throws PluginParseException, IOException {
         File bundle = new PluginJarBuilder("someplugin")
                 .addResource("META-INF/MANIFEST.MF", "Manifest-Version: 1.0\n" +
@@ -119,6 +121,7 @@ public class TestOsgiBundleFactory extends TestCase {
         mockOsgi.verify();
     }
 
+    @Test
     public void testDeployFail() throws PluginParseException, IOException {
         File bundle = new PluginJarBuilder("someplugin")
                 .addResource("META-INF/MANIFEST.MF", "Manifest-Version: 1.0\n" +

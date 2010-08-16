@@ -13,7 +13,7 @@
 
     <filter>
         <filter-name>filter-plugin-dispatcher-after-encoding-request</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>after-encoding</param-value>
@@ -25,7 +25,7 @@
     </filter>
     <filter>
         <filter-name>filter-plugin-dispatcher-after-encoding-forward</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>after-encoding</param-value>
@@ -37,7 +37,7 @@
     </filter>
     <filter>
         <filter-name>filter-plugin-dispatcher-after-encoding-include</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>after-encoding</param-value>
@@ -49,7 +49,7 @@
     </filter>
     <filter>
         <filter-name>filter-plugin-dispatcher-after-encoding-error</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>after-encoding</param-value>
@@ -62,7 +62,7 @@
 
     <filter>
         <filter-name>filter-plugin-dispatcher-before-login-request</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>before-login</param-value>
@@ -74,7 +74,7 @@
     </filter>
     <filter>
         <filter-name>filter-plugin-dispatcher-before-login-forward</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>before-login</param-value>
@@ -86,7 +86,7 @@
     </filter>
     <filter>
         <filter-name>filter-plugin-dispatcher-before-login-include</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>before-login</param-value>
@@ -98,7 +98,7 @@
     </filter>
     <filter>
         <filter-name>filter-plugin-dispatcher-before-login-error</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>before-login</param-value>
@@ -111,7 +111,7 @@
 
     <filter>
         <filter-name>filter-plugin-dispatcher-before-decoration-request</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>before-decoration</param-value>
@@ -123,7 +123,7 @@
     </filter>
     <filter>
         <filter-name>filter-plugin-dispatcher-before-decoration-forward</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>before-decoration</param-value>
@@ -135,7 +135,7 @@
     </filter>
     <filter>
         <filter-name>filter-plugin-dispatcher-before-decoration-include</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>before-decoration</param-value>
@@ -147,7 +147,7 @@
     </filter>
     <filter>
         <filter-name>filter-plugin-dispatcher-before-decoration-error</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>before-decoration</param-value>
@@ -165,7 +165,7 @@
 
     <filter>
         <filter-name>filter-plugin-dispatcher-before-dispatch-request</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>before-dispatch</param-value>
@@ -177,7 +177,7 @@
     </filter>
     <filter>
         <filter-name>filter-plugin-dispatcher-before-dispatch-forward</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>before-dispatch</param-value>
@@ -189,7 +189,7 @@
     </filter>
     <filter>
         <filter-name>filter-plugin-dispatcher-before-dispatch-include</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>before-dispatch</param-value>
@@ -201,7 +201,7 @@
     </filter>
     <filter>
         <filter-name>filter-plugin-dispatcher-before-dispatch-error</filter-name>
-        <filter-class>com.atlassian.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
+        <filter-class>org.maera.plugin.servlet.filter.ServletFilterModuleContainerFilter</filter-class>
         <init-param>
             <param-name>location</param-name>
             <param-value>before-dispatch</param-value>
@@ -214,7 +214,7 @@
 
     <filter>
         <filter-name>web-resource-request-cleaner</filter-name>
-        <filter-class>com.atlassian.plugin.refimpl.webresource.RequestCacheCleaner</filter-class>
+        <filter-class>org.maera.plugin.refimpl.webresource.RequestCacheCleaner</filter-class>
     </filter>
 
     <filter-mapping>
@@ -319,12 +319,12 @@
 
     <servlet>
         <servlet-name>plugins</servlet-name>
-        <servlet-class>com.atlassian.plugin.servlet.ServletModuleContainerServlet</servlet-class>
+        <servlet-class>org.maera.plugin.servlet.ServletModuleContainerServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>file-server</servlet-name>
-        <servlet-class>com.atlassian.plugin.refimpl.servlet.FileServerServlet</servlet-class>
+        <servlet-class>org.maera.plugin.refimpl.servlet.FileServerServlet</servlet-class>
         <load-on-startup>4</load-on-startup>
     </servlet>
 
@@ -336,7 +336,7 @@
       -->
     <servlet>
         <servlet-name>noop</servlet-name>
-        <servlet-class>com.atlassian.plugin.refimpl.servlet.NoOpServlet</servlet-class>
+        <servlet-class>org.maera.plugin.refimpl.servlet.NoOpServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -360,7 +360,7 @@
     </servlet-mapping>
 
     <listener>
-        <listener-class>com.atlassian.plugin.refimpl.InitListener</listener-class>
+        <listener-class>org.maera.plugin.refimpl.InitListener</listener-class>
     </listener>
 
     <welcome-file-list>

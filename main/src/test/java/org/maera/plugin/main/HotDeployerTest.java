@@ -2,10 +2,15 @@ package org.maera.plugin.main;
 
 import com.mockobjects.dynamic.C;
 import com.mockobjects.dynamic.Mock;
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.maera.plugin.PluginController;
 
-public class TestHotDeployer extends TestCase {
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class HotDeployerTest {
+
+    @Test
     public void testRun() throws InterruptedException {
         Mock mockController = new Mock(PluginController.class);
         mockController.expectAndReturn("scanForNewPlugins", C.ANY_ARGS, 0);
@@ -18,7 +23,5 @@ public class TestHotDeployer extends TestCase {
         mockController.verify();
         deployer.stop();
         assertFalse(deployer.isRunning());
-
-
     }
 }

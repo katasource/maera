@@ -1,8 +1,12 @@
 package org.maera.plugin.osgi.factory.transform.model;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class TestSystemExports extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class SystemExportsTest {
+
+    @Test
     public void testExportPackageWithVersion() {
         SystemExports exports = new SystemExports("foo.bar;version=\"4.0\"");
 
