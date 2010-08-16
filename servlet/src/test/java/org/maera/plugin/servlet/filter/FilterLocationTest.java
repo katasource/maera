@@ -1,10 +1,15 @@
 package org.maera.plugin.servlet.filter;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.Locale;
 
-public class TestFilterLocation extends TestCase {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+public class FilterLocationTest {
+
+    @Test
     public void testParse() {
         assertEquals(FilterLocation.AFTER_ENCODING, FilterLocation.parse("after-encoding"));
         assertEquals(FilterLocation.AFTER_ENCODING, FilterLocation.parse("after_encoding"));
@@ -12,17 +17,18 @@ public class TestFilterLocation extends TestCase {
         try {
             FilterLocation.parse(null);
             fail();
-        } catch (IllegalArgumentException ex) {
-            // test passed
+        } catch (IllegalArgumentException ignored) {
+
         }
         try {
             FilterLocation.parse("asf");
             fail();
-        } catch (IllegalArgumentException ex) {
-            // test passed
+        } catch (IllegalArgumentException ignored) {
+
         }
     }
 
+    @Test
     public void testParseWithTurkishCharacters() {
         Locale defLocale = Locale.getDefault();
         try {

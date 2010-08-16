@@ -1,30 +1,16 @@
 package org.maera.plugin.servlet.util;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.net.URISyntaxException;
 
-public class TestClassLoaderStack extends TestCase {
-    public void testThreadClassLoaderIsReplacedAndRestored() throws URISyntaxException {
-        ClassLoader mainLoader = Thread.currentThread().getContextClassLoader();
-        try {
-            ClassLoader pluginLoader1 = new MockClassLoader();
-            ClassLoader pluginLoader2 = new MockClassLoader();
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
-            ClassLoaderStack.push(pluginLoader1);
-            assertSame(pluginLoader1, Thread.currentThread().getContextClassLoader());
-            ClassLoaderStack.push(pluginLoader2);
-            assertSame(pluginLoader2, Thread.currentThread().getContextClassLoader());
-            ClassLoaderStack.pop();
-            assertSame(pluginLoader1, Thread.currentThread().getContextClassLoader());
-            ClassLoaderStack.pop();
-            assertSame(mainLoader, Thread.currentThread().getContextClassLoader());
-        }
-        finally {
-            Thread.currentThread().setContextClassLoader(mainLoader);
-        }
-    }
+@SuppressWarnings({"deprecation"})
+public class ClassLoaderStackTest {
 
+    @Test
     public void testPopReturnsPreviousContextClassLoader() throws Exception {
         ClassLoader mainLoader = Thread.currentThread().getContextClassLoader();
         try {
@@ -48,6 +34,7 @@ public class TestClassLoaderStack extends TestCase {
         }
     }
 
+    @Test
     public void testPushAndPopHandleNull() throws Exception {
         ClassLoader mainLoader = Thread.currentThread().getContextClassLoader();
         try {
@@ -60,6 +47,27 @@ public class TestClassLoaderStack extends TestCase {
         }
         finally {
             // Clean up in case of error
+            Thread.currentThread().setContextClassLoader(mainLoader);
+        }
+    }
+
+    @Test
+    public void testThreadClassLoaderIsReplacedAndRestored() throws URISyntaxException {
+        ClassLoader mainLoader = Thread.currentThread().getContextClassLoader();
+        try {
+            ClassLoader pluginLoader1 = new MockClassLoader();
+            ClassLoader pluginLoader2 = new MockClassLoader();
+
+            ClassLoaderStack.push(pluginLoader1);
+            assertSame(pluginLoader1, Thread.currentThread().getContextClassLoader());
+            ClassLoaderStack.push(pluginLoader2);
+            assertSame(pluginLoader2, Thread.currentThread().getContextClassLoader());
+            ClassLoaderStack.pop();
+            assertSame(pluginLoader1, Thread.currentThread().getContextClassLoader());
+            ClassLoaderStack.pop();
+            assertSame(mainLoader, Thread.currentThread().getContextClassLoader());
+        }
+        finally {
             Thread.currentThread().setContextClassLoader(mainLoader);
         }
     }

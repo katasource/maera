@@ -1,15 +1,18 @@
 package org.maera.plugin.osgi.factory.descriptor;
 
-import junit.framework.TestCase;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.junit.Test;
 import org.maera.plugin.Plugin;
 
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestComponentModuleDescriptor extends TestCase {
+public class ComponentModuleDescriptorTest {
+
+    @Test
     public void testEnableDoesNotLoadClass() throws ClassNotFoundException {
         ComponentModuleDescriptor desc = new ComponentModuleDescriptor();
 
@@ -27,6 +30,7 @@ public class TestComponentModuleDescriptor extends TestCase {
     }
 
     public static class Foo {
+
         public static boolean called;
 
         public Foo() {

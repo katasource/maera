@@ -1,15 +1,17 @@
 package org.maera.plugin.web.descriptors;
 
-import junit.framework.TestCase;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
+import org.junit.Test;
 import org.maera.plugin.Plugin;
 import org.maera.plugin.PluginParseException;
 import org.maera.plugin.web.Condition;
 import org.mockito.Mockito;
 
-public class TestConditionElementParser extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class ConditionElementParserTest {
     private static final String TYPE_OR = "<conditions type=\"OR\">";
     private static final String TYPE_AND = "<conditions type=\"AND\">";
     private static final String TYPE_CLOSE = "</conditions>";
@@ -20,6 +22,7 @@ public class TestConditionElementParser extends TestCase {
 
     private final ConditionElementParser conditionElementParser = new ConditionElementParser(new MockWebFragmentHelper());
 
+    @Test
     public void testSimple() throws DocumentException, PluginParseException {
         assertConditions(TRUE, true); //true
         assertConditions(FALSE, false); //false
@@ -27,6 +30,7 @@ public class TestConditionElementParser extends TestCase {
         assertConditions(NOT_FALSE, true); //NOT false = true
     }
 
+    @Test
     public void testAnd() throws DocumentException, PluginParseException {
         //using the condition elements only (by default they are grouped with AND operator)
         assertConditions(TRUE + TRUE, true);//true AND true = true
@@ -41,6 +45,7 @@ public class TestConditionElementParser extends TestCase {
         assertConditions(TYPE_AND + FALSE + FALSE + TYPE_CLOSE, false);//false AND false = false
     }
 
+    @Test
     public void testOr() throws DocumentException, PluginParseException {
         assertConditions(TYPE_OR + TRUE + TRUE + TYPE_CLOSE, true);//true OR true = true
         assertConditions(TYPE_OR + TRUE + FALSE + TYPE_CLOSE, true);//true OR false = true
@@ -49,6 +54,7 @@ public class TestConditionElementParser extends TestCase {
     }
 
     //test nested AND's - normally all nested AND's should be a single AND
+    @Test
     public void testNestedAnd() throws DocumentException, PluginParseException {
         //nested AND'ed conditions
         assertConditions(TYPE_AND +
@@ -67,6 +73,7 @@ public class TestConditionElementParser extends TestCase {
     }
 
     //test nested OR's - normally all nested OR's should be a single OR
+    @Test
     public void testNestedOr() throws DocumentException, PluginParseException {
         //nested OR'ed conditions
         assertConditions(TYPE_OR +
@@ -80,6 +87,7 @@ public class TestConditionElementParser extends TestCase {
                 TYPE_CLOSE, false);//(false OR false) OR (false OR false) = false
     }
 
+    @Test
     public void testNestedMix() throws DocumentException, PluginParseException {
         //AND with nested OR conditions
         assertConditions(TYPE_AND +
@@ -104,6 +112,7 @@ public class TestConditionElementParser extends TestCase {
                 TYPE_CLOSE, true);//(false AND false) OR (true AND true) = true
     }
 
+    @Test
     public void testComplex() throws DocumentException, PluginParseException {
         assertConditions(TRUE +
                 TYPE_OR +
@@ -120,10 +129,12 @@ public class TestConditionElementParser extends TestCase {
                 TYPE_CLOSE, true);//true AND ((false AND false) OR false OR (true AND (false OR true))) = true
     }
 
+    @Test
     public void assertConditions(String conditionElement, boolean expectedResult) throws DocumentException, PluginParseException {
         String rootElement = "<root>" + conditionElement + "</root>";
         Document document = DocumentHelper.parseText(rootElement);
 
+        @SuppressWarnings({"deprecation"})
         Condition condition = conditionElementParser.makeConditions(Mockito.mock(Plugin.class), document.getRootElement(), AbstractWebFragmentModuleDescriptor.COMPOSITE_TYPE_AND);
 
         assertEquals(expectedResult, condition.shouldDisplay(null));

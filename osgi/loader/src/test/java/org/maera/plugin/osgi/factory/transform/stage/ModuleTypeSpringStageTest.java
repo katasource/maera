@@ -1,15 +1,19 @@
 package org.maera.plugin.osgi.factory.transform.stage;
 
-import junit.framework.TestCase;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.junit.Test;
 import org.maera.plugin.PluginParseException;
 import org.maera.plugin.osgi.external.SingleModuleDescriptorFactory;
 
 import java.io.IOException;
 
-public class TestModuleTypeSpringStage extends TestCase {
+import static org.junit.Assert.fail;
+
+public class ModuleTypeSpringStageTest {
+
+    @Test
     public void testTransform() throws IOException, DocumentException {
         Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element moduleType = pluginRoot.addElement("module-type");
@@ -22,6 +26,7 @@ public class TestModuleTypeSpringStage extends TestCase {
                 "osgi:service[@id='moduleType-foo_osgiService' and @auto-export='interfaces']");
     }
 
+    @Test
     public void testTransformForOneApp() throws IOException, DocumentException {
         Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element moduleType = pluginRoot.addElement("module-type");
@@ -40,6 +45,7 @@ public class TestModuleTypeSpringStage extends TestCase {
                 "beans:bean[@id='moduleType-foo' and @class='" + SingleModuleDescriptorFactory.class.getName() + "']");
     }
 
+    @Test
     public void testTransformOfBadElement() throws IOException, DocumentException {
         Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
         Element moduleType = pluginRoot.addElement("module-type");
@@ -50,25 +56,23 @@ public class TestModuleTypeSpringStage extends TestCase {
                     "beans:bean[@id='moduleType-foo' and @class='" + SingleModuleDescriptorFactory.class.getName() + "']",
                     "osgi:service[@id='moduleType-foo_osgiService' and @auto-export='interfaces']");
             fail();
-        }
-        catch (PluginParseException ex) {
-            // pass
+        } catch (PluginParseException ignored) {
+
         }
     }
 
+    @Test
     public void testTransformOfBadElementKey() throws IOException, DocumentException {
         Element pluginRoot = DocumentHelper.createDocument().addElement("maera-plugin");
-        Element moduleType = pluginRoot.addElement("module-type");
+        pluginRoot.addElement("module-type");
 
         try {
             SpringTransformerTestHelper.transform(new ModuleTypeSpringStage(), pluginRoot,
                     "beans:bean[@id='moduleType-foo' and @class='" + SingleModuleDescriptorFactory.class.getName() + "']",
                     "osgi:service[@id='moduleType-foo_osgiService' and @auto-export='interfaces']");
             fail();
-        }
-        catch (PluginParseException ex) {
-            // pass
+        } catch (PluginParseException ignored) {
+
         }
     }
-
 }

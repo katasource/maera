@@ -1,7 +1,7 @@
 package org.maera.plugin.servlet.filter;
 
 import com.mockobjects.dynamic.Mock;
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.maera.plugin.Plugin;
 import org.maera.plugin.PluginArtifact;
 import org.maera.plugin.classloader.PluginClassLoader;
@@ -17,20 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 
+import static org.junit.Assert.*;
 import static org.maera.plugin.servlet.filter.FilterTestUtils.emptyChain;
 import static org.maera.plugin.servlet.filter.FilterTestUtils.newList;
 import static org.maera.plugin.test.PluginTestUtils.getFileForResource;
 
-public class TestDelegatingPluginFilter extends TestCase {
-    public void testPluginClassLoaderIsThreadContextClassLoaderWhenFiltering() throws Exception {
-        Mock mockRequest = new Mock(HttpServletRequest.class);
-        mockRequest.expectAndReturn("getPathInfo", "/servlet");
+public class DelegatingPluginFilterTest {
 
-        Mock mockResponse = new Mock(HttpServletResponse.class);
-
-        createClassLoaderCheckingFilter("filter").doFilter((HttpServletRequest) mockRequest.proxy(), (HttpServletResponse) mockResponse.proxy(), emptyChain);
-    }
-
+    @Test
     public void testClassLoaderResetDuringFilterChainExecution() throws Exception {
         Mock mockRequest = new Mock(HttpServletRequest.class);
         mockRequest.expectAndReturn("getPathInfo", "/servlet");
@@ -39,6 +33,7 @@ public class TestDelegatingPluginFilter extends TestCase {
 
         final ClassLoader cl = Thread.currentThread().getContextClassLoader();
         FilterChain chain = new FilterChain() {
+
             public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse) throws IOException, ServletException {
                 assertEquals(cl, Thread.currentThread().getContextClassLoader());
             }
@@ -46,20 +41,7 @@ public class TestDelegatingPluginFilter extends TestCase {
         createClassLoaderCheckingFilter("filter").doFilter((HttpServletRequest) mockRequest.proxy(), (HttpServletResponse) mockResponse.proxy(), chain);
     }
 
-    public void testPluginClassLoaderIsThreadContextLoaderWhenFiltersInChainAreFromDifferentPlugins() throws Exception {
-        Mock mockRequest = new Mock(HttpServletRequest.class);
-        mockRequest.matchAndReturn("getPathInfo", "/servlet");
-        Mock mockResponse = new Mock(HttpServletResponse.class);
-
-        Iterable<Filter> filters = newList(
-                createClassLoaderCheckingFilter("filter-1"),
-                createClassLoaderCheckingFilter("filter-2"),
-                createClassLoaderCheckingFilter("filter-3")
-        );
-        FilterChain chain = new IteratingFilterChain(filters.iterator(), emptyChain);
-        chain.doFilter((HttpServletRequest) mockRequest.proxy(), (HttpServletResponse) mockResponse.proxy());
-    }
-
+    @Test
     public void testPluginClassLoaderIsRestoredProperlyWhenAnExceptionIsThrownFromFilter() throws Exception {
         Mock mockRequest = new Mock(HttpServletRequest.class);
         mockRequest.matchAndReturn("getPathInfo", "/servlet");
@@ -72,6 +54,7 @@ public class TestDelegatingPluginFilter extends TestCase {
                 createClassLoaderCheckingFilter("filter-3")
         );
         FilterChain chain = new IteratingFilterChain(filters.iterator(), new FilterChain() {
+
             public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
                 fail("Exception should be thrown before reaching here.");
             }
@@ -80,9 +63,34 @@ public class TestDelegatingPluginFilter extends TestCase {
             chain.doFilter((HttpServletRequest) mockRequest.proxy(), (HttpServletResponse) mockResponse.proxy());
             fail("Exception should have been thrown");
         }
-        catch (ServletException e) {
-            // yay
+        catch (ServletException ignored) {
+
         }
+    }
+
+    @Test
+    public void testPluginClassLoaderIsThreadContextClassLoaderWhenFiltering() throws Exception {
+        Mock mockRequest = new Mock(HttpServletRequest.class);
+        mockRequest.expectAndReturn("getPathInfo", "/servlet");
+
+        Mock mockResponse = new Mock(HttpServletResponse.class);
+
+        createClassLoaderCheckingFilter("filter").doFilter((HttpServletRequest) mockRequest.proxy(), (HttpServletResponse) mockResponse.proxy(), emptyChain);
+    }
+
+    @Test
+    public void testPluginClassLoaderIsThreadContextLoaderWhenFiltersInChainAreFromDifferentPlugins() throws Exception {
+        Mock mockRequest = new Mock(HttpServletRequest.class);
+        mockRequest.matchAndReturn("getPathInfo", "/servlet");
+        Mock mockResponse = new Mock(HttpServletResponse.class);
+
+        Iterable<Filter> filters = newList(
+                createClassLoaderCheckingFilter("filter-1"),
+                createClassLoaderCheckingFilter("filter-2"),
+                createClassLoaderCheckingFilter("filter-3")
+        );
+        FilterChain chain = new IteratingFilterChain(filters.iterator(), emptyChain);
+        chain.doFilter((HttpServletRequest) mockRequest.proxy(), (HttpServletResponse) mockResponse.proxy());
     }
 
     private Filter createClassLoaderCheckingFilter(final String name) throws Exception {
@@ -118,6 +126,7 @@ public class TestDelegatingPluginFilter extends TestCase {
         final PluginClassLoader loader = new PluginClassLoader(pluginFile);
         Plugin plugin = new DefaultDynamicPlugin((PluginArtifact) new Mock(PluginArtifact.class).proxy(), loader);
         FilterAdapter testFilter = new FilterAdapter() {
+
             @Override
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
                 assertSame(name + " loader should be the thread context ClassLoader when entering", loader, Thread.currentThread().getContextClassLoader());
@@ -131,12 +140,12 @@ public class TestDelegatingPluginFilter extends TestCase {
                 .with(plugin)
                 .build();
 
-        final Filter delegatingFilter = new DelegatingPluginFilter(filterDescriptor);
-        return delegatingFilter;
+        return new DelegatingPluginFilter(filterDescriptor);
     }
 
     private Filter createExceptionThrowingFilter(final String name) {
         return new FilterAdapter() {
+
             @Override
             public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
                 throw new ServletException(name);

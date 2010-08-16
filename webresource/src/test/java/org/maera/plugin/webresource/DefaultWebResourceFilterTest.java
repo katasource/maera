@@ -1,8 +1,13 @@
 package org.maera.plugin.webresource;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
-public class TestDefaultWebResourceFilter extends TestCase {
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class DefaultWebResourceFilterTest {
+
+    @Test
     public void testMatches() {
         assertTrue(DefaultWebResourceFilter.INSTANCE.matches("foo.css"));
         assertTrue(DefaultWebResourceFilter.INSTANCE.matches("foo.js"));

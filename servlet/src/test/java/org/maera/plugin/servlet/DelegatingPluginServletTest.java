@@ -1,7 +1,8 @@
 package org.maera.plugin.servlet;
 
 import com.mockobjects.dynamic.Mock;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.Plugin;
 import org.maera.plugin.PluginArtifact;
 import org.maera.plugin.classloader.PluginClassLoader;
@@ -15,12 +16,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-public class TestDelegatingPluginServlet extends TestCase {
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
+public class DelegatingPluginServletTest {
+
     private PluginClassLoader classLoader;
-    private Plugin plugin;
     private Mock mockRequest;
     private Mock mockResponse;
+    private Plugin plugin;
 
+    @Before
     public void setUp() throws Exception {
         classLoader = new PluginClassLoader(PluginTestUtils.getFileForResource(PluginTestUtils.SIMPLE_TEST_JAR));
         plugin = new DefaultDynamicPlugin((PluginArtifact) new Mock(PluginArtifact.class).proxy(), classLoader);
@@ -35,8 +41,10 @@ public class TestDelegatingPluginServlet extends TestCase {
      *
      * @throws Exception on test error
      */
+    @Test
     public void testInitCalledWithPluginClassLoaderAsThreadClassLoader() throws Exception {
         HttpServlet wrappedServlet = new HttpServlet() {
+
             public void init(ServletConfig config) {
                 assertSame(classLoader, Thread.currentThread().getContextClassLoader());
             }
@@ -50,8 +58,10 @@ public class TestDelegatingPluginServlet extends TestCase {
      *
      * @throws Exception on test error
      */
+    @Test
     public void testServiceCalledWithPluginClassLoaderAsThreadClassLoader() throws Exception {
         HttpServlet wrappedServlet = new HttpServlet() {
+
             public void service(HttpServletRequest request, HttpServletResponse response) {
                 assertSame(classLoader, Thread.currentThread().getContextClassLoader());
             }
@@ -65,8 +75,10 @@ public class TestDelegatingPluginServlet extends TestCase {
      *
      * @throws Exception on test error
      */
+    @Test
     public void testServiceCalledWithWrappedRequest() throws Exception {
         HttpServlet wrappedServlet = new HttpServlet() {
+
             public void service(HttpServletRequest request, HttpServletResponse response) {
                 assertTrue(request instanceof PluginHttpRequestWrapper);
             }

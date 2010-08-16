@@ -1,6 +1,7 @@
 package org.maera.plugin.osgi.container.felix;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.osgi.container.impl.DefaultPackageScannerConfiguration;
 import org.maera.plugin.osgi.hostcomponents.HostComponentRegistration;
 import org.maera.plugin.osgi.hostcomponents.impl.MockRegistration;
@@ -15,29 +16,20 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.util.*;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestExportsBuilder extends TestCase {
+public class ExportsBuilderTest {
+
     private ExportsBuilder builder;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
         builder = new ExportsBuilder();
     }
 
-    @Override
-    public void tearDown() throws Exception {
-        builder = null;
-    }
-
-    public void testDetermineExports() {
-        DefaultPackageScannerConfiguration config = new DefaultPackageScannerConfiguration("0.0");
-
-        String exports = builder.determineExports(new ArrayList<HostComponentRegistration>(), config);
-        assertFalse(exports.contains(",,"));
-    }
-
+    @Test
     public void testConstructAutoExports() {
         List<ExportPackage> exports = new ArrayList<ExportPackage>();
         exports.add(new ExportPackage("foo.bar", "1.0", new File("/whatever/foobar-1.0.jar")));
@@ -48,18 +40,7 @@ public class TestExportsBuilder extends TestCase {
         assertEquals("foo.bar;version=1.0,foo.bar,", sb.toString());
     }
 
-    public void testDetermineExportsIncludeServiceInterfaces() {
-        List<HostComponentRegistration> regs = new ArrayList<HostComponentRegistration>() {{
-            add(new MockRegistration(new HashAttributeSet(), AttributeSet.class));
-            add(new MockRegistration(new DefaultTableModel(), TableModel.class));
-        }};
-        String imports = builder.determineExports(regs, new DefaultPackageScannerConfiguration());
-        assertNotNull(imports);
-        System.out.println(imports.replace(',', '\n'));
-        assertTrue(imports.contains(AttributeSet.class.getPackage().getName()));
-        assertTrue(imports.contains("javax.swing.event"));
-    }
-
+    @Test
     public void testConstructJdkExports() {
         StringBuilder sb = new StringBuilder();
         builder.constructJdkExports(sb, "jdk-packages.test.txt");
@@ -69,6 +50,7 @@ public class TestExportsBuilder extends TestCase {
         assertTrue(sb.toString().contains("org.xml.sax"));
     }
 
+    @Test
     public void testConstructJdkExportsWithJdk5And6() {
         String jdkVersion = System.getProperty("java.specification.version");
         try {
@@ -84,7 +66,29 @@ public class TestExportsBuilder extends TestCase {
         }
     }
 
+    @Test
+    public void testDetermineExports() {
+        DefaultPackageScannerConfiguration config = new DefaultPackageScannerConfiguration("0.0");
 
+        String exports = builder.determineExports(new ArrayList<HostComponentRegistration>(), config);
+        assertFalse(exports.contains(",,"));
+    }
+
+    @Test
+    public void testDetermineExportsIncludeServiceInterfaces() {
+        List<HostComponentRegistration> regs = new ArrayList<HostComponentRegistration>() {{
+
+            add(new MockRegistration(new HashAttributeSet(), AttributeSet.class));
+            add(new MockRegistration(new DefaultTableModel(), TableModel.class));
+        }};
+        String imports = builder.determineExports(regs, new DefaultPackageScannerConfiguration());
+        assertNotNull(imports);
+        System.out.println(imports.replace(',', '\n'));
+        assertTrue(imports.contains(AttributeSet.class.getPackage().getName()));
+        assertTrue(imports.contains("javax.swing.event"));
+    }
+
+    @Test
     public void testGenerateExports() throws MalformedURLException {
         ServletContext ctx = mock(ServletContext.class);
         when(ctx.getMajorVersion()).thenReturn(5);
@@ -110,11 +114,11 @@ public class TestExportsBuilder extends TestCase {
         config.setJarIncludes(Arrays.asList("testlog4j23*"));
         config.setJarExcludes(Collections.<String>emptyList());
         try {
-            exports = builder.generateExports(config);
+            builder.generateExports(config);
             fail("Should have thrown an exception");
         }
-        catch (IllegalStateException ex) {
-            // good stuff
+        catch (IllegalStateException ignored) {
+
         }
 
         // Test failure when no servlet context
@@ -122,14 +126,15 @@ public class TestExportsBuilder extends TestCase {
         config.setJarExcludes(Collections.<String>emptyList());
         config.setServletContext(null);
         try {
-            exports = builder.generateExports(config);
+            builder.generateExports(config);
             fail("Should have thrown an exception");
         }
-        catch (IllegalStateException ex) {
-            // good stuff
+        catch (IllegalStateException ignored) {
+
         }
     }
 
+    @Test
     public void testGenerateExportsWithCorrectServletVersion() throws MalformedURLException {
         ServletContext ctx = mock(ServletContext.class);
         when(ctx.getMajorVersion()).thenReturn(5);
@@ -156,6 +161,4 @@ public class TestExportsBuilder extends TestCase {
         }
         assertEquals(0, pkgsToFind);
     }
-
-
 }

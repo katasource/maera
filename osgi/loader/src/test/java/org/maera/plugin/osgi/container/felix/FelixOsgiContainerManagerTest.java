@@ -1,7 +1,9 @@
 package org.maera.plugin.osgi.container.felix;
 
-import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.event.impl.DefaultPluginEventManager;
 import org.maera.plugin.osgi.container.OsgiContainerException;
 import org.maera.plugin.osgi.container.impl.DefaultOsgiPersistentCache;
@@ -18,20 +20,22 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class TestFelixOsgiContainerManager extends TestCase {
-    private File tmpdir;
+import static org.junit.Assert.*;
+
+public class FelixOsgiContainerManagerTest {
+
     private FelixOsgiContainerManager felix;
     private URL frameworkBundlesUrl = getClass().getResource("/nothing.zip");
+    private File tmpdir;
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
-        tmpdir = PluginTestUtils.createTempDirectory(TestFelixOsgiContainerManager.class);
+        tmpdir = PluginTestUtils.createTempDirectory(FelixOsgiContainerManagerTest.class);
         felix = new FelixOsgiContainerManager(frameworkBundlesUrl, new DefaultOsgiPersistentCache(tmpdir), new DefaultPackageScannerConfiguration(),
                 null, new DefaultPluginEventManager());
     }
 
-    @Override
+    @After
     public void tearDown() throws Exception {
         if (felix != null && felix.isRunning()) {
             for (Bundle bundle : felix.getBundles()) {
@@ -46,77 +50,9 @@ public class TestFelixOsgiContainerManager extends TestCase {
             felix.stop();
         felix = null;
         tmpdir = null;
-        super.tearDown();
     }
 
-    public void testDetectXercesOverride() {
-        felix.detectXercesOverride("foo.bar,baz.jim");
-        felix.detectXercesOverride("foo.bar,org.apache.xerces.util;version=\"1.0\",baz.jim");
-        felix.detectXercesOverride("foo.bar,org.apache.xerces.util;version=\"1.0\"");
-        felix.detectXercesOverride("foo.bar,repackaged.org.apache.xerces.util,bar.baz");
-
-
-        try {
-            felix.detectXercesOverride("foo.bar,org.apache.xerces.util");
-            fail("Should fail validation");
-        }
-        catch (OsgiContainerException ex) {
-            // should fail
-        }
-
-        try {
-            felix.detectXercesOverride("org.apache.xerces.util");
-            fail("Should fail validation");
-        }
-        catch (OsgiContainerException ex) {
-            // should fail
-        }
-
-        try {
-            felix.detectXercesOverride("org.apache.xerces.util,bar.baz");
-            fail("Should fail validation");
-        }
-        catch (OsgiContainerException ex) {
-            // should fail
-        }
-
-    }
-
-    public void testDeleteDirectory() throws IOException {
-        File dir = new File(tmpdir, "base");
-        dir.mkdir();
-        File subdir = new File(dir, "subdir");
-        subdir.mkdir();
-        File kid = File.createTempFile("foo", "bar", subdir);
-
-        FileUtils.deleteDirectory(dir);
-        assertTrue(!kid.exists());
-        assertTrue(!subdir.exists());
-        assertTrue(!dir.exists());
-    }
-
-    public void testStartStop() {
-        FilenameFilter filter = new FilenameFilter() {
-            public boolean accept(File file, String s) {
-                return s.startsWith("felix");
-            }
-        };
-        int filesNamedFelix = tmpdir.listFiles(filter).length;
-        felix.start();
-        assertTrue(felix.isRunning());
-        assertEquals(1, felix.getBundles().length);
-        felix.stop();
-        assertEquals(filesNamedFelix, tmpdir.listFiles(filter).length);
-    }
-
-    public void testInstallBundle() throws URISyntaxException {
-        felix.start();
-        assertEquals(1, felix.getBundles().length);
-        File jar = new File(getClass().getResource("/myapp-1.0.jar").toURI());
-        felix.installBundle(jar);
-        assertEquals(2, felix.getBundles().length);
-    }
-
+    @Test
     public void testBootDelegation() throws Exception {
         // Server class extends JUnit TestCase class, which is not available to the bundle
         File pluginServer = new PluginJarBuilder("plugin")
@@ -152,7 +88,8 @@ public class TestFelixOsgiContainerManager extends TestCase {
             clientBundle.loadClass("my.client.ClientClass").newInstance();
             fail("Expected exception: NoClassDefFoundError for junit.framework.TestCase");
         }
-        catch (NoClassDefFoundError expected) {
+        catch (NoClassDefFoundError ignored) {
+
         }
         felix.stop();
 
@@ -172,6 +109,63 @@ public class TestFelixOsgiContainerManager extends TestCase {
         }
     }
 
+    @Test
+    public void testDeleteDirectory() throws IOException {
+        File dir = new File(tmpdir, "base");
+        dir.mkdir();
+        File subdir = new File(dir, "subdir");
+        subdir.mkdir();
+        File kid = File.createTempFile("foo", "bar", subdir);
+
+        FileUtils.deleteDirectory(dir);
+        assertTrue(!kid.exists());
+        assertTrue(!subdir.exists());
+        assertTrue(!dir.exists());
+    }
+
+    @Test
+    public void testDetectXercesOverride() {
+        felix.detectXercesOverride("foo.bar,baz.jim");
+        felix.detectXercesOverride("foo.bar,org.apache.xerces.util;version=\"1.0\",baz.jim");
+        felix.detectXercesOverride("foo.bar,org.apache.xerces.util;version=\"1.0\"");
+        felix.detectXercesOverride("foo.bar,repackaged.org.apache.xerces.util,bar.baz");
+
+
+        try {
+            felix.detectXercesOverride("foo.bar,org.apache.xerces.util");
+            fail("Should fail validation");
+        }
+        catch (OsgiContainerException ignored) {
+
+        }
+
+        try {
+            felix.detectXercesOverride("org.apache.xerces.util");
+            fail("Should fail validation");
+        }
+        catch (OsgiContainerException ignored) {
+
+        }
+
+        try {
+            felix.detectXercesOverride("org.apache.xerces.util,bar.baz");
+            fail("Should fail validation");
+        }
+        catch (OsgiContainerException ignored) {
+
+        }
+    }
+
+    @Test
+    public void testInstallBundle() throws URISyntaxException {
+        felix.start();
+        assertEquals(1, felix.getBundles().length);
+        File jar = new File(getClass().getResource("/myapp-1.0.jar").toURI());
+        felix.installBundle(jar);
+        assertEquals(2, felix.getBundles().length);
+    }
+
+    @Test
     public void testInstallBundleTwice() throws URISyntaxException, IOException, BundleException {
         File plugin = new PluginJarBuilder("plugin")
                 .addResource("META-INF/MANIFEST.MF", "Manifest-Version: 1.0\n" +
@@ -211,6 +205,7 @@ public class TestFelixOsgiContainerManager extends TestCase {
         assertNotNull(bundleUpdate.getResource("bar.txt"));
     }
 
+    @Test
     public void testInstallBundleTwiceDifferentSymbolicNames() throws URISyntaxException, IOException, BundleException {
         File plugin = new PluginJarBuilder("plugin")
                 .addResource("META-INF/MANIFEST.MF", "Manifest-Version: 1.0\n" +
@@ -251,6 +246,7 @@ public class TestFelixOsgiContainerManager extends TestCase {
         assertNotNull(bundleUpdate.getResource("bar.txt"));
     }
 
+    @Test
     public void testInstallFailure() throws Exception {
         File plugin = new PluginJarBuilder("plugin")
                 .addResource("META-INF/MANIFEST.MF", "Manifest-Version: 1.0\n" +
@@ -268,5 +264,21 @@ public class TestFelixOsgiContainerManager extends TestCase {
         } catch (ClassNotFoundException ex) {
             // no worries
         }
+    }
+
+    @Test
+    public void testStartStop() {
+        FilenameFilter filter = new FilenameFilter() {
+
+            public boolean accept(File file, String s) {
+                return s.startsWith("felix");
+            }
+        };
+        int filesNamedFelix = tmpdir.listFiles(filter).length;
+        felix.start();
+        assertTrue(felix.isRunning());
+        assertEquals(1, felix.getBundles().length);
+        felix.stop();
+        assertEquals(filesNamedFelix, tmpdir.listFiles(filter).length);
     }
 }

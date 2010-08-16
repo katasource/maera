@@ -1,27 +1,23 @@
 package org.maera.plugin.osgi.container.felix;
 
-import junit.framework.TestCase;
 import org.apache.felix.framework.Logger;
 import org.apache.felix.moduleloader.ResourceNotFoundException;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.mockito.Mockito.*;
 
-public class TestFelixLoggerBridge extends TestCase {
+@SuppressWarnings({"ThrowableInstanceNeverThrown"})
+public class FelixLoggerBridgeTest {
+
     private org.slf4j.Logger log;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         log = mock(org.slf4j.Logger.class);
     }
 
-    public void testFrameworkLogInfo() {
-        when(log.isInfoEnabled()).thenReturn(true);
-        FelixLoggerBridge bridge = new FelixLoggerBridge(log);
-        bridge.doLog(null, Logger.LOG_INFO, "foo", null);
-        verify(log).info("foo");
-    }
-
+    @Test
     public void testClassNotFound() {
         when(log.isInfoEnabled()).thenReturn(true);
         FelixLoggerBridge bridge = new FelixLoggerBridge(log);
@@ -29,13 +25,7 @@ public class TestFelixLoggerBridge extends TestCase {
         verify(log).debug("Class not found in bundle: foo");
     }
 
-    public void testResourceNotFound() {
-        when(log.isInfoEnabled()).thenReturn(true);
-        FelixLoggerBridge bridge = new FelixLoggerBridge(log);
-        bridge.doLog(null, Logger.LOG_WARNING, "foo", new ResourceNotFoundException("foo"));
-        verify(log).trace("Resource not found in bundle: foo");
-    }
-
+    @Test
     public void testClassNotFoundOnDebug() {
         when(log.isInfoEnabled()).thenReturn(true);
         FelixLoggerBridge bridge = new FelixLoggerBridge(log);
@@ -43,6 +33,15 @@ public class TestFelixLoggerBridge extends TestCase {
         verify(log).debug("Class not found in bundle: *** foo");
     }
 
+    @Test
+    public void testFrameworkLogInfo() {
+        when(log.isInfoEnabled()).thenReturn(true);
+        FelixLoggerBridge bridge = new FelixLoggerBridge(log);
+        bridge.doLog(null, Logger.LOG_INFO, "foo", null);
+        verify(log).info("foo");
+    }
+
+    @Test
     public void testLameClassNotFound() {
         when(log.isInfoEnabled()).thenReturn(true);
         FelixLoggerBridge bridge = new FelixLoggerBridge(log);
@@ -52,6 +51,7 @@ public class TestFelixLoggerBridge extends TestCase {
         verifyNoMoreInteractions(log);
     }
 
+    @Test
     public void testLameClassNotFoundInDebug() {
         when(log.isInfoEnabled()).thenReturn(true);
         FelixLoggerBridge bridge = new FelixLoggerBridge(log);
@@ -60,5 +60,13 @@ public class TestFelixLoggerBridge extends TestCase {
         bridge.doLog(null, Logger.LOG_WARNING, "*** org.springframework.foo",
                 new ClassNotFoundException("*** org.springframework.foo", new ClassNotFoundException("org.springframework.foo")));
         verifyNoMoreInteractions(log);
+    }
+
+    @Test
+    public void testResourceNotFound() {
+        when(log.isInfoEnabled()).thenReturn(true);
+        FelixLoggerBridge bridge = new FelixLoggerBridge(log);
+        bridge.doLog(null, Logger.LOG_WARNING, "foo", new ResourceNotFoundException("foo"));
+        verify(log).trace("Resource not found in bundle: foo");
     }
 }

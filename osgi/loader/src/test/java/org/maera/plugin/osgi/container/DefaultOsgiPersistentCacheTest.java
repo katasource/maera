@@ -1,31 +1,32 @@
 package org.maera.plugin.osgi.container;
 
-import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.osgi.container.impl.DefaultOsgiPersistentCache;
 import org.maera.plugin.test.PluginTestUtils;
 
 import java.io.File;
 import java.io.IOException;
 
-public class TestDefaultOsgiPersistentCache extends TestCase {
+import static org.junit.Assert.*;
+
+public class DefaultOsgiPersistentCacheTest {
+
     private File tmpDir;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        tmpDir = PluginTestUtils.createTempDirectory(TestDefaultOsgiPersistentCache.class);
+    @Before
+    public void setUp() throws Exception {
+        tmpDir = PluginTestUtils.createTempDirectory(DefaultOsgiPersistentCacheTest.class);
     }
 
-    public void testRecordLastVersion() throws IOException {
-        DefaultOsgiPersistentCache cache = new DefaultOsgiPersistentCache(tmpDir);
-        File versionFile = new File(new File(tmpDir, "transformed-plugins"), "cache.key");
-        cache.validate("1.0");
-        assertTrue(versionFile.exists());
-        String txt = FileUtils.readFileToString(versionFile);
-        assertEquals("1.0", txt);
+    @After
+    public void tearDown() throws Exception {
+        FileUtils.cleanDirectory(tmpDir);
     }
 
+    @Test
     public void testCleanOnUpgrade() throws IOException {
         DefaultOsgiPersistentCache cache = new DefaultOsgiPersistentCache(tmpDir);
         File tmp = File.createTempFile("foo", ".txt", new File(tmpDir, "transformed-plugins"));
@@ -35,6 +36,7 @@ public class TestDefaultOsgiPersistentCache extends TestCase {
         assertFalse(tmp.exists());
     }
 
+    @Test
     public void testNullVersion() throws IOException {
         DefaultOsgiPersistentCache cache = new DefaultOsgiPersistentCache(tmpDir);
         cache.validate(null);
@@ -44,9 +46,13 @@ public class TestDefaultOsgiPersistentCache extends TestCase {
         assertTrue(tmp.exists());
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-        FileUtils.cleanDirectory(tmpDir);
+    @Test
+    public void testRecordLastVersion() throws IOException {
+        DefaultOsgiPersistentCache cache = new DefaultOsgiPersistentCache(tmpDir);
+        File versionFile = new File(new File(tmpDir, "transformed-plugins"), "cache.key");
+        cache.validate("1.0");
+        assertTrue(versionFile.exists());
+        String txt = FileUtils.readFileToString(versionFile);
+        assertEquals("1.0", txt);
     }
 }

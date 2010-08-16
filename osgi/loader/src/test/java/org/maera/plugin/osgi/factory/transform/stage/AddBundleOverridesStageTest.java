@@ -1,6 +1,6 @@
 package org.maera.plugin.osgi.factory.transform.stage;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.maera.plugin.JarPluginArtifact;
 import org.maera.plugin.PluginAccessor;
 import org.maera.plugin.osgi.container.OsgiContainerManager;
@@ -13,10 +13,13 @@ import org.osgi.framework.ServiceReference;
 import java.io.File;
 import java.util.Collections;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestAddBundleOverridesStage extends TestCase {
+public class AddBundleOverridesStageTest {
+
+    @Test
     public void testTransform() throws Exception {
         final File plugin = new PluginJarBuilder("plugin").addFormattedResource("maera-plugin.xml",
                 "<maera-plugin name='Test Bundle instruction plugin 2' key='test.plugin'>", "    <plugin-info>", "        <version>1.0</version>",

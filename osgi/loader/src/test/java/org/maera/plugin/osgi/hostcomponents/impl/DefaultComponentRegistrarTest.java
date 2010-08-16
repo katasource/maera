@@ -3,7 +3,7 @@ package org.maera.plugin.osgi.hostcomponents.impl;
 import com.mockobjects.constraint.Constraint;
 import com.mockobjects.dynamic.C;
 import com.mockobjects.dynamic.Mock;
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.maera.plugin.hostcontainer.HostContainer;
 import org.maera.plugin.osgi.hostcomponents.HostComponentRegistration;
 import org.osgi.framework.BundleContext;
@@ -13,7 +13,11 @@ import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
-public class TestDefaultComponentRegistrar extends TestCase {
+import static org.junit.Assert.*;
+
+public class DefaultComponentRegistrarTest {
+
+    @Test
     public void testRegister() {
         DefaultComponentRegistrar registrar = new DefaultComponentRegistrar();
         Class[] ifs = new Class[]{Serializable.class};
@@ -27,6 +31,7 @@ public class TestDefaultComponentRegistrar extends TestCase {
         assertEquals("bar", reg.getProperties().get("jim"));
     }
 
+    @Test
     public void testRegisterMultiple() {
         DefaultComponentRegistrar registrar = new DefaultComponentRegistrar();
         Class[] ifs = new Class[]{Serializable.class};
@@ -35,6 +40,7 @@ public class TestDefaultComponentRegistrar extends TestCase {
         assertEquals(2, registrar.getRegistry().size());
     }
 
+    @Test
     public void testRegisterOnlyInterfaces() {
         DefaultComponentRegistrar registrar = new DefaultComponentRegistrar();
         Class[] ifs = new Class[]{Object.class};
@@ -42,11 +48,12 @@ public class TestDefaultComponentRegistrar extends TestCase {
             registrar.register(ifs).forInstance("Foo").withName("foo").withProperty("jim", "bar");
             fail("Should have failed");
         }
-        catch (IllegalArgumentException ex) {
-            // very good...
+        catch (IllegalArgumentException ignored) {
+
         }
     }
 
+    @Test
     public void testWriteRegistry() {
         Class[] ifs = new Class[]{Serializable.class};
         DefaultComponentRegistrar registrar = new DefaultComponentRegistrar();
@@ -60,32 +67,7 @@ public class TestDefaultComponentRegistrar extends TestCase {
         mockBundleContext.verify();
     }
 
-    public void testWriteRegistryRemovesHostContainer() {
-        Class[] ifs = new Class[]{HostContainer.class};
-        DefaultComponentRegistrar registrar = new DefaultComponentRegistrar();
-        registrar.register(ifs).forInstance("Foo").withName("foo");
-
-        Mock mockBundleContext = new Mock(BundleContext.class);
-
-        registrar.writeRegistry((BundleContext) mockBundleContext.proxy());
-
-        mockBundleContext.verify();
-        assertEquals(0, registrar.getRegistry().size());
-    }
-
-    public void testWriteRegistryNoInterface() {
-        Class[] ifs = new Class[]{};
-        DefaultComponentRegistrar registrar = new DefaultComponentRegistrar();
-        registrar.register(ifs).forInstance("Foo").withName("foo");
-
-        Mock mockBundleContext = new Mock(BundleContext.class);
-        registerInMock(mockBundleContext, ifs, "Foo", "foo");
-
-        registrar.writeRegistry((BundleContext) mockBundleContext.proxy());
-
-        mockBundleContext.verify();
-    }
-
+    @Test
     public void testWriteRegistryGenBeanName() {
         Class[] ifs = new Class[]{Serializable.class};
         DefaultComponentRegistrar registrar = new DefaultComponentRegistrar();
@@ -99,6 +81,33 @@ public class TestDefaultComponentRegistrar extends TestCase {
         mockBundleContext.verify();
     }
 
+    @Test
+    public void testWriteRegistryNoInterface() {
+        Class[] ifs = new Class[]{};
+        DefaultComponentRegistrar registrar = new DefaultComponentRegistrar();
+        registrar.register(ifs).forInstance("Foo").withName("foo");
+
+        Mock mockBundleContext = new Mock(BundleContext.class);
+        registerInMock(mockBundleContext, ifs, "Foo", "foo");
+
+        registrar.writeRegistry((BundleContext) mockBundleContext.proxy());
+
+        mockBundleContext.verify();
+    }
+
+    @Test
+    public void testWriteRegistryRemovesHostContainer() {
+        Class[] ifs = new Class[]{HostContainer.class};
+        DefaultComponentRegistrar registrar = new DefaultComponentRegistrar();
+        registrar.register(ifs).forInstance("Foo").withName("foo");
+
+        Mock mockBundleContext = new Mock(BundleContext.class);
+
+        registrar.writeRegistry((BundleContext) mockBundleContext.proxy());
+
+        mockBundleContext.verify();
+        assertEquals(0, registrar.getRegistry().size());
+    }
 
     private void registerInMock(Mock mockBundleContext, Class[] ifs, Object instance, String name) {
         Dictionary<String, String> properties = new Hashtable<String, String>();
@@ -115,6 +124,7 @@ public class TestDefaultComponentRegistrar extends TestCase {
     }
 
     static class ArrayConstraint implements Constraint {
+
         private Class[] expected;
 
         public ArrayConstraint(Class[] expected) {
@@ -140,5 +150,4 @@ public class TestDefaultComponentRegistrar extends TestCase {
             return false;
         }
     }
-
 }

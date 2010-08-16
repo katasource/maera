@@ -1,6 +1,7 @@
 package org.maera.plugin.osgi.factory.transform;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.JarPluginArtifact;
 import org.maera.plugin.PluginAccessor;
 import org.maera.plugin.osgi.container.OsgiContainerManager;
@@ -23,33 +24,29 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestDefaultPluginTransformer extends TestCase {
-    private DefaultPluginTransformer transformer;
-    private File tmpDir;
+public class DefaultPluginTransformerTest {
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    private File tmpDir;
+    private DefaultPluginTransformer transformer;
+
+    @Before
+    public void setUp() throws Exception {
         OsgiContainerManager osgiContainerManager = mock(OsgiContainerManager.class);
         when(osgiContainerManager.getRegisteredServices()).thenReturn(new ServiceReference[0]);
         tmpDir = PluginTestUtils.createTempDirectory("plugin-transformer");
         transformer = new DefaultPluginTransformer(new DefaultOsgiPersistentCache(tmpDir), SystemExports.NONE, null, PluginAccessor.Descriptor.FILENAME, osgiContainerManager);
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-        tmpDir = null;
-        transformer = null;
-    }
-
+    @Test
     public void testAddFilesToZip() throws URISyntaxException, IOException {
         final File file = PluginTestUtils.getFileForResource("myapp-1.0-plugin.jar");
 
         final Map<String, byte[]> files = new HashMap<String, byte[]>() {
+
             {
                 put("foo", "bar".getBytes());
             }
@@ -64,6 +61,21 @@ public class TestDefaultPluginTransformer extends TestCase {
         assertNotNull(entry);
     }
 
+    @Test
+    public void testGenerateCacheName() throws IOException {
+        File tmp = File.createTempFile("asdf", ".jar", tmpDir);
+        assertTrue(DefaultPluginTransformer.generateCacheName(tmp).endsWith(".jar"));
+        tmp = File.createTempFile("asdf", "asdf", tmpDir);
+        assertTrue(DefaultPluginTransformer.generateCacheName(tmp).endsWith(String.valueOf(tmp.lastModified())));
+
+        tmp = File.createTempFile("asdf", "asdf.", tmpDir);
+        assertTrue(DefaultPluginTransformer.generateCacheName(tmp).endsWith(String.valueOf(tmp.lastModified())));
+
+        tmp = File.createTempFile("asdf", "asdf.s", tmpDir);
+        assertTrue(DefaultPluginTransformer.generateCacheName(tmp).endsWith(String.valueOf(".s")));
+    }
+
+    @Test
     public void testTransform() throws Exception {
         final File file = new PluginJarBuilder()
                 .addFormattedJava("my.Foo",
@@ -75,6 +87,7 @@ public class TestDefaultPluginTransformer extends TestCase {
                 .build();
 
         final File copy = transformer.transform(new JarPluginArtifact(file), new ArrayList<HostComponentRegistration>() {
+
             {
                 add(new StubHostComponentRegistration(Fooable.class));
             }
@@ -91,19 +104,4 @@ public class TestDefaultPluginTransformer extends TestCase {
 
         assertNotNull(jar.getEntry("META-INF/spring/maera-plugins-host-components.xml"));
     }
-
-    public void testGenerateCacheName() throws IOException {
-        File tmp = File.createTempFile("asdf", ".jar", tmpDir);
-        assertTrue(DefaultPluginTransformer.generateCacheName(tmp).endsWith(".jar"));
-        tmp = File.createTempFile("asdf", "asdf", tmpDir);
-        assertTrue(DefaultPluginTransformer.generateCacheName(tmp).endsWith(String.valueOf(tmp.lastModified())));
-
-        tmp = File.createTempFile("asdf", "asdf.", tmpDir);
-        assertTrue(DefaultPluginTransformer.generateCacheName(tmp).endsWith(String.valueOf(tmp.lastModified())));
-
-        tmp = File.createTempFile("asdf", "asdf.s", tmpDir);
-        assertTrue(DefaultPluginTransformer.generateCacheName(tmp).endsWith(String.valueOf(".s")));
-
-    }
-
 }

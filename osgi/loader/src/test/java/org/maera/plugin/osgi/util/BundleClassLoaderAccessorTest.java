@@ -1,7 +1,7 @@
 package org.maera.plugin.osgi.util;
 
-import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 
 import java.io.ByteArrayOutputStream;
@@ -10,10 +10,13 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestBundleClassLoaderAccessor extends TestCase {
+public class BundleClassLoaderAccessorTest {
+
+    @Test
     public void testGetResource() throws IOException {
         Bundle bundle = mock(Bundle.class);
         when(bundle.getResource("foo.txt")).thenReturn(getClass().getClassLoader().getResource("foo.txt"));
@@ -22,6 +25,7 @@ public class TestBundleClassLoaderAccessor extends TestCase {
         assertNotNull(url);
     }
 
+    @Test
     public void testGetResourceAsStream() throws IOException {
         Bundle bundle = mock(Bundle.class);
         when(bundle.getResource("foo.txt")).thenReturn(getClass().getClassLoader().getResource("foo.txt"));
@@ -32,6 +36,7 @@ public class TestBundleClassLoaderAccessor extends TestCase {
         assertTrue(out.toByteArray().length > 0);
     }
 
+    @Test
     public void testGetResources() throws IOException {
         Bundle bundle = mock(Bundle.class);
         when(bundle.getResources("foo.txt")).thenReturn(getClass().getClassLoader().getResources("foo.txt"));
@@ -41,6 +46,7 @@ public class TestBundleClassLoaderAccessor extends TestCase {
         assertTrue(e.hasMoreElements());
     }
 
+    @Test
     public void testGetResourcesIfNull() throws IOException {
         Bundle bundle = mock(Bundle.class);
         when(bundle.getResources("foo.txt")).thenReturn(null);
