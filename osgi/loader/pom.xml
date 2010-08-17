@@ -64,11 +64,15 @@
                                     <artifactId>spring-osgi-io</artifactId>
                                     <version>${springDmVersion}</version>
                                 </artifactItem>
+                                <!--  The following below was causing OSGi dependency isses after the
+                                      fork to Maera.  We assume that Atlassian included this to support their
+                                      own web mechanisms, since most Atlassian products allow plugins to add
+                                      web views via the Velocity Template Language.
                                 <artifactItem>
                                     <groupId>com.atlassian.bundles</groupId>
                                     <artifactId>velocity</artifactId>
                                     <version>1.6.2-1</version>
-                                </artifactItem>
+                                </artifactItem> -->
                             </artifactItems>
                             <outputDirectory>${frameworkBundleDirectory}</outputDirectory>
                         </configuration>
