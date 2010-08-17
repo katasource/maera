@@ -21,6 +21,11 @@
         </dependency>
         <dependency>
             <groupId>org.maera</groupId>
+            <artifactId>maera-main</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.maera</groupId>
             <artifactId>maera-servlet</artifactId>
             <version>${project.version}</version>
         </dependency>

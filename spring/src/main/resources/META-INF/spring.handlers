@@ -1,1 +1,1 @@
-http\://maera.org/schema/spring/plugin=org.maera.plugin.spring.pluginns.PluginNamespaceHandler
+http\://maera.org/schema/spring/plugin=org.maera.plugin.spring.plugins.PluginNamespaceHandler
