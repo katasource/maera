@@ -165,6 +165,11 @@
             <artifactId>bndlib</artifactId>
             <version>0.0.255</version>
         </dependency>
+        <!-- Required by dom4J at runtime (used by the ScanDescriptorForHostClassesStage implementation): -->
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
