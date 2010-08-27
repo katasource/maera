@@ -127,7 +127,7 @@ public abstract class AbstractPluginInContainerTest {
             }
         }
         File bundledDir = new File(bundledPluginJars[0].getParentFile(), "bundled-plugins");
-        final BundledPluginLoader bundledLoader = new BundledPluginLoader(zip.toURL(), bundledDir, Arrays.<PluginFactory>asList(osgiPluginDeployer),
+        final BundledPluginLoader bundledLoader = new BundledPluginLoader(zip.toURI().toURL(), bundledDir, Arrays.<PluginFactory>asList(osgiPluginDeployer),
                 new DefaultPluginEventManager());
 
         pluginManager = new DefaultPluginManager(new MemoryPluginPersistentStateStore(), Arrays.<PluginLoader>asList(bundledLoader, loader), moduleDescriptorFactory,
@@ -162,7 +162,7 @@ public abstract class AbstractPluginInContainerTest {
 
     protected void initPluginManager(final HostComponentProvider hostComponentProvider, final ModuleDescriptorFactory moduleDescriptorFactory)
             throws Exception {
-        initPluginManager(hostComponentProvider, moduleDescriptorFactory, (String) null);
+        initPluginManager(hostComponentProvider, moduleDescriptorFactory, null);
     }
 
     protected void initPluginManager(final ModuleDescriptorFactory moduleDescriptorFactory, PluginLoader loader)
@@ -178,7 +178,6 @@ public abstract class AbstractPluginInContainerTest {
         final PackageScannerConfiguration scannerConfig = new DefaultPackageScannerConfiguration(version);
         scannerConfig.getPackageIncludes().add("org.maera.plugin*");
         scannerConfig.getPackageIncludes().add("javax.servlet*");
-        scannerConfig.getPackageIncludes().add("com_cenqua_clover");
         scannerConfig.getPackageExcludes().add("org.maera.plugin.osgi.bridge*");
         scannerConfig.getPackageVersions().put("org.apache.commons.logging", "1.1.1");
         return scannerConfig;

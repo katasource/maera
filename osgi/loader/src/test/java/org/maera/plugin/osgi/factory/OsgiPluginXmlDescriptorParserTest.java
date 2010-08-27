@@ -16,7 +16,7 @@ public class OsgiPluginXmlDescriptorParserTest {
 
     @Test
     public void testCreateModuleDescriptor() throws PluginParseException, IllegalAccessException, ClassNotFoundException, InstantiationException {
-        OsgiPluginXmlDescriptorParser parser = new OsgiPluginXmlDescriptorParser(new ByteArrayInputStream("<foo/>".getBytes()), null);
+        OsgiPluginXmlDescriptorParser parser = new OsgiPluginXmlDescriptorParser(new ByteArrayInputStream("<foo/>".getBytes()));
 
         ModuleDescriptor desc = mock(ModuleDescriptor.class);
         when(desc.getKey()).thenReturn("foo");

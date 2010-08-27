@@ -19,24 +19,6 @@
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.main</artifactId>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>org.apache.felix.shell</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>org.apache.felix.shell</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>org.apache.felix.shell.tui</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>org.apache.felix.bundlerepository</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
     </dependencies>
 </project>

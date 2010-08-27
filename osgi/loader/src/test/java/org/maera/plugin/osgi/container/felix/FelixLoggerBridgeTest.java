@@ -1,7 +1,7 @@
 package org.maera.plugin.osgi.container.felix;
 
 import org.apache.felix.framework.Logger;
-import org.apache.felix.moduleloader.ResourceNotFoundException;
+import org.apache.felix.framework.resolver.ResourceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 

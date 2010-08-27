@@ -7,7 +7,7 @@ import org.maera.plugin.servlet.DownloadStrategy;
 import java.util.List;
 
 public class FileServerServlet extends AbstractFileServerServlet {
-    private List downloadStrategies;
+    private List<DownloadStrategy> downloadStrategies;
 
     protected List<DownloadStrategy> getDownloadStrategies() {
         if (downloadStrategies == null)

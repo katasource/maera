@@ -88,7 +88,7 @@ public class MaeraPluginsTest extends TestCase {
 
         final PluginsConfiguration config = pluginsConfiguration()
                 .pluginDirectory(pluginDir)
-                .bundledPluginUrl(bundledPluginZip.toURL())
+                .bundledPluginUrl(bundledPluginZip.toURI().toURL())
                 .bundledPluginCacheDirectory(bundledPluginDir)
                 .packageScannerConfiguration(
                         new PackageScannerConfigurationBuilder()
