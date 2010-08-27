@@ -1,7 +1,7 @@
 package org.maera.plugin.spring;
 
-import junit.framework.TestCase;
 import org.aopalliance.aop.Advice;
+import org.junit.Test;
 import org.maera.plugin.osgi.hostcomponents.ContextClassLoaderStrategy;
 import org.maera.plugin.osgi.hostcomponents.HostComponentProvider;
 import org.maera.plugin.osgi.hostcomponents.HostComponentRegistration;
@@ -16,9 +16,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class TestSpringHostComponentProviderFactoryBeanWithAnnotations extends TestCase {
+import static org.junit.Assert.*;
+
+public class SpringHostComponentProviderFactoryBeanWithAnnotationsTest {
+
+    @Test
     public void testProvide() throws Exception {
         StaticListableBeanFactory factory = new StaticListableBeanFactory() {
+
             @Override
             public boolean isSingleton(String name) throws NoSuchBeanDefinitionException {
                 return true;
@@ -48,15 +53,10 @@ public class TestSpringHostComponentProviderFactoryBeanWithAnnotations extends T
         assertTrue(ifs.contains(Map.class));
     }
 
-    private HostComponentProvider getHostComponentProvider(BeanFactory factory) throws Exception {
-        SpringHostComponentProviderFactoryBean providerFactoryBean = new SpringHostComponentProviderFactoryBean();
-        providerFactoryBean.setBeanFactory(factory);
-        providerFactoryBean.afterPropertiesSet();
-        return (HostComponentProvider) providerFactoryBean.getObject();
-    }
-
+    @Test
     public void testProvideWithCCLStrategy() throws Exception {
         StaticListableBeanFactory factory = new StaticListableBeanFactory() {
+
             @Override
             public boolean isSingleton(String name) throws NoSuchBeanDefinitionException {
                 return true;
@@ -77,8 +77,10 @@ public class TestSpringHostComponentProviderFactoryBeanWithAnnotations extends T
         assertEquals(ContextClassLoaderStrategy.USE_PLUGIN.name(), list.get(0).getProperties().get(PropertyBuilder.CONTEXT_CLASS_LOADER_STRATEGY));
     }
 
+    @Test
     public void testProvideWithProxy() throws Exception {
         StaticListableBeanFactory factory = new StaticListableBeanFactory() {
+
             @Override
             public boolean isSingleton(String name) throws NoSuchBeanDefinitionException {
                 return true;
@@ -103,5 +105,12 @@ public class TestSpringHostComponentProviderFactoryBeanWithAnnotations extends T
         assertEquals(1, list.size());
         assertEquals("bean", list.get(0).getProperties().get("bean-name"));
         assertEquals(Fooable.class.getName(), list.get(0).getMainInterfaces()[0]);
+    }
+
+    private HostComponentProvider getHostComponentProvider(BeanFactory factory) throws Exception {
+        SpringHostComponentProviderFactoryBean providerFactoryBean = new SpringHostComponentProviderFactoryBean();
+        providerFactoryBean.setBeanFactory(factory);
+        providerFactoryBean.afterPropertiesSet();
+        return (HostComponentProvider) providerFactoryBean.getObject();
     }
 }

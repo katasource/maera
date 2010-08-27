@@ -1,7 +1,9 @@
 package org.maera.plugin.main;
 
-import junit.framework.TestCase;
 import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.test.PluginJarBuilder;
 
 import java.io.BufferedOutputStream;
@@ -12,15 +14,17 @@ import java.util.Collections;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static org.junit.Assert.assertEquals;
 import static org.maera.plugin.main.PluginsConfigurationBuilder.pluginsConfiguration;
 
-public class MaeraPluginsTest extends TestCase {
-    private File pluginDir;
+public class MaeraPluginsTest {
+
     private File bundledPluginDir;
     private File bundledPluginZip;
+    private File pluginDir;
     private MaeraPlugins plugins;
 
-    @Override
+    @Before
     public void setUp() throws IOException {
         final File targetDir = new File("target");
         pluginDir = new File(targetDir, "plugins");
@@ -31,32 +35,17 @@ public class MaeraPluginsTest extends TestCase {
         bundledPluginZip = new File(targetDir, "maera-bundled-plugins.zip");
     }
 
-    @Override
+    @After
     public void tearDown() throws IOException {
-        FileUtils.cleanDirectory(pluginDir);
-        FileUtils.cleanDirectory(bundledPluginDir);
-        bundledPluginZip.delete();
         if (plugins != null) {
             plugins.stop();
         }
+        FileUtils.cleanDirectory(pluginDir);
+        FileUtils.cleanDirectory(bundledPluginDir);
+        bundledPluginZip.delete();
     }
 
-    public void testStart() throws Exception {
-        //tests
-        new PluginJarBuilder().addPluginInformation("mykey", "mykey", "1.0").build(pluginDir);
-        final PluginsConfiguration config = pluginsConfiguration()
-                .pluginDirectory(pluginDir)
-                .packageScannerConfiguration(
-                        new PackageScannerConfigurationBuilder()
-                                .packagesToInclude("org.apache.*", "org.maera.*", "org.dom4j*")
-                                .packagesVersions(Collections.singletonMap("org.apache.commons.logging", "1.1.1"))
-                                .build())
-                .build();
-        plugins = new MaeraPlugins(config);
-        plugins.start();
-        assertEquals(1, plugins.getPluginAccessor().getPlugins().size());
-    }
-
+    @Test
     public void testInstalledPluginCanDependOnBundledPlugin() throws Exception {
         PluginJarBuilder bundledJar = new PluginJarBuilder("bundled")
                 .addFormattedResource("META-INF/MANIFEST.MF",
@@ -100,6 +89,23 @@ public class MaeraPluginsTest extends TestCase {
         plugins.start();
         assertEquals(2, plugins.getPluginAccessor().getEnabledPlugins().size());
 
+    }
+
+    @Test
+    public void testStart() throws Exception {
+        //tests
+        new PluginJarBuilder().addPluginInformation("mykey", "mykey", "1.0").build(pluginDir);
+        final PluginsConfiguration config = pluginsConfiguration()
+                .pluginDirectory(pluginDir)
+                .packageScannerConfiguration(
+                        new PackageScannerConfigurationBuilder()
+                                .packagesToInclude("org.apache.*", "org.maera.*", "org.dom4j*")
+                                .packagesVersions(Collections.singletonMap("org.apache.commons.logging", "1.1.1"))
+                                .build())
+                .build();
+        plugins = new MaeraPlugins(config);
+        plugins.start();
+        assertEquals(1, plugins.getPluginAccessor().getPlugins().size());
     }
 
     private void zipBundledPlugins() throws IOException {

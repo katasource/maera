@@ -1,6 +1,7 @@
 package org.maera.plugin.osgi.bridge;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.event.PluginEventManager;
 import org.maera.plugin.osgi.event.PluginServiceDependencyWaitStartingEvent;
 import org.mockito.ArgumentMatcher;
@@ -19,16 +20,15 @@ import java.util.Hashtable;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Mockito.*;
 
-public class TestSpringContextEventBridge extends TestCase {
+public class SpringContextEventBridgeTest {
+
+    private SpringContextEventBridge bridge;
 
     private Bundle bundle;
     private PluginEventManager eventManager;
-    private SpringContextEventBridge bridge;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         eventManager = mock(PluginEventManager.class);
 
         bridge = new SpringContextEventBridge(eventManager);
@@ -40,6 +40,7 @@ public class TestSpringContextEventBridge extends TestCase {
         when(bundle.getHeaders()).thenReturn(headers);
     }
 
+    @Test
     public void testWaitingEventWithApplicationContext() throws Exception {
         ConfigurableOsgiBundleApplicationContext source = mock(ConfigurableOsgiBundleApplicationContext.class);
         when(source.getBundle()).thenReturn(bundle);
@@ -50,6 +51,7 @@ public class TestSpringContextEventBridge extends TestCase {
         verify(eventManager).broadcast(isPluginKey("foo"));
     }
 
+    @Test
     public void testWaitingEventWithServiceFactoryBean() throws Exception {
         AbstractOsgiServiceImportFactoryBean source = mock(AbstractOsgiServiceImportFactoryBean.class);
         when(source.getBeanName()).thenReturn("bar");
@@ -67,7 +69,8 @@ public class TestSpringContextEventBridge extends TestCase {
         return argThat(new PluginKeyMatcher(key));
     }
 
-    private static class PluginKeyMatcher extends ArgumentMatcher {
+    private static class PluginKeyMatcher extends ArgumentMatcher<Object> {
+
         private String key;
 
         public PluginKeyMatcher(String key) {

@@ -1,39 +1,45 @@
 package org.maera.plugin.refimpl;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.webresource.UrlMode;
 
-public class ParameterUtilsTest extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class ParameterUtilsTest {
+
     private static final String CONTEXT_PATH = "/maera-plugins-refimpl";
     private static final String BASE_URL = "http://localhost:8080" + CONTEXT_PATH;
     private String previousBaseUrl;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         previousBaseUrl = System.getProperty("baseurl");
         System.setProperty("baseurl", BASE_URL);
     }
 
-    @Override
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         if (previousBaseUrl != null) {
             System.setProperty("baseurl", previousBaseUrl);
         } else {
             System.clearProperty("baseurl");
         }
-        super.tearDown();
     }
 
+    @Test
     public void testBaseUrlWithAbsoluteUrlMode() {
         assertEquals(BASE_URL, ParameterUtils.getBaseUrl(UrlMode.ABSOLUTE));
     }
 
-    public void testBaseUrlWithRelativeUrlMode() {
-        assertEquals(CONTEXT_PATH, ParameterUtils.getBaseUrl(UrlMode.RELATIVE));
-    }
-
+    @Test
     public void testBaseUrlWithAutoUrlMode() {
         assertEquals(CONTEXT_PATH, ParameterUtils.getBaseUrl(UrlMode.AUTO));
+    }
+
+    @Test
+    public void testBaseUrlWithRelativeUrlMode() {
+        assertEquals(CONTEXT_PATH, ParameterUtils.getBaseUrl(UrlMode.RELATIVE));
     }
 }

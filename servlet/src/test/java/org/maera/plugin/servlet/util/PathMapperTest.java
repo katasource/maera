@@ -1,8 +1,10 @@
 package org.maera.plugin.servlet.util;
 
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Test;
 
-public class TestPathMapper extends TestCase {
+public class PathMapperTest extends Assert {
+
     /**
      * For more info, see:
      * https://studio.atlassian.com/browse/PLUG-597
@@ -11,6 +13,7 @@ public class TestPathMapper extends TestCase {
      * https://studio.atlassian.com/source/cru/CR-PLUG-193#c17487
      * https://studio.atlassian.com/browse/PLUG-605
      */
+    @Test
     public void testDoubleSlashes() {
         final PathMapper pathMapper = new DefaultPathMapper();
 
@@ -22,6 +25,22 @@ public class TestPathMapper extends TestCase {
         assertNull(pathMapper.get("/images/ddtree/black spinner/12.png"));
     }
 
+    @Test
+    public void testRemovePath() {
+        final PathMapper pathMapper = new DefaultPathMapper();
+
+        pathMapper.put("foo.bar", "/foo*");
+        pathMapper.put("foo.baz", "/bar*");
+        assertEquals("foo.bar", pathMapper.get("/foo/bar"));
+        assertEquals("foo.baz", pathMapper.get("/bar/foo"));
+
+        pathMapper.put("foo.bar", null);
+        assertNull(pathMapper.get("/foo/bar"));
+        assertEquals(0, pathMapper.getAll("/foo/bar").size());
+        assertEquals("foo.baz", pathMapper.get("/bar/foo"));
+    }
+
+    @Test
     public void testSlashRemover() {
         final DefaultPathMapper pathMapper = new DefaultPathMapper();
 
@@ -36,19 +55,5 @@ public class TestPathMapper extends TestCase {
         assertEquals("foo/bar", pathMapper.removeRedundantSlashes("foo////bar"));
         assertEquals("foo/bar/", pathMapper.removeRedundantSlashes("foo////bar/"));
         assertEquals("/f oo/b/ar/", pathMapper.removeRedundantSlashes("//f oo////b/ar//"));
-    }
-
-    public void testRemovePath() {
-        final PathMapper pathMapper = new DefaultPathMapper();
-
-        pathMapper.put("foo.bar", "/foo*");
-        pathMapper.put("foo.baz", "/bar*");
-        assertEquals("foo.bar", pathMapper.get("/foo/bar"));
-        assertEquals("foo.baz", pathMapper.get("/bar/foo"));
-
-        pathMapper.put("foo.bar", null);
-        assertNull(pathMapper.get("/foo/bar"));
-        assertEquals(0, pathMapper.getAll("/foo/bar").size());
-        assertEquals("foo.baz", pathMapper.get("/bar/foo"));
     }
 }

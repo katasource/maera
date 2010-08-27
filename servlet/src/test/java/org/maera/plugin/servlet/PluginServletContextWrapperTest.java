@@ -2,7 +2,8 @@ package org.maera.plugin.servlet;
 
 import com.mockobjects.dynamic.C;
 import com.mockobjects.dynamic.Mock;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.Plugin;
 
 import javax.servlet.ServletContext;
@@ -11,15 +12,18 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class TestPluginServletContextWrapper extends TestCase {
-    Mock mockServletContext;
-    Mock mockPlugin;
+import static org.junit.Assert.assertEquals;
+
+public class PluginServletContextWrapperTest {
 
     ConcurrentMap<String, Object> attributes;
-    Map<String, String> initParams;
 
     ServletContext contextWrapper;
+    Map<String, String> initParams;
+    Mock mockPlugin;
+    Mock mockServletContext;
 
+    @Before
     public void setUp() {
         mockServletContext = new Mock(ServletContext.class);
         mockServletContext.expectAndReturn("getAttribute", C.eq("wrapped"), "wrapped value");
@@ -32,6 +36,12 @@ public class TestPluginServletContextWrapper extends TestCase {
         contextWrapper = new PluginServletContextWrapper((Plugin) mockPlugin.proxy(), (ServletContext) mockServletContext.proxy(), attributes, initParams);
     }
 
+    @Test
+    public void testGetAttributeDelegatesToWrappedContext() {
+        assertEquals("wrapped value", contextWrapper.getAttribute("wrapped"));
+    }
+
+    @Test
     public void testPutAttribute() {
         // if set attribute is called on the wrapped context it will throw an 
         // exception since it is not expecting it
@@ -39,10 +49,7 @@ public class TestPluginServletContextWrapper extends TestCase {
         assertEquals("value", contextWrapper.getAttribute("attr"));
     }
 
-    public void testGetAttributeDelegatesToWrappedContext() {
-        assertEquals("wrapped value", contextWrapper.getAttribute("wrapped"));
-    }
-
+    @Test
     public void testPutAttributeOverridesWrapperContextAttribute() {
         // if set attribute is called on the wrapped context it will throw an 
         // exception since it is not expecting it

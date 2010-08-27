@@ -2,7 +2,9 @@ package org.maera.plugin.servlet;
 
 import com.mockobjects.dynamic.C;
 import com.mockobjects.dynamic.Mock;
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.webresource.PluginResourceLocator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,18 +13,21 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TestPluginResourceDownload extends TestCase {
-    private static final String SINGLE_RESOURCE = "/download/resources/org.maera.plugin:foo-resources/foo.js";
+import static org.junit.Assert.assertTrue;
+
+public class PluginResourceDownloadTest {
+
     private static final String BATCH_RESOURCE = "/download/batch/js/org.maera.plugin:bar-resources.js";
     private static final String JS_CONTENT_TYPE = "text/javascript";
 
-    private PluginResourceDownload pluginResourceDownload;
-    private Mock mockPluginResourceLocator;
+    private static final String SINGLE_RESOURCE = "/download/resources/org.maera.plugin:foo-resources/foo.js";
     private Mock mockContentTypeResolver;
+    private Mock mockPluginResourceLocator;
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    private PluginResourceDownload pluginResourceDownload;
 
+    @Before
+    public void setUp() throws Exception {
         mockPluginResourceLocator = new Mock(PluginResourceLocator.class);
         mockContentTypeResolver = new Mock(ContentTypeResolver.class);
 
@@ -30,13 +35,14 @@ public class TestPluginResourceDownload extends TestCase {
                 (ContentTypeResolver) mockContentTypeResolver.proxy(), "UTF-8");
     }
 
-    protected void tearDown() throws Exception {
+    @After
+    public void tearDown() throws Exception {
         mockContentTypeResolver = null;
         mockPluginResourceLocator = null;
         pluginResourceDownload = null;
-        super.tearDown();
     }
 
+    @Test
     public void testMatches() {
         mockPluginResourceLocator.expectAndReturn("matches", C.args(C.eq(SINGLE_RESOURCE)), true);
         assertTrue(pluginResourceDownload.matches(SINGLE_RESOURCE));
@@ -45,6 +51,7 @@ public class TestPluginResourceDownload extends TestCase {
         assertTrue(pluginResourceDownload.matches(BATCH_RESOURCE));
     }
 
+    @Test
     public void testResourceNotFound() throws Exception {
         Mock mockRequest = new Mock(HttpServletRequest.class);
         mockRequest.matchAndReturn("getRequestURI", SINGLE_RESOURCE);
@@ -57,6 +64,7 @@ public class TestPluginResourceDownload extends TestCase {
         pluginResourceDownload.serveFile((HttpServletRequest) mockRequest.proxy(), (HttpServletResponse) mockResponse.proxy());
     }
 
+    @Test
     public void testServeFile() throws Exception {
         Map<String, String[]> params = new HashMap<String, String[]>();
         params.put("aaa", new String[]{"bbb"});
@@ -77,6 +85,7 @@ public class TestPluginResourceDownload extends TestCase {
         pluginResourceDownload.serveFile((HttpServletRequest) mockRequest.proxy(), (HttpServletResponse) mockResponse.proxy());
     }
 
+    @Test
     public void testServeFileContentTypeUsesContentTypeResolverWhenResourceContentTypeIsNull() throws DownloadException {
         Mock mockRequest = new Mock(HttpServletRequest.class);
         mockRequest.matchAndReturn("getRequestURI", SINGLE_RESOURCE);
@@ -103,6 +112,7 @@ public class TestPluginResourceDownload extends TestCase {
         mockResponse.verify();
     }
 
+    @Test
     public void testServeFileDoesNotCallSetContentTypeWithNullContentType() throws DownloadException {
         Mock mockRequest = new Mock(HttpServletRequest.class);
         mockRequest.matchAndReturn("getRequestURI", SINGLE_RESOURCE);

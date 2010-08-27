@@ -1,15 +1,18 @@
 package org.maera.plugin.test;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 import org.apache.commons.io.IOUtils;
+import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
 import java.net.URLClassLoader;
 
-public class TestPluginJarBuilder extends TestCase {
+import static org.junit.Assert.*;
 
+public class PluginJarBuilderTest {
+
+    @Test
     public void testBuild() throws Exception {
         File jar = new PluginJarBuilder("foo")
                 .addJava("my.Foo", "package my; public class Foo { public String hi() {return \"hi\";}}")

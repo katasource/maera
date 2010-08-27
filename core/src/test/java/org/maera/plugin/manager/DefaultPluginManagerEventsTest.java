@@ -1,6 +1,8 @@
 package org.maera.plugin.manager;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.maera.plugin.DefaultModuleDescriptorFactory;
 import org.maera.plugin.JarPluginArtifact;
 import org.maera.plugin.PluginAccessor;
@@ -29,14 +31,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DefaultPluginManagerEventsTest extends TestCase {
-    private DefaultPluginManager manager;
+import static org.junit.Assert.assertEquals;
+
+public class DefaultPluginManagerEventsTest {
+
     private RecordingListener listener;
+    private DefaultPluginManager manager;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         listener = new RecordingListener(
                 PluginEnabledEvent.class,
                 PluginDisabledEvent.class,
@@ -48,47 +51,81 @@ public class DefaultPluginManagerEventsTest extends TestCase {
         listener.reset();
     }
 
-    private DefaultPluginManager buildPluginManager(RecordingListener listener) throws Exception {
-        PluginEventManager pluginEventManager = new DefaultPluginEventManager();
-        pluginEventManager.register(listener);
+    @Test
+    public void testDisableModule() throws Exception {
+        manager.disablePluginModule("test.maera.plugin:bear");
 
-        DefaultModuleDescriptorFactory moduleDescriptorFactory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
-        moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
-        moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
-        moduleDescriptorFactory.addModuleDescriptor("vegetable", MockVegetableModuleDescriptor.class);
-
-        File pluginTempDirectory = DirectoryPluginLoaderUtils.copyTestPluginsToTempDirectory();
-        List<PluginLoader> pluginLoaders = buildPluginLoaders(pluginEventManager, pluginTempDirectory);
-
-        DefaultPluginManager manager = new DefaultPluginManager(new MemoryPluginPersistentStateStore(), pluginLoaders,
-                moduleDescriptorFactory, pluginEventManager);
-        manager.setPluginInstaller(new FilePluginInstaller(pluginTempDirectory));
-
-        return manager;
+        assertListEquals(listener.getEventClasses(), PluginModuleDisabledEvent.class);
+        assertListEquals(listener.getEventPluginOrModuleKeys(), "test.maera.plugin:bear");
     }
 
-    private List<PluginLoader> buildPluginLoaders(PluginEventManager pluginEventManager, File pluginTempDirectory) {
-        List<PluginLoader> pluginLoaders = new ArrayList<PluginLoader>();
-        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
-        pluginLoaders.add(new SinglePluginLoader("test-disabled-plugin.xml"));
-        DirectoryPluginLoader directoryPluginLoader = new DirectoryPluginLoader(
-                pluginTempDirectory,
-                Arrays.asList(new LegacyDynamicPluginFactory(PluginAccessor.Descriptor.FILENAME),
-                        new XmlDynamicPluginFactory("foo")),
-                pluginEventManager);
-        pluginLoaders.add(directoryPluginLoader);
-        return pluginLoaders;
+    @Test
+    public void testDisableModuleWithCannotDisableDoesNotFireEvent() throws Exception {
+        manager.disablePluginModule("test.maera.plugin:veg");
+        assertEquals(listener.getEventClasses().size(), 0);
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        // prevent resources being used until end of all tests
-        manager = null;
-        listener = null;
-        super.tearDown();
+    @Test
+    public void testDisablePlugin() throws Exception {
+        manager.disablePlugin("test.maera.plugin");
+
+        assertListEquals(listener.getEventClasses(),
+                PluginModuleDisabledEvent.class,
+                PluginModuleDisabledEvent.class,
+                PluginModuleDisabledEvent.class,
+                PluginDisabledEvent.class);
+        assertListEquals(listener.getEventPluginOrModuleKeys(),
+                "test.maera.plugin:veg",  // a  module that can't be individually disabled can still be disabled with the plugin
+                "test.maera.plugin:gold", // modules in reverse order to enable
+                "test.maera.plugin:bear",
+                "test.maera.plugin");
     }
 
-    public void ignoreInitialisationEvents() throws Exception {
+    @Test
+    public void testEnableDisabledByDefaultPlugin() throws Exception {
+        manager.enablePlugin("test.disabled.plugin");
+
+        assertListEquals(listener.getEventClasses(), PluginEnabledEvent.class);
+        assertListEquals(listener.getEventPluginOrModuleKeys(), "test.disabled.plugin");
+
+        listener.reset();
+        manager.enablePluginModule("test.disabled.plugin:gold");
+
+        assertListEquals(listener.getEventClasses(), PluginModuleEnabledEvent.class);
+        assertListEquals(listener.getEventPluginOrModuleKeys(), "test.disabled.plugin:gold");
+    }
+
+    @Test
+    public void testEnableModule() throws Exception {
+        manager.disablePluginModule("test.maera.plugin:bear");
+        listener.reset();
+        manager.enablePluginModule("test.maera.plugin:bear");
+
+        assertListEquals(listener.getEventClasses(), PluginModuleEnabledEvent.class);
+        assertListEquals(listener.getEventPluginOrModuleKeys(), "test.maera.plugin:bear");
+    }
+
+    @Test
+    public void testEnablePlugin() throws Exception {
+        manager.disablePlugin("test.maera.plugin");
+        listener.reset();
+        manager.enablePlugin("test.maera.plugin");
+
+        assertListEquals(listener.getEventClasses(),
+                PluginModuleEnabledEvent.class,
+                PluginModuleEnabledEvent.class,
+                PluginModuleEnabledEvent.class,
+                PluginEnabledEvent.class);
+        assertListEquals(listener.getEventPluginOrModuleKeys(),
+                "test.maera.plugin:bear",
+                "test.maera.plugin:gold",
+                "test.maera.plugin:veg",
+                "test.maera.plugin");
+    }
+
+    @Test
+    @Ignore
+    public void testInitialisationEvents() throws Exception {
         DefaultPluginManager manager = buildPluginManager(listener);
         manager.init();
 
@@ -112,73 +149,9 @@ public class DefaultPluginManagerEventsTest extends TestCase {
                 "test.maera.plugin.classloaded2");
     }
 
-    public void testDisablePlugin() throws Exception {
-        manager.disablePlugin("test.maera.plugin");
-
-        assertListEquals(listener.getEventClasses(),
-                PluginModuleDisabledEvent.class,
-                PluginModuleDisabledEvent.class,
-                PluginModuleDisabledEvent.class,
-                PluginDisabledEvent.class);
-        assertListEquals(listener.getEventPluginOrModuleKeys(),
-                "test.maera.plugin:veg",  // a  module that can't be individually disabled can still be disabled with the plugin
-                "test.maera.plugin:gold", // modules in reverse order to enable
-                "test.maera.plugin:bear",
-                "test.maera.plugin");
-    }
-
-    public void testEnablePlugin() throws Exception {
-        manager.disablePlugin("test.maera.plugin");
-        listener.reset();
-        manager.enablePlugin("test.maera.plugin");
-
-        assertListEquals(listener.getEventClasses(),
-                PluginModuleEnabledEvent.class,
-                PluginModuleEnabledEvent.class,
-                PluginModuleEnabledEvent.class,
-                PluginEnabledEvent.class);
-        assertListEquals(listener.getEventPluginOrModuleKeys(),
-                "test.maera.plugin:bear",
-                "test.maera.plugin:gold",
-                "test.maera.plugin:veg",
-                "test.maera.plugin");
-    }
-
-    public void testEnableDisabledByDefaultPlugin() throws Exception {
-        manager.enablePlugin("test.disabled.plugin");
-
-        assertListEquals(listener.getEventClasses(), PluginEnabledEvent.class);
-        assertListEquals(listener.getEventPluginOrModuleKeys(), "test.disabled.plugin");
-
-        listener.reset();
-        manager.enablePluginModule("test.disabled.plugin:gold");
-
-        assertListEquals(listener.getEventClasses(), PluginModuleEnabledEvent.class);
-        assertListEquals(listener.getEventPluginOrModuleKeys(), "test.disabled.plugin:gold");
-    }
-
-    public void testDisableModule() throws Exception {
-        manager.disablePluginModule("test.maera.plugin:bear");
-
-        assertListEquals(listener.getEventClasses(), PluginModuleDisabledEvent.class);
-        assertListEquals(listener.getEventPluginOrModuleKeys(), "test.maera.plugin:bear");
-    }
-
-    public void testDisableModuleWithCannotDisableDoesNotFireEvent() throws Exception {
-        manager.disablePluginModule("test.maera.plugin:veg");
-        assertEquals(listener.getEventClasses().size(), 0);
-    }
-
-    public void testEnableModule() throws Exception {
-        manager.disablePluginModule("test.maera.plugin:bear");
-        listener.reset();
-        manager.enablePluginModule("test.maera.plugin:bear");
-
-        assertListEquals(listener.getEventClasses(), PluginModuleEnabledEvent.class);
-        assertListEquals(listener.getEventPluginOrModuleKeys(), "test.maera.plugin:bear");
-    }
-
-    public void ignoreInstallPlugin() throws Exception {
+    @Test
+    @Ignore
+    public void testInstallPlugin() throws Exception {
         // have to uninstall one of the directory plugins
         manager.uninstall(manager.getPlugin("test.maera.plugin.classloaded2"));
         listener.reset();
@@ -191,13 +164,47 @@ public class DefaultPluginManagerEventsTest extends TestCase {
                 PluginEnabledEvent.class);
     }
 
-    public void ignoreUninstallPlugin() throws Exception {
+    @Test
+    @Ignore
+    public void testUninstallPlugin() throws Exception {
         // have to uninstall one of the directory plugins
         manager.uninstall(manager.getPlugin("test.maera.plugin.classloaded2"));
 
         assertListEquals(listener.getEventClasses(),
                 PluginModuleDisabledEvent.class,
                 PluginDisabledEvent.class);
+    }
+
+    private List<PluginLoader> buildPluginLoaders(PluginEventManager pluginEventManager, File pluginTempDirectory) {
+        List<PluginLoader> pluginLoaders = new ArrayList<PluginLoader>();
+        pluginLoaders.add(new SinglePluginLoader("test-maera-plugin.xml"));
+        pluginLoaders.add(new SinglePluginLoader("test-disabled-plugin.xml"));
+        DirectoryPluginLoader directoryPluginLoader = new DirectoryPluginLoader(
+                pluginTempDirectory,
+                Arrays.asList(new LegacyDynamicPluginFactory(PluginAccessor.Descriptor.FILENAME),
+                        new XmlDynamicPluginFactory("foo")),
+                pluginEventManager);
+        pluginLoaders.add(directoryPluginLoader);
+        return pluginLoaders;
+    }
+
+    private DefaultPluginManager buildPluginManager(RecordingListener listener) throws Exception {
+        PluginEventManager pluginEventManager = new DefaultPluginEventManager();
+        pluginEventManager.register(listener);
+
+        DefaultModuleDescriptorFactory moduleDescriptorFactory = new DefaultModuleDescriptorFactory(new DefaultHostContainer());
+        moduleDescriptorFactory.addModuleDescriptor("animal", MockAnimalModuleDescriptor.class);
+        moduleDescriptorFactory.addModuleDescriptor("mineral", MockMineralModuleDescriptor.class);
+        moduleDescriptorFactory.addModuleDescriptor("vegetable", MockVegetableModuleDescriptor.class);
+
+        File pluginTempDirectory = DirectoryPluginLoaderUtils.copyTestPluginsToTempDirectory();
+        List<PluginLoader> pluginLoaders = buildPluginLoaders(pluginEventManager, pluginTempDirectory);
+
+        DefaultPluginManager manager = new DefaultPluginManager(new MemoryPluginPersistentStateStore(), pluginLoaders,
+                moduleDescriptorFactory, pluginEventManager);
+        manager.setPluginInstaller(new FilePluginInstaller(pluginTempDirectory));
+
+        return manager;
     }
 
     // yeah, the expected values should come first in jUnit, but varargs are so convenient...

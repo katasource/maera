@@ -1,6 +1,7 @@
 package org.maera.plugin.servlet.filter;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.servlet.ServletModuleManager;
 import org.mockito.Mock;
 
@@ -10,23 +11,27 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-public class TestServletFilterModuleContainerFilter extends TestCase {
+public class ServletFilterModuleContainerFilterTest {
+
+    @Mock
+    private FilterChain filterChain;
     @Mock
     private ServletModuleManager moduleManager;
     @Mock
     private HttpServletRequest request;
     @Mock
     private HttpServletResponse response;
-    @Mock
-    private FilterChain filterChain;
 
+    @Before
     public void setUp() {
         initMocks(this);
     }
 
+    @Test
     public void testFilter() throws IOException, ServletException {
         when(moduleManager.getFilters(any(FilterLocation.class), eq("/myfilter"), any(FilterConfig.class), eq(FilterDispatcherCondition.REQUEST))).thenReturn(Collections.<Filter>emptyList());
 
@@ -39,6 +44,7 @@ public class TestServletFilterModuleContainerFilter extends TestCase {
         verify(filterChain).doFilter(any(ServletRequest.class), any(ServletResponse.class));
     }
 
+    @Test
     public void testFilterNoDispatcher() throws IOException, ServletException {
         when(moduleManager.getFilters(any(FilterLocation.class), eq("/myfilter"), any(FilterConfig.class), eq(FilterDispatcherCondition.REQUEST))).thenReturn(Collections.<Filter>emptyList());
 
@@ -51,6 +57,7 @@ public class TestServletFilterModuleContainerFilter extends TestCase {
         }
     }
 
+    @Test
     public void testNoServletModuleManager() throws IOException, ServletException {
         MyFilter filter = new MyFilter(null);
         filter.doFilter(request, response, filterChain);
@@ -58,10 +65,10 @@ public class TestServletFilterModuleContainerFilter extends TestCase {
     }
 
     static class MyFilter extends ServletFilterModuleContainerFilter {
-        @Mock
-        private FilterConfig filterConfig;
 
         private final ServletModuleManager moduleManager;
+        @Mock
+        private FilterConfig filterConfig;
 
         public MyFilter(ServletModuleManager moduleManager) throws ServletException {
             initMocks(this);
@@ -77,10 +84,10 @@ public class TestServletFilterModuleContainerFilter extends TestCase {
     }
 
     static class MyFilterNoDispatcher extends ServletFilterModuleContainerFilter {
-        @Mock
-        private FilterConfig filterConfig;
 
         private final ServletModuleManager moduleManager;
+        @Mock
+        private FilterConfig filterConfig;
 
         public MyFilterNoDispatcher(ServletModuleManager moduleManager) throws ServletException {
             initMocks(this);

@@ -1,6 +1,7 @@
 package org.maera.plugin.osgi.factory.transform.stage;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.JarPluginArtifact;
 import org.maera.plugin.PluginAccessor;
 import org.maera.plugin.osgi.SomeInterface;
@@ -16,22 +17,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class TestScanDescriptorForHostClassesStage extends TestCase {
+public class ScanDescriptorForHostClassesStageTest {
+
     private OsgiContainerManager osgiContainerManager;
     private HostComponentRegistration registration;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
+    @Before
+    public void setUp() throws Exception {
         osgiContainerManager = mock(OsgiContainerManager.class);
         registration = mock(HostComponentRegistration.class);
         when(osgiContainerManager.getRegisteredServices()).thenReturn(new ServiceReference[0]);
     }
 
+    @Test
     public void testTransform() throws Exception {
         final File plugin = new PluginJarBuilder("plugin")
                 .addFormattedResource("maera-plugin.xml",
@@ -51,6 +53,7 @@ public class TestScanDescriptorForHostClassesStage extends TestCase {
         assertTrue(context.getExtraImports().contains("org.maera.plugin.osgi"));
     }
 
+    @Test
     public void testTransformButPackageInPlugin() throws Exception {
         final File plugin = new PluginJarBuilder("plugin")
                 .addFormattedResource("maera-plugin.xml",
@@ -72,6 +75,7 @@ public class TestScanDescriptorForHostClassesStage extends TestCase {
         assertTrue(!context.getExtraImports().contains("org.maera.plugin.osgi"));
     }
 
+    @Test
     public void testTransformIgnoreUnknown() throws Exception {
         final File plugin = new PluginJarBuilder("plugin")
                 .addFormattedResource("maera-plugin.xml",
@@ -91,6 +95,7 @@ public class TestScanDescriptorForHostClassesStage extends TestCase {
         assertFalse(context.getExtraImports().contains("blat"));
     }
 
+    @Test
     public void testTransformWithHostComponentConstructorReferences() throws Exception {
         when(registration.getMainInterfaceClasses()).thenReturn(new Class<?>[]{SomeInterface.class});
         List<HostComponentRegistration> registrations = new ArrayList<HostComponentRegistration>(1);
@@ -115,6 +120,7 @@ public class TestScanDescriptorForHostClassesStage extends TestCase {
         assertEquals(registration, context.getRequiredHostComponents().iterator().next());
     }
 
+    @Test
     public void testTransformWithHostComponentSetterReferences() throws Exception {
         when(registration.getMainInterfaceClasses()).thenReturn(new Class<?>[]{SomeInterface.class});
         List<HostComponentRegistration> registrations = new ArrayList<HostComponentRegistration>(1);

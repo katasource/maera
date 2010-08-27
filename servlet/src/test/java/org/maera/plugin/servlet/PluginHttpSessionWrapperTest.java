@@ -1,16 +1,20 @@
 package org.maera.plugin.servlet;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 import org.maera.plugin.servlet.util.ClassLoaderStack;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
 
+import static org.junit.Assert.assertSame;
+
 /**
  * @since 2.3.9
  */
-public class TestPluginHttpSessionWrapper extends TestCase {
+public class PluginHttpSessionWrapperTest {
+
+    @Test
     public void testGetAttribute() throws Exception {
         // Mock the Session
         MockSession mockSession = new MockSession(Thread.currentThread().getContextClassLoader());
@@ -37,10 +41,22 @@ public class TestPluginHttpSessionWrapper extends TestCase {
     }
 
     private class MockSession implements HttpSession {
+
         private final ClassLoader expectedClassLoader;
 
         public MockSession(final ClassLoader expectedClassLoader) {
             this.expectedClassLoader = expectedClassLoader;
+        }
+
+        public Object getAttribute(final String name) {
+            // We just care that the context ClassLoader is correct
+            assertSame(expectedClassLoader, Thread.currentThread().getContextClassLoader());
+
+            return null;
+        }
+
+        public Enumeration getAttributeNames() {
+            return null;
         }
 
         public long getCreationTime() {
@@ -55,15 +71,12 @@ public class TestPluginHttpSessionWrapper extends TestCase {
             return 0;
         }
 
-        public ServletContext getServletContext() {
-            return null;
-        }
-
-        public void setMaxInactiveInterval(final int interval) {
-        }
-
         public int getMaxInactiveInterval() {
             return 0;
+        }
+
+        public ServletContext getServletContext() {
+            return null;
         }
 
         @SuppressWarnings({"deprecation"})
@@ -71,18 +84,7 @@ public class TestPluginHttpSessionWrapper extends TestCase {
             return null;
         }
 
-        public Object getAttribute(final String name) {
-            // We just care that the context ClassLoader is correct
-            assertSame(expectedClassLoader, Thread.currentThread().getContextClassLoader());
-
-            return null;
-        }
-
         public Object getValue(final String name) {
-            return null;
-        }
-
-        public Enumeration getAttributeNames() {
             return null;
         }
 
@@ -90,7 +92,11 @@ public class TestPluginHttpSessionWrapper extends TestCase {
             return new String[0];
         }
 
-        public void setAttribute(final String name, final Object value) {
+        public void invalidate() {
+        }
+
+        public boolean isNew() {
+            return false;
         }
 
         public void putValue(final String name, final Object value) {
@@ -102,11 +108,10 @@ public class TestPluginHttpSessionWrapper extends TestCase {
         public void removeValue(final String name) {
         }
 
-        public void invalidate() {
+        public void setAttribute(final String name, final Object value) {
         }
 
-        public boolean isNew() {
-            return false;
+        public void setMaxInactiveInterval(final int interval) {
         }
     }
 }

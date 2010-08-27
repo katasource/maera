@@ -1,11 +1,15 @@
 package org.maera.plugin.main;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-public class TestPluginsConfigurationBuilder extends TestCase {
+import static org.junit.Assert.assertEquals;
+
+public class PluginsConfigurationBuilderTest {
+
+    @Test
     public void testHotDeploySetting() {
         PluginsConfiguration config = new PluginsConfigurationBuilder()
                 .hotDeployPollingFrequency(2, TimeUnit.SECONDS)

@@ -1,7 +1,9 @@
 package org.maera.plugin.servlet.download.plugin;
 
 import com.mockobjects.dynamic.Mock;
-import junit.framework.TestCase;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.maera.plugin.ModuleDescriptor;
 import org.maera.plugin.event.events.PluginModuleDisabledEvent;
 import org.maera.plugin.event.events.PluginModuleEnabledEvent;
@@ -21,44 +23,40 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Collections;
 
-public class TestPluggableDownloadStrategy extends TestCase {
+public class PluggableDownloadStrategyTest extends Assert {
+
     private PluggableDownloadStrategy strategy;
 
-    protected void setUp() throws Exception {
-        super.setUp();
+    @Before
+    public void setUp() throws Exception {
         strategy = new PluggableDownloadStrategy(new DefaultPluginEventManager());
     }
 
-    public void testRegister() throws Exception {
-        strategy.register("monkey.key", new StubDownloadStrategy("/monkey", "Bananas"));
+    @Test
+    public void testPluginModuleDisabled() throws Exception {
+        ModuleDescriptor module = new DownloadStrategyModuleDescriptor(getDefaultModuleClassFactory()) {
 
-        assertTrue(strategy.matches("/monkey/something"));
+            public String getCompleteKey() {
+                return "jungle.plugin:lion-strategy";
+            }
 
-        StringWriter result = new StringWriter();
-        Mock mockResponse = new Mock(HttpServletResponse.class);
-        mockResponse.expectAndReturn("getWriter", new PrintWriter(result));
-        Mock mockRequest = new Mock(HttpServletRequest.class);
-        mockRequest.expectAndReturn("getRequestURI", "/monkey/something");
+            public DownloadStrategy getModule() {
+                return new StubDownloadStrategy("/lion", "ROAR!");
+            }
+        };
 
-        strategy.serveFile((HttpServletRequest) mockRequest.proxy(), (HttpServletResponse) mockResponse.proxy());
-        assertEquals("Bananas\n", result.toString());
+        strategy.pluginModuleEnabled(new PluginModuleEnabledEvent(module));
+        assertTrue(strategy.matches("/lion/something"));
+
+        strategy.pluginModuleDisabled(new PluginModuleDisabledEvent(module));
+        assertFalse(strategy.matches("/lion/something"));
     }
 
-    public void testUnregister() throws Exception {
-        strategy.register("monkey.key", new StubDownloadStrategy("/monkey", "Bananas"));
-        strategy.unregister("monkey.key");
-
-        assertFalse(strategy.matches("/monkey/something"));
-    }
-
-    protected ModuleFactory getDefaultModuleClassFactory() {
-        return new PrefixDelegatingModuleFactory(
-                Collections.<PrefixModuleFactory>singleton(new ClassPrefixModuleFactory(new DefaultHostContainer())));
-    }
-
+    @Test
     public void testPluginModuleEnabled() throws Exception {
 
         ModuleDescriptor module = new DownloadStrategyModuleDescriptor(getDefaultModuleClassFactory()) {
+
             public String getCompleteKey() {
                 return "jungle.plugin:lion-strategy";
             }
@@ -82,26 +80,34 @@ public class TestPluggableDownloadStrategy extends TestCase {
         assertEquals("ROAR!\n", result.toString());
     }
 
-    public void testPluginModuleDisabled() throws Exception {
-        ModuleDescriptor module = new DownloadStrategyModuleDescriptor(getDefaultModuleClassFactory()) {
-            public String getCompleteKey() {
-                return "jungle.plugin:lion-strategy";
-            }
+    @Test
+    public void testRegister() throws Exception {
+        strategy.register("monkey.key", new StubDownloadStrategy("/monkey", "Bananas"));
 
-            public DownloadStrategy getModule() {
-                return new StubDownloadStrategy("/lion", "ROAR!");
-            }
-        };
+        assertTrue(strategy.matches("/monkey/something"));
 
-        strategy.pluginModuleEnabled(new PluginModuleEnabledEvent(module));
-        assertTrue(strategy.matches("/lion/something"));
+        StringWriter result = new StringWriter();
+        Mock mockResponse = new Mock(HttpServletResponse.class);
+        mockResponse.expectAndReturn("getWriter", new PrintWriter(result));
+        Mock mockRequest = new Mock(HttpServletRequest.class);
+        mockRequest.expectAndReturn("getRequestURI", "/monkey/something");
 
-        strategy.pluginModuleDisabled(new PluginModuleDisabledEvent(module));
-        assertFalse(strategy.matches("/lion/something"));
+        strategy.serveFile((HttpServletRequest) mockRequest.proxy(), (HttpServletResponse) mockResponse.proxy());
+        assertEquals("Bananas\n", result.toString());
     }
 
+    @Test
+    public void testUnregister() throws Exception {
+        strategy.register("monkey.key", new StubDownloadStrategy("/monkey", "Bananas"));
+        strategy.unregister("monkey.key");
+
+        assertFalse(strategy.matches("/monkey/something"));
+    }
+
+    @Test
     public void testUnregisterPluginModule() throws Exception {
         ModuleDescriptor module = new DownloadStrategyModuleDescriptor(getDefaultModuleClassFactory()) {
+
             public String getCompleteKey() {
                 return "jungle.plugin:lion-strategy";
             }
@@ -118,9 +124,15 @@ public class TestPluggableDownloadStrategy extends TestCase {
         assertFalse(strategy.matches("/lion/something"));
     }
 
+    protected ModuleFactory getDefaultModuleClassFactory() {
+        return new PrefixDelegatingModuleFactory(
+                Collections.<PrefixModuleFactory>singleton(new ClassPrefixModuleFactory(new DefaultHostContainer())));
+    }
+
     private static class StubDownloadStrategy implements DownloadStrategy {
-        private final String urlPattern;
+
         private final String output;
+        private final String urlPattern;
 
         public StubDownloadStrategy(String urlPattern, String output) {
             this.urlPattern = urlPattern;
