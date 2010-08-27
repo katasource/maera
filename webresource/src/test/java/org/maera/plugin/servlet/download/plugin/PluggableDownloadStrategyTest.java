@@ -1,6 +1,7 @@
 package org.maera.plugin.servlet.download.plugin;
 
 import com.mockobjects.dynamic.Mock;
+import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -77,7 +78,7 @@ public class PluggableDownloadStrategyTest extends Assert {
         mockRequest.expectAndReturn("getRequestURI", "/lion/something");
 
         strategy.serveFile((HttpServletRequest) mockRequest.proxy(), (HttpServletResponse) mockResponse.proxy());
-        assertEquals("ROAR!\n", result.toString());
+        assertEquals("ROAR!" + IOUtils.LINE_SEPARATOR, result.toString());
     }
 
     @Test
@@ -93,7 +94,7 @@ public class PluggableDownloadStrategyTest extends Assert {
         mockRequest.expectAndReturn("getRequestURI", "/monkey/something");
 
         strategy.serveFile((HttpServletRequest) mockRequest.proxy(), (HttpServletResponse) mockResponse.proxy());
-        assertEquals("Bananas\n", result.toString());
+        assertEquals("Bananas" + IOUtils.LINE_SEPARATOR, result.toString());
     }
 
     @Test
