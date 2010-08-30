@@ -33,8 +33,8 @@
     </ciManagement>
 
     <scm>
-        <connection>http://maera.googlecode.com/svn/trunk</connection>
-        <developerConnection>https://maera.googlecode.com/svn/trunk</developerConnection>
+        <connection>scm:svn:http://maera.googlecode.com/svn/trunk</connection>
+        <developerConnection>scm:svn:https://maera.googlecode.com/svn/trunk</developerConnection>
         <url>http://maera.googlecode.com/svn/trunk</url>
     </scm>
 
