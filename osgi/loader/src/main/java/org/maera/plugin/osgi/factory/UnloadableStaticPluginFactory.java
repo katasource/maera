@@ -2,7 +2,11 @@ package org.maera.plugin.osgi.factory;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
-import org.maera.plugin.*;
+import org.maera.plugin.JarPluginArtifact;
+import org.maera.plugin.ModuleDescriptorFactory;
+import org.maera.plugin.Plugin;
+import org.maera.plugin.PluginArtifact;
+import org.maera.plugin.PluginParseException;
 import org.maera.plugin.factories.PluginFactory;
 import org.maera.plugin.impl.UnloadablePlugin;
 import org.maera.plugin.loaders.classloading.DeploymentUnit;
@@ -16,7 +20,7 @@ import java.io.InputStream;
  * to a directory that only accepts OSGi plugins.  This should be placed last in the chain of plugin factories and
  * only if {@link org.maera.plugin.factories.LegacyDynamicPluginFactory} is not used.
  *
- * @since 2.2.3
+ * @since 0.1
  */
 public class UnloadableStaticPluginFactory implements PluginFactory {
 

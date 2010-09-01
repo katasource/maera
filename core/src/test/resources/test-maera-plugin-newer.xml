@@ -4,7 +4,7 @@
         </description>
         <version>1.1</version>
         <application-version min="3.0" max="3.1"/>
-        <vendor name="Atlassian Software Systems Pty Ltd" url="http://www.atlassian.com"/>
+        <vendor name="Katasoft, Inc." url="http://www.katasoft.com"/>
         <param name="arbitrary.parameter">brown</param>
     </plugin-info>
 

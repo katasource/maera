@@ -3,9 +3,10 @@ package org.maera.plugin.osgi.factory.transform;
 /**
  * Performes an stage in the transformation from a JAR to an OSGi bundle
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public interface TransformStage {
+
     /**
      * Transforms the jar by operating on the context
      *

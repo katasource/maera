@@ -14,9 +14,10 @@ import static org.maera.plugin.util.validation.ValidationPattern.test;
 /**
  * Represents the data in a component-import tag in the plugin descriptor
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class ComponentImport {
+
     private final String key;
     private final Set<String> interfaces;
     private final String filter;

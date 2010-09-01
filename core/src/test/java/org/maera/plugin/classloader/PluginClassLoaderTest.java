@@ -1,6 +1,5 @@
 package org.maera.plugin.classloader;
 
-import com.opensymphony.util.BeanUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
@@ -14,7 +13,10 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * To make this test pass in your IDE, make sure you run Maven to build the necessary plugins and copy
@@ -133,7 +135,9 @@ public class PluginClassLoaderTest {
                 Class.forName("org.maera.plugin.mock.MockVersionedClass", true, pluginClassLoader);
         Object instance = mockVersionedClass.newInstance();
 
+        Object value = mockVersionedClass.getMethod("getVersion", (Class[])null).invoke(instance, (Object[])null);
+        
         assertEquals("PluginClassLoader is searching the parent classloader for classes before inner JARs",
-                2, BeanUtils.getValue(instance, "version"));
+                2, value);
     }
 }

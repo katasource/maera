@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.maera</groupId>
@@ -37,43 +38,85 @@
                             <goal>copy</goal>
                         </goals>
                         <configuration>
+                            <outputDirectory>${frameworkBundleDirectory}</outputDirectory>
                             <artifactItems>
+                                <!-- Needed by the spring aop bundle: -->
+                                <artifactItem>
+                                    <groupId>org.aopalliance</groupId>
+                                    <artifactId>com.springsource.org.aopalliance</artifactId>
+                                    <version>${aopalliance.version}</version>
+                                </artifactItem>
+
+                                <!-- Needed by the maera-osgi-bridge bundle: -->
+                                <artifactItem>
+                                    <groupId>org.apache.commons</groupId>
+                                    <artifactId>com.springsource.org.apache.commons.lang</artifactId>
+                                    <version>2.4.0</version>
+                                </artifactItem>
+                                <!-- <artifactItem>
+                                    <groupId>org.eclipse.gemini.blueprint</groupId>
+                                    <artifactId>gemini-blueprint-annotation</artifactId>
+                                    <version>${gemini.blueprint.version}</version>
+                                </artifactItem> -->
+                                <artifactItem>
+                                    <groupId>org.eclipse.gemini.blueprint</groupId>
+                                    <artifactId>gemini-blueprint-core</artifactId>
+                                    <version>${gemini.blueprint.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.eclipse.gemini.blueprint</groupId>
+                                    <artifactId>gemini-blueprint-extender</artifactId>
+                                    <version>${gemini.blueprint.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.eclipse.gemini.blueprint</groupId>
+                                    <artifactId>gemini-blueprint-io</artifactId>
+                                    <version>${gemini.blueprint.version}</version>
+                                </artifactItem>
+                                <!-- Needed by the below slfj4 JCL bundle: -->
+                                <artifactItem>
+                                    <groupId>org.slf4j</groupId>
+                                    <artifactId>com.springsource.slf4j.api</artifactId>
+                                    <version>${slf4j.version}</version>
+                                </artifactItem>
+                                <!-- Needed by the Spring bundles: -->
+                                <artifactItem>
+                                    <groupId>org.slf4j</groupId>
+                                    <artifactId>com.springsource.slf4j.org.apache.commons.logging</artifactId>
+                                    <version>${slf4j.version}</version>
+                                </artifactItem>
                                 <artifactItem>
                                     <groupId>org.springframework</groupId>
-                                    <artifactId>spring</artifactId>
-                                    <version>${springVersion}</version>
+                                    <artifactId>org.springframework.aop</artifactId>
+                                    <version>${spring.version}</version>
                                 </artifactItem>
                                 <artifactItem>
-                                    <groupId>org.springframework.osgi</groupId>
-                                    <artifactId>spring-osgi-annotation</artifactId>
-                                    <version>${springDmVersion}</version>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>org.springframework.asm</artifactId>
+                                    <version>${spring.version}</version>
                                 </artifactItem>
                                 <artifactItem>
-                                    <groupId>org.springframework.osgi</groupId>
-                                    <artifactId>spring-osgi-core</artifactId>
-                                    <version>${springDmVersion}</version>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>org.springframework.beans</artifactId>
+                                    <version>${spring.version}</version>
                                 </artifactItem>
                                 <artifactItem>
-                                    <groupId>org.springframework.osgi</groupId>
-                                    <artifactId>spring-osgi-extender</artifactId>
-                                    <version>${springDmVersion}</version>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>org.springframework.core</artifactId>
+                                    <version>${spring.version}</version>
                                 </artifactItem>
                                 <artifactItem>
-                                    <groupId>org.springframework.osgi</groupId>
-                                    <artifactId>spring-osgi-io</artifactId>
-                                    <version>${springDmVersion}</version>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>org.springframework.context</artifactId>
+                                    <version>${spring.version}</version>
                                 </artifactItem>
-                                <!--  The following below was causing OSGi dependency isses after the
-                                      fork to Maera.  We assume that Atlassian included this to support their
-                                      own web mechanisms, since most Atlassian products allow plugins to add
-                                      web views via the Velocity Template Language.
                                 <artifactItem>
-                                    <groupId>com.atlassian.bundles</groupId>
-                                    <artifactId>velocity</artifactId>
-                                    <version>1.6.2-1</version>
-                                </artifactItem> -->
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>org.springframework.expression</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+
                             </artifactItems>
-                            <outputDirectory>${frameworkBundleDirectory}</outputDirectory>
                         </configuration>
                     </execution>
                     <execution>
@@ -162,30 +205,15 @@
         <dependency>
             <groupId>biz.aQute</groupId>
             <artifactId>bndlib</artifactId>
-            <version>0.0.255</version>
         </dependency>
         <!-- Required by dom4J at runtime (used by the ScanDescriptorForHostClassesStage implementation): -->
         <dependency>
-            <groupId>jaxen</groupId>
-            <artifactId>jaxen</artifactId>
+            <groupId>org.jaxen</groupId>
+            <artifactId>com.springsource.org.jaxen</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <version>${springVersion}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
-            <version>${springVersion}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>${springVersion}</version>
-            <scope>provided</scope>
+            <artifactId>org.springframework.context</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.felix</groupId>
@@ -194,12 +222,10 @@
         <dependency>
             <groupId>org.twdata.pkgscanner</groupId>
             <artifactId>package-scanner</artifactId>
-            <version>0.9.4</version>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>1.4</version>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>com.springsource.org.apache.commons.io</artifactId>
         </dependency>
         <dependency>
             <groupId>org.maera</groupId>
@@ -225,18 +251,22 @@
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- This tests the ability of Spring DM to access xerces due to lame service finding algorithms in JAXP -->
+        <!-- This tests the ability of Gemini Blueprint to access xerces due to lame service finding algorithms in JAXP -->
         <dependency>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
+            <groupId>org.apache.xerces</groupId>
+            <artifactId>com.springsource.org.apache.xerces</artifactId>
             <version>2.9.1</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.xmlcommons</groupId>
+                    <artifactId>com.springsource.org.apache.xmlcommons</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>provided</scope>
+            <artifactId>com.springsource.javax.servlet</artifactId>
         </dependency>
     </dependencies>
 </project>

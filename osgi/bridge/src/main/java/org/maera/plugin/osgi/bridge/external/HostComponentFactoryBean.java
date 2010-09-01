@@ -1,13 +1,17 @@
 package org.maera.plugin.osgi.bridge.external;
 
 import org.apache.commons.lang.Validate;
+import org.eclipse.gemini.blueprint.context.BundleContextAware;
 import org.maera.plugin.PluginException;
-import org.osgi.framework.*;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceEvent;
+import org.osgi.framework.ServiceListener;
+import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.osgi.context.BundleContextAware;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -20,9 +24,10 @@ import static org.osgi.framework.ServiceEvent.REGISTERED;
  * Simple factory bean to resolve host components.  Since we know host components won't change during the bundle's
  * lifetime, we can use a direct reference instead of the fancy proxy stuff from Spring DM.
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class HostComponentFactoryBean implements FactoryBean, BundleContextAware, InitializingBean {
+
     private BundleContext bundleContext;
     private String filter;
     private Object service;

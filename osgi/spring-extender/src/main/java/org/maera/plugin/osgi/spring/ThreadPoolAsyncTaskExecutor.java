@@ -2,8 +2,10 @@ package org.maera.plugin.osgi.spring;
 
 import org.springframework.core.task.AsyncTaskExecutor;
 
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -11,9 +13,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Executes spring tasks using a cached thread pool that expands as necessary.  Overrides the default Spring executor
  * that spawns a new thread for every application context creation.
  *
- * @since 2.5.0
+ * @since 0.1
  */
 public class ThreadPoolAsyncTaskExecutor implements AsyncTaskExecutor {
+
     private final ExecutorService executor = Executors.newCachedThreadPool(new NamedThreadFactory());
 
     /**
@@ -34,6 +37,16 @@ public class ThreadPoolAsyncTaskExecutor implements AsyncTaskExecutor {
      */
     public void execute(Runnable task) {
         this.execute(task, -1);
+    }
+
+    @Override
+    public Future<?> submit(Runnable runnable) {
+        return executor.submit(runnable);
+    }
+
+    @Override
+    public <T> Future<T> submit(Callable<T> tCallable) {
+        return executor.submit(tCallable);
     }
 
     /**

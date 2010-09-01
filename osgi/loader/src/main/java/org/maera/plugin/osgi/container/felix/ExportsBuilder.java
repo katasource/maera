@@ -15,7 +15,11 @@ import org.twdata.pkgscanner.ExportPackage;
 import org.twdata.pkgscanner.PackageScanner;
 
 import javax.servlet.ServletContext;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,10 +27,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.jar.Manifest;
 
-import static org.twdata.pkgscanner.PackageScanner.*;
+import static org.twdata.pkgscanner.PackageScanner.exclude;
+import static org.twdata.pkgscanner.PackageScanner.include;
+import static org.twdata.pkgscanner.PackageScanner.jars;
+import static org.twdata.pkgscanner.PackageScanner.packages;
 
 /**
  * Builds the OSGi package exports string.  Uses a file to cache the scanned results, keyed by the application version.
+ *
+ * @since 0.1
  */
 class ExportsBuilder {
 

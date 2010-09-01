@@ -5,8 +5,11 @@ import org.maera.plugin.osgi.hostcomponents.PropertyBuilder;
 
 /**
  * Default instance builder for host components
+ *
+ * @since 0.1
  */
 class DefaultInstanceBuilder implements InstanceBuilder {
+    
     private Registration registration;
 
     public DefaultInstanceBuilder(Registration registration) {

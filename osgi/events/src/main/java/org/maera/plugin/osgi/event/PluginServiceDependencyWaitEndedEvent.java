@@ -5,9 +5,10 @@ import org.osgi.framework.Filter;
 /**
  * Event for when a plugin OSGi service dependency that the system was waiting for has been found
  *
- * @since 2.2.1
+ * @since 0.1
  */
 public class PluginServiceDependencyWaitEndedEvent extends AbstractPluginServiceDependencyWaitEvent {
+    
     private final long elapsedTime;
 
     public PluginServiceDependencyWaitEndedEvent(String pluginKey, String beanName, Filter filter, long elapsedTime) {

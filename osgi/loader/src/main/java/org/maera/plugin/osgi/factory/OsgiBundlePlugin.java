@@ -1,14 +1,22 @@
 package org.maera.plugin.osgi.factory;
 
 import org.apache.commons.lang.Validate;
-import org.maera.plugin.*;
+import org.maera.plugin.ModuleDescriptor;
+import org.maera.plugin.PluginException;
+import org.maera.plugin.PluginInformation;
+import org.maera.plugin.PluginState;
+import org.maera.plugin.Resourced;
 import org.maera.plugin.elements.ResourceDescriptor;
 import org.maera.plugin.elements.ResourceLocation;
 import org.maera.plugin.event.PluginEventManager;
 import org.maera.plugin.impl.AbstractPlugin;
 import org.maera.plugin.osgi.util.BundleClassLoaderAccessor;
 import org.maera.plugin.util.resource.AlternativeDirectoryResourceLoader;
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
+import org.osgi.framework.SynchronousBundleListener;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -19,6 +27,8 @@ import java.util.List;
 
 /**
  * Plugin that wraps an OSGi bundle that has no plugin descriptor.
+ *
+ * @since 0.1
  */
 public class OsgiBundlePlugin extends AbstractPlugin {
 

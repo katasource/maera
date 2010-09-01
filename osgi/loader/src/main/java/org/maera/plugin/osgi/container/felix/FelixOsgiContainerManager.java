@@ -8,8 +8,17 @@ import org.apache.felix.framework.util.FelixConstants;
 import org.apache.felix.framework.util.StringMap;
 import org.maera.plugin.event.PluginEventListener;
 import org.maera.plugin.event.PluginEventManager;
-import org.maera.plugin.event.events.*;
-import org.maera.plugin.osgi.container.*;
+import org.maera.plugin.event.events.PluginFrameworkShutdownEvent;
+import org.maera.plugin.event.events.PluginFrameworkStartingEvent;
+import org.maera.plugin.event.events.PluginFrameworkWarmRestartingEvent;
+import org.maera.plugin.event.events.PluginUninstalledEvent;
+import org.maera.plugin.event.events.PluginUpgradedEvent;
+import org.maera.plugin.osgi.container.OsgiContainerException;
+import org.maera.plugin.osgi.container.OsgiContainerManager;
+import org.maera.plugin.osgi.container.OsgiContainerStartedEvent;
+import org.maera.plugin.osgi.container.OsgiContainerStoppedEvent;
+import org.maera.plugin.osgi.container.OsgiPersistentCache;
+import org.maera.plugin.osgi.container.PackageScannerConfiguration;
 import org.maera.plugin.osgi.container.impl.DefaultOsgiPersistentCache;
 import org.maera.plugin.osgi.hostcomponents.HostComponentProvider;
 import org.maera.plugin.osgi.hostcomponents.HostComponentRegistration;
@@ -17,7 +26,17 @@ import org.maera.plugin.osgi.hostcomponents.impl.DefaultComponentRegistrar;
 import org.maera.plugin.osgi.util.OsgiHeaderUtil;
 import org.maera.plugin.util.ClassLoaderUtils;
 import org.maera.plugin.util.ContextClassLoaderSwitchingUtil;
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.BundleListener;
+import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.LoggerFactory;
@@ -26,7 +45,11 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
@@ -34,8 +57,11 @@ import java.util.jar.JarFile;
 
 /**
  * Felix implementation of the OSGi container manager
+ *
+ * @since 0.1
  */
 public class FelixOsgiContainerManager implements OsgiContainerManager {
+    
     public static final String OSGI_FRAMEWORK_BUNDLES_ZIP = "osgi-framework-bundles.zip";
     public static final int REFRESH_TIMEOUT = 10;
 

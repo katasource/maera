@@ -1,5 +1,10 @@
 package org.maera.plugin.osgi.bridge;
 
+import org.eclipse.gemini.blueprint.context.ConfigurableOsgiBundleApplicationContext;
+import org.eclipse.gemini.blueprint.extender.event.BootstrappingDependencyEvent;
+import org.eclipse.gemini.blueprint.service.importer.OsgiServiceDependency;
+import org.eclipse.gemini.blueprint.service.importer.event.OsgiServiceDependencyWaitStartingEvent;
+import org.eclipse.gemini.blueprint.service.importer.support.AbstractOsgiServiceImportFactoryBean;
 import org.junit.Before;
 import org.junit.Test;
 import org.maera.plugin.event.PluginEventManager;
@@ -8,17 +13,14 @@ import org.mockito.ArgumentMatcher;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.springframework.context.ApplicationContext;
-import org.springframework.osgi.context.ConfigurableOsgiBundleApplicationContext;
-import org.springframework.osgi.extender.event.BootstrappingDependencyEvent;
-import org.springframework.osgi.service.importer.OsgiServiceDependency;
-import org.springframework.osgi.service.importer.event.OsgiServiceDependencyWaitStartingEvent;
-import org.springframework.osgi.service.importer.support.AbstractOsgiServiceImportFactoryBean;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class SpringContextEventBridgeTest {
 

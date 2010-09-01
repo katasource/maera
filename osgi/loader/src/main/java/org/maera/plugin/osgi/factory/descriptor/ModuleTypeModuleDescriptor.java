@@ -6,9 +6,10 @@ import org.maera.plugin.module.ModuleFactory;
 /**
  * Module descriptor for dynamic module types.  Shouldn't be directly used outside providing read-only information.
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class ModuleTypeModuleDescriptor extends AbstractModuleDescriptor<Void> {
+
     public ModuleTypeModuleDescriptor() {
         super(ModuleFactory.LEGACY_MODULE_FACTORY);
     }

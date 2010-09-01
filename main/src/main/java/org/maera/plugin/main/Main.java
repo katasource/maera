@@ -1,14 +1,10 @@
 package org.maera.plugin.main;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collections;
-import java.util.Properties;
 
 import static org.maera.plugin.main.PackageScannerConfigurationBuilder.packageScannerConfiguration;
 import static org.maera.plugin.main.PluginsConfigurationBuilder.pluginsConfiguration;
@@ -21,8 +17,9 @@ import static org.maera.plugin.main.PluginsConfigurationBuilder.pluginsConfigura
  */
 public class Main {
 
+    private static final transient Logger log = LoggerFactory.getLogger(Main.class);
+
     public static void main(final String[] args) {
-        initialiseLogger();
         final File pluginDir = new File("plugins");
         pluginDir.mkdir();
         System.out.println("Created plugins directory " + pluginDir.getAbsolutePath());
@@ -59,24 +56,6 @@ public class Main {
             }
         };
         hotDeploy.start();
-    }
-
-    private static void initialiseLogger() {
-        final Properties logProperties = new Properties();
-
-        InputStream in = null;
-        try {
-            in = Main.class.getResourceAsStream("/log4j-standalone.properties");
-            logProperties.load(in);
-            PropertyConfigurator.configure(logProperties);
-            Logger.getLogger(Main.class).info("Logging initialized.");
-        }
-        catch (final IOException e) {
-            throw new RuntimeException("Unable to load logging");
-        }
-        finally {
-            IOUtils.closeQuietly(in);
-        }
     }
 
 }

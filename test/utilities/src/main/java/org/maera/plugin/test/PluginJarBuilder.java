@@ -6,7 +6,11 @@ import org.codehaus.janino.CompileException;
 import org.codehaus.janino.Parser;
 import org.codehaus.janino.SimpleCompiler;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -136,7 +140,7 @@ public class PluginJarBuilder {
         sb.append("    <plugin-info>\n");
         sb.append("        <description>This plugin descriptor is used for testing plugins!</description>\n");
         sb.append("        <version>").append(version).append("</version>\n");
-        sb.append("        <vendor name=\"Atlassian Software Systems Pty Ltd\" url=\"http://www.atlassian.com\" />\n");
+        sb.append("        <vendor name=\"Katasoft, Inc.\" url=\"http://www.katasoft.com\" />\n");
         if (params != null)
             for (Map.Entry<String, String> param : params.entrySet())
                 sb.append("<param name=\"").append(param.getKey()).append("\">").append(param.getValue()).append("</param>\n");

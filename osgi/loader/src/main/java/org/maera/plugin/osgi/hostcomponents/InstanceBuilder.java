@@ -2,8 +2,11 @@ package org.maera.plugin.osgi.hostcomponents;
 
 /**
  * Ties a host component registration with a host component instance
+ *
+ * @since 0.1
  */
 public interface InstanceBuilder {
+    
     /**
      * Declares the host component instance for the registration.
      *

@@ -10,10 +10,11 @@ import org.maera.plugin.osgi.module.BeanPrefixModuleFactory;
 /**
  * Module descriptor for Spring components.  Shouldn't be directly used outside providing read-only information.
  *
- * @since 2.2.0
+ * @since 0.1
  */
 @CannotDisable
 public class ComponentModuleDescriptor<Object> extends AbstractModuleDescriptor {
+    
     public ComponentModuleDescriptor() {
         super(ModuleFactory.LEGACY_MODULE_FACTORY);
     }

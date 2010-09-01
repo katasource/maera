@@ -10,9 +10,10 @@ import java.io.InputStream;
 /**
  * Descriptor parser factory that creates parsers for Osgi plugins.  Must only be used with {@link OsgiPlugin} instances.
  *
- * @since 2.1.2
+ * @since 0.1
  */
 public class OsgiPluginXmlDescriptorParserFactory implements DescriptorParserFactory {
+    
     /**
      * Gets an instance that filters the modules "component", "component-import", "module-type", "bean", and "spring"
      *

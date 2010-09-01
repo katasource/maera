@@ -15,7 +15,14 @@ import org.maera.plugin.parsers.XmlDescriptorParser;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -23,9 +30,10 @@ import java.util.jar.Manifest;
 /**
  * The transform context containing any configuration necessary to enact a JAR transformation
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class TransformContext {
+    
 //    private final JarFile pluginJar;
     private final Manifest manifest;
     private final List<HostComponentRegistration> regs;

@@ -2,8 +2,11 @@ package org.maera.plugin.osgi.hostcomponents;
 
 /**
  * The strategy for handling the context class loader for host component method invocations
+ *
+ * @since 0.1
  */
 public enum ContextClassLoaderStrategy {
+
     /**
      * This strategy ensures the context class loader remains the bundle's class loader.
      */

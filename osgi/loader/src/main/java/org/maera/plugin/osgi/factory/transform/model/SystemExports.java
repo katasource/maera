@@ -9,9 +9,10 @@ import java.util.Map;
 /**
  * Encapsulates the package exports from the system bundle
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class SystemExports {
+    
     private final Map<String, Map<String, String>> exports;
 
     public static final SystemExports NONE = new SystemExports("");

@@ -2,7 +2,12 @@ package org.maera.plugin.osgi;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.maera.plugin.*;
+import org.maera.plugin.AutowireCapablePlugin;
+import org.maera.plugin.DefaultModuleDescriptorFactory;
+import org.maera.plugin.JarPluginArtifact;
+import org.maera.plugin.Plugin;
+import org.maera.plugin.PluginRestartState;
+import org.maera.plugin.PluginState;
 import org.maera.plugin.descriptors.AbstractModuleDescriptor;
 import org.maera.plugin.descriptors.RequiresRestart;
 import org.maera.plugin.hostcontainer.DefaultHostContainer;
@@ -15,7 +20,10 @@ import org.osgi.util.tracker.ServiceTracker;
 
 import java.io.File;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class EnableDisablePluginTest extends AbstractPluginInContainerTest {
 
@@ -34,7 +42,7 @@ public class EnableDisablePluginTest extends AbstractPluginInContainerTest {
                 .addFormattedJava("my.Foo",
                         "package my;",
                         "import org.maera.plugin.osgi.*;",
-                        "public class Foo implements Callable3{",
+                        "public class Foo implements Callable3 {",
                         "  private Callable2 callable;",
                         "  public Foo(Callable2 callable) {",
                         "    this.callable = callable;",

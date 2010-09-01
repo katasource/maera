@@ -1,5 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.katasoft.cinder.maven</groupId>
         <artifactId>java-pom</artifactId>
@@ -16,8 +19,8 @@
 
     <licenses>
         <license>
-            <name>BSD</name>
-            <url>LICENSE.txt</url>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.opensource.org/licenses/apache2.0.php</url>
         </license>
     </licenses>
 
@@ -41,17 +44,20 @@
         <module>core</module>
         <module>main</module>
         <module>osgi</module>
-        <module>reference-impl</module>
-        <module>servlet</module>
+        <!-- <module>reference-impl</module>
+        <module>servlet</module> -->
         <module>spring</module>
         <module>test</module>
-        <module>webfragment</module>
-        <module>webresource</module>
+        <!-- <module>webfragment</module>
+        <module>webresource</module> -->
     </modules>
 
     <properties>
-        <springDmVersion>1.2.1</springDmVersion>
-        <springVersion>2.5.6.SEC01</springVersion>
+        <osgi.version>4.2.0</osgi.version>
+        <gemini.blueprint.version>1.0.0.M1</gemini.blueprint.version>
+        <spring.version>3.0.3.RELEASE</spring.version>
+        <aopalliance.version>1.0.0</aopalliance.version>
+        <slf4j.version>1.5.6</slf4j.version>
     </properties>
 
     <build>
@@ -90,7 +96,6 @@
                     <systemPropertyVariables>
                         <project.version>${project.version}</project.version>
                     </systemPropertyVariables>
-                    <skipTests>true</skipTests>
                 </configuration>
             </plugin>
         </plugins>
@@ -98,118 +103,43 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- Required by the OSGI Loader at runtime: -->
+
             <dependency>
-                <groupId>jaxen</groupId>
-                <artifactId>jaxen</artifactId>
-                <version>1.1.1</version>
-                <scope>runtime</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>jdom</groupId>
-                        <artifactId>jdom</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xml-apis</groupId>
-                        <artifactId>xml-apis</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>xerces</groupId>
-                        <artifactId>xmlParserAPIs</artifactId>
-                    </exclusion>
-                </exclusions>
+                <groupId>biz.aQute</groupId>
+                <artifactId>bndlib</artifactId>
+                <version>0.0.357</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>com.springsource.javax.servlet</artifactId>
+                <version>2.5.0</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.aopalliance</groupId>
+                <artifactId>com.springsource.org.aopalliance</artifactId>
+                <version>${aopalliance.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>com.springsource.org.apache.commons.collections</artifactId>
+                <version>3.2.1</version>
             </dependency>
             <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>1.5.8</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>com.springsource.org.apache.commons.io</artifactId>
+                <version>1.4.0</version>
             </dependency>
             <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>1.5.8</version>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>com.springsource.org.apache.commons.lang</artifactId>
+                <version>2.4.0</version>
             </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jcl-over-slf4j</artifactId>
-                <version>1.5.8</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
-                <version>${springVersion}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context</artifactId>
-                <version>${springVersion}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-beans</artifactId>
-                <version>${springVersion}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring</artifactId>
-                <!--suppress MavenModelInspection -->
-                <version>${springVersion}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>commons-logging</groupId>
-                        <artifactId>commons-logging</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>dom4j</groupId>
-                <artifactId>dom4j</artifactId>
-                <version>1.6.1</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>xml-apis</groupId>
-                        <artifactId>xml-apis</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>jaxen</groupId>
-                        <artifactId>jaxen</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>saxpath</groupId>
-                        <artifactId>saxpath</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>msv</groupId>
-                        <artifactId>msv</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>relaxngDatatype</groupId>
-                        <artifactId>relaxngDatatype</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>isorelax</groupId>
-                        <artifactId>isorelax</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
+
+
             <dependency>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>org.apache.felix.main</artifactId>
@@ -221,10 +151,249 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.log4j</groupId>
+                <artifactId>com.springsource.org.apache.log4j</artifactId>
+                <version>1.2.15</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- OSGi Blueprint (Eclipse Gemini project) -->
+            <dependency>
+                <groupId>org.eclipse.gemini.blueprint</groupId>
+                <artifactId>gemini-blueprint-annotation</artifactId>
+                <version>${gemini.blueprint.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.gemini.blueprint</groupId>
+                <artifactId>gemini-blueprint-core</artifactId>
+                <version>${gemini.blueprint.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.gemini.blueprint</groupId>
+                <artifactId>gemini-blueprint-extender</artifactId>
+                <version>${gemini.blueprint.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.gemini.blueprint</groupId>
+                <artifactId>gemini-blueprint-io</artifactId>
+                <version>${gemini.blueprint.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.gemini.blueprint</groupId>
+                <artifactId>gemini-blueprint-mock</artifactId>
+                <version>${gemini.blueprint.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.gemini.blueprint</groupId>
+                <artifactId>gemini-blueprint-test</artifactId>
+                <version>${gemini.blueprint.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.gemini.blueprint</groupId>
+                <artifactId>gemini-blueprint-web</artifactId>
+                <version>${gemini.blueprint.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.gemini.blueprint</groupId>
+                <artifactId>spring-osgi-web-extender</artifactId>
+                <version>${gemini.blueprint.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.core</artifactId>
+                <version>${osgi.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.osgi</groupId>
+                <artifactId>org.osgi.compendium</artifactId>
+                <version>${osgi.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>com.springsource.slf4j.api</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>com.springsource.slf4j.log4j</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>provided</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.apache.log4j</groupId>
+                        <artifactId>com.springsource.org.apache.log4j</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>com.springsource.slf4j.org.apache.commons.logging</artifactId>
+                <version>${slf4j.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Spring -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.aop</artifactId>
+                <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.asm</artifactId>
+                <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.beans</artifactId>
+                <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.core</artifactId>
+                <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.context</artifactId>
+                <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.expression</artifactId>
+                <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <!-- <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.context.support</artifactId>
+                <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency> -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.test</artifactId>
+                <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.web</artifactId>
+                <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>org.springframework.web.servlet</artifactId>
+                <version>${spring.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.commons</groupId>
+                        <artifactId>com.springsource.org.apache.commons.logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
+                <groupId>org.twdata.pkgscanner</groupId>
+                <artifactId>package-scanner</artifactId>
+                <version>0.9.4</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Required by the OSGI Loader at runtime: -->
+            <dependency>
+                <groupId>org.jaxen</groupId>
+                <artifactId>com.springsource.org.jaxen</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.dom4j</groupId>
+                <artifactId>com.springsource.org.dom4j</artifactId>
+                <version>1.6.1</version>
+            </dependency>
+
         </dependencies>
+
     </dependencyManagement>
 
     <dependencies>
+        <!-- Default dependencies for all modules: -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>com.springsource.slf4j.api</artifactId>
+        </dependency>
+
+        <!-- Test dependencies for all modules: -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -243,42 +412,20 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.15</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.sun.jdmk</groupId>
-                    <artifactId>jmxtools</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.sun.jmx</groupId>
-                    <artifactId>jmxri</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.jms</groupId>
-                    <artifactId>jms</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.mail</groupId>
-                    <artifactId>mail</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.activation</groupId>
-                    <artifactId>activation</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
+            <artifactId>com.springsource.slf4j.org.apache.commons.logging</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
+            <artifactId>com.springsource.slf4j.log4j</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.log4j</groupId>
+            <artifactId>com.springsource.org.apache.log4j</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
 </project>

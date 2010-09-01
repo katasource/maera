@@ -1,7 +1,7 @@
 package org.springframework.osgi.maera;
 
+import org.eclipse.gemini.blueprint.context.support.OsgiBundleXmlApplicationContext;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext;
 
 /**
  * Application context that initializes the bean definition reader to not validate via XML Schema.  Note that by
@@ -11,9 +11,10 @@ import org.springframework.osgi.context.support.OsgiBundleXmlApplicationContext;
  * This class exists in the same package as the parent so the log messages won't get confused as the parent class
  * logs against the instance class.
  *
- * @since 2.5.0
+ * @since 0.1
  */
 public class NonValidatingOsgiBundleXmlApplicationContext extends OsgiBundleXmlApplicationContext {
+
     public NonValidatingOsgiBundleXmlApplicationContext(String[] configLocations) {
         super(configLocations);
     }

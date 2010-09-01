@@ -2,7 +2,12 @@ package org.maera.plugin.osgi.factory;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
-import org.maera.plugin.*;
+import org.maera.plugin.JarPluginArtifact;
+import org.maera.plugin.ModuleDescriptorFactory;
+import org.maera.plugin.Plugin;
+import org.maera.plugin.PluginAccessor;
+import org.maera.plugin.PluginArtifact;
+import org.maera.plugin.PluginParseException;
 import org.maera.plugin.event.PluginEventManager;
 import org.maera.plugin.factories.PluginFactory;
 import org.maera.plugin.impl.UnloadablePlugin;
@@ -23,8 +28,11 @@ import java.util.jar.Manifest;
 
 /**
  * Plugin deployer that deploys OSGi bundles that don't contain XML descriptor files
+ *
+ * @since 0.1
  */
 public class OsgiBundleFactory implements PluginFactory {
+
     private static final Logger log = LoggerFactory.getLogger(OsgiBundleFactory.class);
 
     private final OsgiContainerManager osgi;

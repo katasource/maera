@@ -13,9 +13,10 @@ import java.io.IOException;
 /**
  * Default implementation of persistent cache.  Handles clearing of directories if an upgrade has been detected.
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class DefaultOsgiPersistentCache implements OsgiPersistentCache {
+    
     private final File osgiBundleCache;
     private final File frameworkBundleCache;
     private final File transformedPluginCache;

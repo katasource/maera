@@ -2,8 +2,11 @@ package org.maera.plugin.osgi.factory.transform;
 
 /**
  * Generic wrapper exception for all exceptions thrown during plugin transformation
+ *
+ * @since 0.1
  */
 public class PluginTransformationException extends RuntimeException {
+
     public PluginTransformationException() {
     }
 

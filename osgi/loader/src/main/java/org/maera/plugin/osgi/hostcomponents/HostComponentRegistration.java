@@ -4,8 +4,11 @@ import java.util.Dictionary;
 
 /**
  * Represents a registration of a host component
+ *
+ * @since 0.1
  */
 public interface HostComponentRegistration {
+    
     /**
      * @return The metadata properties for the component
      */

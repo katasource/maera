@@ -8,8 +8,11 @@ import java.util.List;
 
 /**
  * Transforms a plugin jar into a proper OSGi bundle
+ * 
+ * @since 0.1
  */
 public interface PluginTransformer {
+
     /**
      * Transforms a plugin artifact into a proper OSGi bundle
      *

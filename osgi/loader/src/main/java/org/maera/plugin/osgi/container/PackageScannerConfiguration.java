@@ -9,11 +9,13 @@ import java.util.Map;
  * and versions to export to OSGi.  Jar and package includes/excludes, and packages for the package version map can
  * either be simple names or wildcard patterns, where the "*" character will match any character.
  * <p/>
- * <p/>
  * Includes and excludes are matched so that only includes are, well, included, but if you need to filter a few out
  * of that set, the exclude patterns will be removed.
+ *
+ * @since 0.1
  */
 public interface PackageScannerConfiguration {
+    
     /**
      * @return The jar patterns to include
      */

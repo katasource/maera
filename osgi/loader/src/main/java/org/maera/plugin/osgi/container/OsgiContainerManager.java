@@ -10,8 +10,11 @@ import java.util.List;
 
 /**
  * Manages the OSGi container and handles any interactions with it
+ *
+ * @since 0.1
  */
 public interface OsgiContainerManager {
+    
     /**
      * Starts the OSGi container
      *

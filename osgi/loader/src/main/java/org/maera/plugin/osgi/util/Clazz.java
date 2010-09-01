@@ -7,10 +7,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 /**
  * Copied from the bndlib version 0.255, adding the capture of referred classes
+ *
+ * @since 0.1
  */
 public class Clazz {
 

@@ -22,9 +22,10 @@ import java.util.List;
  * {@link org.maera.plugin.descriptors.UnrecognisedModuleDescriptor}} instances into modules if the new factory supports them.  Updates to factories
  * and removal are also handled.
  *
- * @since 2.1.2
+ * @since 0.1
  */
 class UnrecognizedModuleDescriptorServiceTrackerCustomizer implements ServiceTrackerCustomizer {
+    
     private static final Logger log = LoggerFactory.getLogger(UnrecognizedModuleDescriptorServiceTrackerCustomizer.class);
 
     private final Bundle bundle;

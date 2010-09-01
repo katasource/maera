@@ -9,8 +9,11 @@ import java.util.List;
 
 /**
  * Bridges Felix logging messages with the Commons Logging
+ *
+ * @since 0.1
  */
 public class FelixLoggerBridge extends Logger {
+    
     private final org.slf4j.Logger log;
 
     private static final List<String> messagesToIgnore = Arrays.asList(

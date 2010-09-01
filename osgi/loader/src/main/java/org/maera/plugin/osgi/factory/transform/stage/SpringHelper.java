@@ -1,6 +1,10 @@
 package org.maera.plugin.osgi.factory.transform.stage;
 
-import org.dom4j.*;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.Namespace;
+import org.dom4j.QName;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.XMLWriter;
 import org.maera.plugin.osgi.factory.transform.PluginTransformationException;
@@ -14,7 +18,7 @@ import java.io.IOException;
 /**
  * Helper class for dealing with spring files
  *
- * @since 2.2.0
+ * @since 0.1
  */
 class SpringHelper {
 

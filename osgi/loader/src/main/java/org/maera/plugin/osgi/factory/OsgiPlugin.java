@@ -2,7 +2,11 @@ package org.maera.plugin.osgi.factory;
 
 import org.apache.commons.lang.Validate;
 import org.dom4j.Element;
-import org.maera.plugin.*;
+import org.maera.plugin.AutowireCapablePlugin;
+import org.maera.plugin.IllegalPluginStateException;
+import org.maera.plugin.ModuleDescriptor;
+import org.maera.plugin.PluginArtifact;
+import org.maera.plugin.PluginState;
 import org.maera.plugin.event.PluginEventListener;
 import org.maera.plugin.event.PluginEventManager;
 import org.maera.plugin.event.events.PluginContainerFailedEvent;
@@ -18,7 +22,13 @@ import org.maera.plugin.osgi.event.PluginServiceDependencyWaitStartingEvent;
 import org.maera.plugin.osgi.event.PluginServiceDependencyWaitTimedOutEvent;
 import org.maera.plugin.osgi.external.ListableModuleDescriptorFactory;
 import org.maera.plugin.util.PluginUtils;
-import org.osgi.framework.*;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleEvent;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.BundleListener;
+import org.osgi.framework.ServiceReference;
+import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
@@ -40,9 +50,12 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * {@link OsgiPluginUninstalledHelper} implements the methods when the plugin hasn't yet been installed into the
  * OSGi container, while {@link OsgiPluginInstalledHelper} implements the methods when the bundle is available.  This
  * leaves this class to manage the {@link PluginState} and interactions with the event system.
+ *
+ * @since 0.1
  */
 //@Threadsafe
 public class OsgiPlugin extends AbstractPlugin implements AutowireCapablePlugin, ContainerManagedPlugin {
+    
     private final Map<String, Element> moduleElements = new HashMap<String, Element>();
     private final PluginEventManager pluginEventManager;
     private final PackageAdmin packageAdmin;

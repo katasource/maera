@@ -2,7 +2,13 @@ package org.maera.plugin.osgi.factory;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.Validate;
-import org.maera.plugin.*;
+import org.maera.plugin.DefaultModuleDescriptorFactory;
+import org.maera.plugin.JarPluginArtifact;
+import org.maera.plugin.ModuleDescriptor;
+import org.maera.plugin.ModuleDescriptorFactory;
+import org.maera.plugin.Plugin;
+import org.maera.plugin.PluginArtifact;
+import org.maera.plugin.PluginParseException;
 import org.maera.plugin.descriptors.ChainModuleDescriptorFactory;
 import org.maera.plugin.event.PluginEventManager;
 import org.maera.plugin.factories.PluginFactory;
@@ -28,12 +34,19 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Plugin loader that starts an OSGi container and loads plugins into it, wrapped as OSGi bundles.
+ *
+ * @since 0.1
  */
 public class OsgiPluginFactory implements PluginFactory {
+
     private static final Logger log = LoggerFactory.getLogger(OsgiPluginFactory.class);
 
     private final OsgiContainerManager osgi;

@@ -14,9 +14,10 @@ import java.io.InputStream;
  * Descriptor parser that handles special tasks for osgi plugins such as recording the
  * originating module descriptor elements.  Must only be used with {@link OsgiPlugin} instances.
  *
- * @since 2.1.2
+ * @since 0.1
  */
 public class OsgiPluginXmlDescriptorParser extends XmlDescriptorParser {
+
     /**
      * @param source          The XML descriptor source
      * @param applicationKeys The application keys to limit modules to, null for only unspecified

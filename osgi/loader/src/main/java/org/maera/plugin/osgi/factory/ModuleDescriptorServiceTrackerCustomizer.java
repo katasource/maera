@@ -14,9 +14,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Tracks module descriptors registered as services, then updates the descriptors map accordingly
  *
- * @since 2.2.0
+ * @since 0.1
  */
 class ModuleDescriptorServiceTrackerCustomizer implements ServiceTrackerCustomizer {
+    
     private static final Logger log = LoggerFactory.getLogger(ModuleDescriptorServiceTrackerCustomizer.class);
 
     private final Bundle bundle;

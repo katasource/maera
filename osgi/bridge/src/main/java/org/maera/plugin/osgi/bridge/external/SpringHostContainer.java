@@ -9,9 +9,10 @@ import org.springframework.context.ApplicationContextAware;
 /**
  * Host container implementation that uses the bundle's application context
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class SpringHostContainer implements HostContainer, ApplicationContextAware {
+
     private ApplicationContext applicationContext;
 
     public <T> T create(Class<T> moduleClass) throws IllegalArgumentException {

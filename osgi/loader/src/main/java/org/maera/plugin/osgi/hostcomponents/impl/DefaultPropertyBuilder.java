@@ -5,8 +5,11 @@ import org.maera.plugin.osgi.hostcomponents.PropertyBuilder;
 
 /**
  * Default property builder for host components
+ *
+ * @since 0.1
  */
 class DefaultPropertyBuilder implements PropertyBuilder {
+
     private Registration registration;
 
     public DefaultPropertyBuilder(Registration registration) {

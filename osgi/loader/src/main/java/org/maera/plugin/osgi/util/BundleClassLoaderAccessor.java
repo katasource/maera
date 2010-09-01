@@ -15,9 +15,10 @@ import java.util.Enumeration;
 /**
  * Utility methods for accessing a bundle as if it was a classloader.
  *
- * @since 2.3.0
+ * @since 0.1
  */
 public class BundleClassLoaderAccessor {
+    
     /**
      * Creates a classloader that delegates to the bundle
      *

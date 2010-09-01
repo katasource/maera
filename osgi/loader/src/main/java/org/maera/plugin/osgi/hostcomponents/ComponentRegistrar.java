@@ -2,8 +2,11 @@ package org.maera.plugin.osgi.hostcomponents;
 
 /**
  * A registrar for capturing host components and their configuration
+ *
+ * @since 0.1
  */
 public interface ComponentRegistrar {
+
     /**
      * The flag to mark host components from other OSGi services
      */

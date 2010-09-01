@@ -1,5 +1,5 @@
-<atlassian-plugin key="test.bad.plugin" name="Bad Plugin">
+<maera-plugin key="test.bad.plugin" name="Bad Plugin">
     <mineral key="gold" name="Bar" class="org.maera.plugin.loaders.DummyClassOne">
         <weight>20</weight>
     </mineral>
-</atlassian-plugin>
+</maera-plugin>

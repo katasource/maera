@@ -5,9 +5,10 @@ import org.osgi.framework.Filter;
 /**
  * Events that are fired when OSGi services are waiting to be resolved.
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public interface PluginServiceDependencyWaitEvent {
+    
     /**
      * @return the filter used for the resolution.  May be null.
      */

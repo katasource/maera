@@ -9,9 +9,10 @@ import org.maera.plugin.osgi.spring.SpringContainerAccessor;
  * The SpringBeanModuleFactory creates a java bean for the given module class by resolving the name to spring bean reference.
  * It returns a reference to this bean.
  *
- * @since 2.5.0
+ * @since 0.1
  */
 public class BeanPrefixModuleFactory implements PrefixModuleFactory {
+    
     public <T> T createModule(String name, ModuleDescriptor<T> moduleDescriptor) {
         if (moduleDescriptor.getPlugin() instanceof ContainerManagedPlugin) {
             ContainerManagedPlugin containerManagedPlugin = (ContainerManagedPlugin) moduleDescriptor.getPlugin();

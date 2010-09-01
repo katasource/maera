@@ -6,9 +6,10 @@ import org.maera.plugin.module.ContainerAccessor;
 /**
  * Allows to access the spring container and access springs beans.
  *
- * @since 2.5.0
+ * @since 0.1
  */
 public interface SpringContainerAccessor extends ContainerAccessor {
+    
     /**
      * Retrieves a spring bean from the spring bean factory.
      *

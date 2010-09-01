@@ -3,8 +3,11 @@ package org.maera.plugin.osgi.hostcomponents;
 /**
  * Ties properties to the host component registration.  Properties can be set via specific methods or generically
  * via {@link #withProperty(String,String)}
+ *
+ * @since 0.1
  */
 public interface PropertyBuilder {
+
     /**
      * The name of the host component bean, usually the Spring bean identifier
      */

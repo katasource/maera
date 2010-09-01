@@ -7,22 +7,41 @@ import org.maera.plugin.PluginArtifact;
 import org.maera.plugin.osgi.container.OsgiContainerManager;
 import org.maera.plugin.osgi.container.OsgiPersistentCache;
 import org.maera.plugin.osgi.factory.transform.model.SystemExports;
-import org.maera.plugin.osgi.factory.transform.stage.*;
+import org.maera.plugin.osgi.factory.transform.stage.AddBundleOverridesStage;
+import org.maera.plugin.osgi.factory.transform.stage.ComponentImportSpringStage;
+import org.maera.plugin.osgi.factory.transform.stage.ComponentSpringStage;
+import org.maera.plugin.osgi.factory.transform.stage.GenerateManifestStage;
+import org.maera.plugin.osgi.factory.transform.stage.HostComponentSpringStage;
+import org.maera.plugin.osgi.factory.transform.stage.ModuleTypeSpringStage;
+import org.maera.plugin.osgi.factory.transform.stage.ScanDescriptorForHostClassesStage;
 import org.maera.plugin.osgi.hostcomponents.HostComponentRegistration;
 import org.maera.plugin.util.PluginUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
  * Default implementation of plugin transformation that uses stages to convert a plain JAR into an OSGi bundle.
+ *
+ * @since 0.1
  */
 public class DefaultPluginTransformer implements PluginTransformer {
+    
     private static final Logger log = LoggerFactory.getLogger(DefaultPluginTransformer.class);
 
     private final String pluginDescriptorPath;
@@ -42,8 +61,7 @@ public class DefaultPluginTransformer implements PluginTransformer {
      * @since 2.2.0
      */
     public DefaultPluginTransformer(OsgiPersistentCache cache, SystemExports systemExports, Set<String> applicationKeys, String pluginDescriptorPath,
-                                    OsgiContainerManager osgiContainerManager
-    ) {
+                                    OsgiContainerManager osgiContainerManager) {
         this(cache, systemExports, applicationKeys, pluginDescriptorPath, osgiContainerManager, new ArrayList<TransformStage>() {{
             add(new AddBundleOverridesStage());
             add(new ComponentImportSpringStage());

@@ -6,9 +6,10 @@ import java.io.File;
  * Access to persistent cache locations used throughout the OSGi plugin system.  Implementations are responsible for
  * ensuring the directories are not null and do exist.
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public interface OsgiPersistentCache {
+
     /**
      * @return the directory to store extracted framework bundles
      */

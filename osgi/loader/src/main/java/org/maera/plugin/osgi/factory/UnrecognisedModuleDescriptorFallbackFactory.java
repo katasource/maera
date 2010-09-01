@@ -13,9 +13,10 @@ import org.slf4j.LoggerFactory;
  * module so be sure that this factory is last in a list of factories.
  *
  * @see {@link UnrecognisedModuleDescriptor}
- * @since 2.1.2
+ * @since 0.1
  */
 class UnrecognisedModuleDescriptorFallbackFactory implements ModuleDescriptorFactory {
+
     private static final Logger log = LoggerFactory.getLogger(UnrecognisedModuleDescriptorFallbackFactory.class);
     public static final String DESCRIPTOR_TEXT = "Support for this module is not currently installed.";
 

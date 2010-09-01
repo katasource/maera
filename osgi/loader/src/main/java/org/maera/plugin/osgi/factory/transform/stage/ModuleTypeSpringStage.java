@@ -16,9 +16,10 @@ import static org.maera.plugin.util.validation.ValidationPattern.test;
 /**
  * Transforms module-type elements into the appropriate Spring XML configuration file
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class ModuleTypeSpringStage implements TransformStage {
+    
     /**
      * The name of the generated Spring XML file for this stage
      */

@@ -6,7 +6,7 @@ import org.osgi.framework.Constants;
 /**
  * Utility methods for event bridge classes
  *
- * @since 2.2.1
+ * @since 0.1
  */
 class PluginBundleUtils {
     /**

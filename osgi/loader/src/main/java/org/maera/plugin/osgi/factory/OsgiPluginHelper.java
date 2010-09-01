@@ -14,7 +14,7 @@ import java.util.Set;
  * Helper for the {@link OsgiPlugin} to abstract how key operations are handled in different states, represented
  * by implementations of this interface.
  *
- * @since 2.2.0
+ * @since 0.1
  */
 interface OsgiPluginHelper {
 

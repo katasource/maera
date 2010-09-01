@@ -1,6 +1,6 @@
 package org.maera.plugin.osgi.util;
 
-import aQute.lib.header.OSGiHeader;
+import aQute.libg.header.OSGiHeader;
 import org.apache.commons.io.IOUtils;
 import org.maera.plugin.osgi.factory.OsgiPlugin;
 import org.maera.plugin.osgi.hostcomponents.HostComponentRegistration;
@@ -14,13 +14,20 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.jar.Manifest;
 
 /**
  * Utilities to help create OSGi headers
+ *
+ * @since 0.1
  */
 public class OsgiHeaderUtil {
+
     static final String JDK_PACKAGES_PATH = "jdk-packages.txt";
     static final String JDK6_PACKAGES_PATH = "jdk6-packages.txt";
     static Logger log = LoggerFactory.getLogger(OsgiHeaderUtil.class);

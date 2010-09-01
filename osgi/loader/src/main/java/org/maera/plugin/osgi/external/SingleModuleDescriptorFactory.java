@@ -11,9 +11,10 @@ import java.util.Set;
  * A single module descriptor factory for plugins to use when they want to expose just one plugin.  Uses
  * {@link HostContainer} to optionally provide autowiring for new descriptor instances.
  *
- * @since 2.1
+ * @since 0.1
  */
 public class SingleModuleDescriptorFactory<T extends ModuleDescriptor<?>> implements ListableModuleDescriptorFactory {
+    
     private final String type;
     private final Class<T> moduleDescriptorClass;
     private final HostContainer hostContainer;

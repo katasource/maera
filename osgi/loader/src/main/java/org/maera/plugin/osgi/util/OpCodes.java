@@ -2,8 +2,11 @@ package org.maera.plugin.osgi.util;
 
 /**
  * Copied from the bndlib version 0.255, no changes, but necessary due to package-private fields
+ *
+ * @since 0.1
  */
 public class OpCodes {
+    
     final static short nop = 0x00;            // [No change] performs
     // no
     // operation

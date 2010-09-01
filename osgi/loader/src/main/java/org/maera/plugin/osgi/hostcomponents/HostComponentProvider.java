@@ -18,6 +18,8 @@ package org.maera.plugin.osgi.hostcomponents;
  *      }
  * }
  * </pre>
+ *
+ * @since 0.1
  */
 public interface HostComponentProvider {
 

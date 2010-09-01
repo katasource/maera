@@ -3,7 +3,7 @@
         <description>This plugin descriptor is used for testing dynamic plugins!</description>
         <version>1.0</version>
         <application-version min="3.0" max="3.1"/>
-        <vendor name="Atlassian Software Systems Pty Ltd" url="http://www.atlassian.com"/>
+        <vendor name="Katasoft, Inc." url="http://www.katasoft.com"/>
     </plugin-info>
 
     <animal key="pooh" name="Pooh Bear" class="org.maera.plugin.mock.MockPooh">

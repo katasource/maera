@@ -10,9 +10,10 @@ import java.util.List;
 /**
  * Adds bundle instruction overrides from the plugin descriptor to be later used in the manifest generation process.
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class AddBundleOverridesStage implements TransformStage {
+    
     public void execute(TransformContext context) throws PluginTransformationException {
         Element pluginInfo = context.getDescriptorDocument().getRootElement().element("plugin-info");
         if (pluginInfo != null) {

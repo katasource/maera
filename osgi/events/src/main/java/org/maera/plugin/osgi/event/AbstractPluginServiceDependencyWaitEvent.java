@@ -5,9 +5,10 @@ import org.osgi.framework.Filter;
 /**
  * Abstract implementation of plugin service dependency waiting events
  *
- * @since 2.2.1
+ * @since 0.1
  */
 class AbstractPluginServiceDependencyWaitEvent implements PluginServiceDependencyWaitEvent {
+    
     protected final Filter filter;
     protected final String beanName;
     protected final String pluginKey;

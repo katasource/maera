@@ -12,9 +12,10 @@ import java.util.Map;
 /**
  * Manages spring context access, including autowiring.
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class DefaultSpringContainerAccessor implements SpringContainerAccessor {
+
     private final Object nativeBeanFactory;
     private final Method nativeCreateBeanMethod;
     private final Method nativeAutowireBeanMethod;

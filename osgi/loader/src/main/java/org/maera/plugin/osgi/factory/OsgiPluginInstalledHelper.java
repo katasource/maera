@@ -24,9 +24,10 @@ import java.util.Set;
 /**
  * Helper class that implements the methods assuming the OSGi plugin has been installed
  *
- * @since 2.2.0
+ * @since 0.1
  */
 class OsgiPluginInstalledHelper implements OsgiPluginHelper {
+    
     private final ClassLoader bundleClassLoader;
     private final Bundle bundle;
     private final PackageAdmin packageAdmin;

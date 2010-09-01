@@ -18,9 +18,10 @@ import java.util.Set;
 /**
  * Helper class that implements the methods assuming the OSGi plugin has not been installed
  *
- * @since 2.2.0
+ * @since 0.1
  */
 class OsgiPluginUninstalledHelper implements OsgiPluginHelper {
+    
     private final String key;
     private final OsgiContainerManager osgiContainerManager;
     private final PluginArtifact pluginArtifact;

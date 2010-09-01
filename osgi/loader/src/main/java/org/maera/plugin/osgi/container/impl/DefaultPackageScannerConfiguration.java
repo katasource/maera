@@ -3,19 +3,36 @@ package org.maera.plugin.osgi.container.impl;
 import org.maera.plugin.osgi.container.PackageScannerConfiguration;
 
 import javax.servlet.ServletContext;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Default package scanner configuration.  Probably mostly useful for Spring XML configuration.
+ *
+ * @since 0.1
  */
 public class DefaultPackageScannerConfiguration implements PackageScannerConfiguration {
 
     private List<String> jarIncludes = Arrays.asList("*.jar");
     private List<String> jarExcludes = Collections.emptyList();
     private List<String> packageIncludes = Arrays.asList(
+            //JVM Packages (see the jdk-packages* files):
+            "javax.*", "org.maera.*", "org.xml.*", "org.w3c.dom*", "org.ietf.jgss*",
+            //Maera Packages:
+            "org.maera.*", //Maera Packages
+            //3rd Party Packages:
+            "org.slf4j*", "org.bouncycastle*", "org.dom4j*", "org.jdom*"
+    );
+
+    /*private List<String> packageIncludes = Arrays.asList(
             "org.maera.*", "com.google.common.*", "javax.*", "net.jcip.*", "org.jfree.*",
             "org.joda.*", "org.quartz", "org.quartz.*", "com.opensymphony.*", "org.apache.*", "org.ofbiz.*", "org.xml.*", "org.w3c.*", "webwork.*",
-            "org.tuckey.web.filters.urlrewrite.*", "org.bouncycastle*", "org.dom4j*", "org.jdom*", "com.perforce*", "org.slf4j*");
+            "org.tuckey.web.filters.urlrewrite.*", "org.bouncycastle*", "org.dom4j*", "org.jdom*", "com.perforce*", "org.slf4j*");*/
+
     private List<String> packageExcludes = Arrays.asList("com.springframework*", "org.apache.tomcat.*",
             "org.apache.catalina.*", "org.apache.jasper.*", "org.apache.coyote.*", "org.apache.naming*");
     private Map<String, String> packageVersions;

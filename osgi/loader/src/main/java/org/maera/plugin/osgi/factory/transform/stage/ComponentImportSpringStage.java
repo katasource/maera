@@ -15,9 +15,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Transforms component imports into a Spring XML file
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class ComponentImportSpringStage implements TransformStage {
+    
     /**
      * Path of generated Spring XML file
      */

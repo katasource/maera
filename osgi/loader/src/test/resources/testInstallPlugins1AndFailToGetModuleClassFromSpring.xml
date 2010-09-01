@@ -1,8 +1,8 @@
-<atlassian-plugin name='Test' key='first' pluginsVersion='1'>
+<maera-plugin name='Test' key='first' pluginsVersion='1'>
     <plugin-info>
         <version>1.0</version>
     </plugin-info>
     <servlet key='foo' class='bean:BeanServlet' name="A test servlet">
         <url-pattern>/foo</url-pattern>
     </servlet>
-</atlassian-plugin>
+</maera-plugin>

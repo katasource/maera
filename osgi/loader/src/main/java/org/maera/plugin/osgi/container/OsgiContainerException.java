@@ -4,9 +4,12 @@ import org.maera.plugin.PluginException;
 
 /**
  * Generic wrapper exception for any OSGi-related exceptions
+ *
+ * @since 0.1
  */
 ///CLOVER:OFF
 public class OsgiContainerException extends PluginException {
+    
     public OsgiContainerException() {
     }
 

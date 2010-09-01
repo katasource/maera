@@ -3,15 +3,16 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:osgi="http://www.springframework.org/schema/osgi"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
            http://www.springframework.org/schema/osgi
-           http://www.springframework.org/schema/osgi/spring-osgi.xsd"
-       default-autowire="autodetect">
+           http://www.springframework.org/schema/osgi/spring-osgi.xsd" default-autowire="autodetect">
 
     <!-- Bridges the plugin event system with the Spring OSGi events -->
     <bean id="osgiApplicationEventMulticaster" class="org.maera.plugin.osgi.spring.PluginBridgeEventMulticaster"/>
+
     <!-- Uses a cached thread pool instead of creating a new thread for every context creation -->
     <bean id="taskExecutor" class="org.maera.plugin.osgi.spring.ThreadPoolAsyncTaskExecutor"/>
+
     <!-- Creates an application context that disables XML Schema validation -->
     <bean id="applicationContextCreator"
           class="org.maera.plugin.osgi.spring.NonValidatingOsgiApplicationContextCreator"/>

@@ -3,9 +3,10 @@ package org.maera.plugin.osgi.container;
 /**
  * Event fired when the OSGi container has stopped
  *
- * @since 2.5.0
+ * @since 0.1
  */
 public class OsgiContainerStoppedEvent {
+    
     private final OsgiContainerManager osgiContainerManager;
 
     public OsgiContainerStoppedEvent(OsgiContainerManager osgiContainerManager) {

@@ -9,8 +9,11 @@ import java.util.Hashtable;
 
 /**
  * A registration of a host component
+ *
+ * @since 0.1
  */
 class Registration implements HostComponentRegistration {
+    
     private final String[] mainInterfaces;
     private final Class<?>[] mainInterfaceClasses;
     private final Dictionary<String, String> properties = new Hashtable<String, String>();

@@ -21,16 +21,22 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.StringTokenizer;
 import java.util.jar.JarEntry;
 import java.util.jar.Manifest;
 
 /**
  * Generates an OSGi manifest if not already defined.  Should be the last stage.
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class GenerateManifestStage implements TransformStage {
+    
     private final int SPRING_TIMEOUT = PluginUtils.getDefaultEnablingWaitPeriod();
     private final String SPRING_CONTEXT_DEFAULT = "*;" + SPRING_CONTEXT_TIMEOUT + SPRING_TIMEOUT;
     static Logger log = LoggerFactory.getLogger(GenerateManifestStage.class);

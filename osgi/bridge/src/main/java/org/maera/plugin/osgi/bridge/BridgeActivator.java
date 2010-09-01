@@ -1,10 +1,10 @@
 package org.maera.plugin.osgi.bridge;
 
+import org.eclipse.gemini.blueprint.context.event.OsgiBundleApplicationContextListener;
 import org.maera.plugin.event.PluginEventManager;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.springframework.osgi.context.event.OsgiBundleApplicationContextListener;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -12,9 +12,10 @@ import java.util.Hashtable;
 /**
  * Registers services for bridging Spring events with the plugin event system
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class BridgeActivator implements BundleActivator {
+
     public void start(BundleContext bundleContext) throws Exception {
         // We can do this because the plugin event manager is a host component
         ServiceReference ref = bundleContext.getServiceReference(PluginEventManager.class.getName());

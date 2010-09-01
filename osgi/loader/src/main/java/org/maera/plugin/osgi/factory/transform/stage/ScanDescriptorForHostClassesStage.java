@@ -20,9 +20,10 @@ import java.util.Map;
 /**
  * Scans the plugin descriptor for any "class" attribute, and ensures that it will be imported, if appropriate.
  *
- * @since 2.2.0
+ * @since 0.1
  */
 public class ScanDescriptorForHostClassesStage implements TransformStage {
+    
     private static final Logger log = LoggerFactory.getLogger(ScanDescriptorForHostClassesStage.class);
 
     @SuppressWarnings("unchecked")
