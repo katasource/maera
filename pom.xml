@@ -44,6 +44,7 @@
         <module>core-api</module>
         <module>io-api</module>
         <module>plugin-api</module>
+        <module>plugin-impl</module>
         <module>engine-api</module>
         <module>core</module>
         <module>main</module>

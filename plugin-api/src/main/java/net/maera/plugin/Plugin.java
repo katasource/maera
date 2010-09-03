@@ -75,7 +75,7 @@ public interface Plugin {
      * @return the current life cycle state of the plugin instance within the host application.
      */
     PluginState getState();
-
+       
     /**
      * Returns a {@code Resource} instance representing the specified plugin resource path.
      *

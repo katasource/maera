@@ -1,4 +1,4 @@
-package net.maera.engine;
+package net.maera.plugin.mgt;
 
 import net.maera.io.Resource;
 import net.maera.plugin.Plugin;
@@ -11,12 +11,11 @@ import java.util.Collection;
  */
 public interface PluginManager {
 
-    Plugin getPlugin(String id);
-    Plugin getPlugin(String key, String version);
+    Plugin getPlugin(String key);
 
     Collection<Plugin> getPlugins();
 
-    void installPlugin(Resource pluginResource);
+    void installPlugins(Resource... pluginResource);
 
-    void uninstall(Plugin plugin);
+    void uninstall(Plugin... plugins);
 }
