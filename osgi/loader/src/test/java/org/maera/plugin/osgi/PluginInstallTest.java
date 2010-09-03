@@ -31,7 +31,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -440,7 +444,7 @@ public class PluginInstallTest extends AbstractPluginInContainerTest {
                     + "       xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
                     + "       xmlns:osgi=\"http://www.springframework.org/schema/osgi\"\n"
                     + "       xsi:schemaLocation=\"http://www.springframework.org/schema/beans\n"
-                    + "           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd\n"
+                    + "           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd\n"
                     + "           http://www.springframework.org/schema/osgi\n"
                     + "           http://www.springframework.org/schema/osgi/spring-osgi.xsd\"\n"
                     + ">\n"

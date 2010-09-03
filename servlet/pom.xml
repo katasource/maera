@@ -2,9 +2,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.maera</groupId>
+        <groupId>net.maera</groupId>
         <artifactId>maera-root</artifactId>
-        <version>0.2-SNAPSHOT</version>
+        <version>0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>maera-servlet</artifactId>
@@ -33,24 +33,24 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.maera</groupId>
+            <groupId>net.maera</groupId>
             <artifactId>maera-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.maera</groupId>
+            <groupId>net.maera</groupId>
             <artifactId>maera-test-filtertest</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.maera</groupId>
+            <groupId>net.maera</groupId>
             <artifactId>maera-test-simpletest</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.maera</groupId>
+            <groupId>net.maera</groupId>
             <artifactId>maera-test-utilities</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>

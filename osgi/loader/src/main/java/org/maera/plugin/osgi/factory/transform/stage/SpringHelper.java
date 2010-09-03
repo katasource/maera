@@ -37,7 +37,7 @@ class SpringHelper {
         root.addNamespace("osgi", "http://www.springframework.org/schema/osgi");
         root.addNamespace("xsi", "http://www.w3.org/2001/XMLSchema-instance");
         root.addAttribute(new QName("schemaLocation", new Namespace("xsi", "http://www.w3.org/2001/XMLSchema-instance")),
-                "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd\n" +
+                "http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd\n" +
                         "http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd");
         root.setName("beans:beans");
         root.addAttribute("default-autowire", "autodetect");

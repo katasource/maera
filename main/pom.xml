@@ -4,9 +4,9 @@
     
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.maera</groupId>
+        <groupId>net.maera</groupId>
         <artifactId>maera-root</artifactId>
-        <version>0.2-SNAPSHOT</version>
+        <version>0.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>maera-main</artifactId>
@@ -18,17 +18,17 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.maera</groupId>
+            <groupId>net.maera</groupId>
             <artifactId>maera-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.maera</groupId>
+            <groupId>net.maera</groupId>
             <artifactId>maera-osgi-loader</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.maera</groupId>
+            <groupId>net.maera</groupId>
             <artifactId>maera-test-utilities</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
