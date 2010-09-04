@@ -46,6 +46,7 @@
         <module>plugin-api</module>
         <module>plugin-impl</module>
         <module>engine-api</module>
+        <module>engine-impl</module>
         <module>core</module>
         <module>main</module>
         <module>osgi</module>
@@ -128,6 +129,11 @@
             <dependency>
                 <groupId>net.maera</groupId>
                 <artifactId>maera-engine-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.maera</groupId>
+                <artifactId>maera-engine-impl</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
