@@ -15,7 +15,7 @@
     <dependencies>
         <dependency>
             <groupId>net.maera</groupId>
-            <artifactId>maera-core</artifactId>
+            <artifactId>maera-core-old</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>

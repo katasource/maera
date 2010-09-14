@@ -7,11 +7,11 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>maera-osgi-container</artifactId>
+    <artifactId>maera-osgi-core</artifactId>
 
-    <name>Maera :: OSGi :: Container</name>
+    <name>Maera :: OSGi :: Core</name>
     <description>
-        Maera APIs that define how the plugin engine uses and manages OSGi containers.
+        Common/Core OSGi-related utilities used across Maera's OSGi-specific modules.
     </description>
 
     <dependencies>
@@ -20,27 +20,15 @@
             <artifactId>maera-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>net.maera</groupId>
-            <artifactId>maera-io</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.maera</groupId>
-            <artifactId>maera-osgi-core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.compendium</artifactId>
+            <groupId>biz.aQute</groupId>
+            <artifactId>bndlib</artifactId>
         </dependency>
 
         <!-- Test dependencies below here: -->
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.main</artifactId>
-            <scope>test</scope>
-        </dependency>
+
     </dependencies>
 </project>
