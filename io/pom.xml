@@ -7,8 +7,15 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>maera-core-api</artifactId>
-    <name>Maera :: Core API</name>
-    <description>Maera's Core API, typically required by all other Maera modules</description>
+    <artifactId>maera-io</artifactId>
+    <name>Maera :: IO API</name>
+    <description>Maera's IO API for working with input-stream based resources</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.maera</groupId>
+            <artifactId>maera-core</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

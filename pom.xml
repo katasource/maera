@@ -41,21 +41,20 @@
     </scm>
 
     <modules>
-        <module>core-api</module>
-        <module>io-api</module>
+        <module>core</module>
+        <module>io</module>
         <module>plugin-api</module>
         <module>plugin-impl</module>
         <module>engine-api</module>
         <module>engine-impl</module>
-        <module>core</module>
         <module>main</module>
         <module>osgi</module>
-        <!-- <module>reference-impl</module> -->
+        <!-- <module>reference-impl</module>
         <module>servlet</module>
         <module>spring</module>
         <module>test</module>
         <module>webfragment</module>
-        <!-- <module>webresource</module> -->
+        <module>webresource</module> -->
     </modules>
 
     <properties>
@@ -113,12 +112,12 @@
             <!-- Maera intra-project dependencies: -->
             <dependency>
                 <groupId>net.maera</groupId>
-                <artifactId>maera-core-api</artifactId>
+                <artifactId>maera-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>net.maera</groupId>
-                <artifactId>maera-io-api</artifactId>
+                <artifactId>maera-io</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

@@ -11,6 +11,7 @@
     <name>Maera :: OSGi</name>
 
     <modules>
+        <module>container</module>
         <module>bridge</module>
         <module>events</module>
         <module>loader</module>
