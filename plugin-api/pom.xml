@@ -8,13 +8,13 @@
     </parent>
 
     <artifactId>maera-plugin-api</artifactId>
-    <name>Maera :: Plugin API</name>
+    <name>Maera :: Plugin :: API</name>
     <description>API for building and using application plugins.</description>
 
     <dependencies>
         <dependency>
             <groupId>net.maera</groupId>
-            <artifactId>maera-io-api</artifactId>
+            <artifactId>maera-io</artifactId>
         </dependency>
     </dependencies>
 </project>

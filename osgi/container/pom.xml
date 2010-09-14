@@ -11,14 +11,21 @@
 
     <name>Maera :: OSGi :: Container</name>
     <description>
-        Maera APIs that define how the plugin engine uses and manages OSGi containers. 
+        Maera APIs that define how the plugin engine uses and manages OSGi containers.
     </description>
 
     <dependencies>
         <dependency>
             <groupId>net.maera</groupId>
             <artifactId>maera-core</artifactId>
-            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.maera</groupId>
+            <artifactId>maera-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
         </dependency>
     </dependencies>
 </project>

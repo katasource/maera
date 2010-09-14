@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>maera-engine-api</artifactId>
-    <name>Maera :: Engine API</name>
+    <name>Maera :: Engine :: API</name>
     <description>Maera's Plugin Engine's API</description>
 
     <dependencies>

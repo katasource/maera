@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>maera-plugin-impl</artifactId>
-    <name>Maera :: Plugin Impl</name>
+    <name>Maera :: Plugin :: Impl</name>
     <description>Implementation support for the Plugin API</description>
 
     <dependencies>

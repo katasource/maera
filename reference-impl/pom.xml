@@ -19,21 +19,6 @@
         </dependency>
         <dependency>
             <groupId>net.maera</groupId>
-            <artifactId>maera-servlet</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.maera</groupId>
-            <artifactId>maera-webfragment</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.maera</groupId>
-            <artifactId>maera-webresource</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.maera</groupId>
             <artifactId>maera-main</artifactId>
             <version>${project.version}</version>
         </dependency>

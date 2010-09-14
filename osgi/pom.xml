@@ -15,6 +15,6 @@
         <module>bridge</module>
         <module>events</module>
         <module>loader</module>
-        <module>spring-extender</module>
+        <!-- <module>spring-extender</module> -->
     </modules>
 </project>

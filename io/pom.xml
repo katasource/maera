@@ -8,7 +8,7 @@
     </parent>
 
     <artifactId>maera-io</artifactId>
-    <name>Maera :: IO API</name>
+    <name>Maera :: IO</name>
     <description>Maera's IO API for working with input-stream based resources</description>
 
     <dependencies>
