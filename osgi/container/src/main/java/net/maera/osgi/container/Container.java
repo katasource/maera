@@ -17,6 +17,8 @@ public interface Container extends Startable, Stoppable {
     @Override
     void stop() throws InterruptedException, ContainerException;
 
+    void stop(long waitMillis) throws InterruptedException, ContainerException;
+
     Bundle installBundle(Resource resource) throws ContainerException;
 
 }

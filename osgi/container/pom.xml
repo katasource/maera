@@ -27,5 +27,12 @@
             <groupId>org.osgi</groupId>
             <artifactId>org.osgi.core</artifactId>
         </dependency>
+
+        <!-- Test dependencies below here: -->
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.main</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>
