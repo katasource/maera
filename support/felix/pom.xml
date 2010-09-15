@@ -3,29 +3,22 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>net.maera</groupId>
-        <artifactId>maera-osgi</artifactId>
+        <artifactId>maera-support</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>maera-osgi-core</artifactId>
-
-    <name>Maera :: OSGi :: Core</name>
-    <description>
-        Common/Core OSGi-related utilities used across Maera's OSGi-specific modules.
-    </description>
+    <artifactId>maera-felix</artifactId>
+    <name>Maera :: Support :: Felix</name>
+    <description>Implementation support for the Apache Felix OSGi framework.</description>
 
     <dependencies>
         <dependency>
             <groupId>net.maera</groupId>
-            <artifactId>maera-core</artifactId>
+            <artifactId>maera-osgi-container</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>biz.aQute</groupId>
-            <artifactId>bndlib</artifactId>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.main</artifactId>
         </dependency>
 
         <!-- Test dependencies below here: -->

@@ -38,6 +38,16 @@
 
         <!-- Test dependencies below here: -->
         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>com.springsource.slf4j.log4j</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>com.springsource.slf4j.org.apache.commons.logging</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.main</artifactId>
             <scope>test</scope>

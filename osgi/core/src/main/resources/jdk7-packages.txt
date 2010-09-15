@@ -1,0 +1,6 @@
+# Java package list pulled from Java SE 7 (excluding java.*) with those in jdk-packages.txt and
+# jdk6-packages.txt removed.  Copied from the packages frame in the Javadocs at
+# http://download.oracle.com/javase/7/docs/api/index.html
+
+javax.script
+javax.swing.plaf.nimbus

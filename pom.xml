@@ -50,6 +50,7 @@
         <module>engine-impl</module>
         <module>main</module>
         <module>osgi</module>
+        <module>support</module>
         <!-- <module>reference-impl</module>
         <module>servlet</module>
         <module>spring</module>
@@ -146,8 +147,24 @@
                 <artifactId>maera-osgi-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>net.maera</groupId>
+                <artifactId>maera-osgi-container</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.maera</groupId>
+                <artifactId>maera-felix</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- 3rd Party dependencies: -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>r06</version>
+            </dependency>
+
             <dependency>
                 <groupId>biz.aQute</groupId>
                 <artifactId>bndlib</artifactId>
