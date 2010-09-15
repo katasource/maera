@@ -29,18 +29,10 @@ public class FelixContainer extends DefaultContainer {
         super(startupThreadFactoryName);
     }
 
-    public String getCacheDirectoryPath() {
-        return cacheDirectoryPath;
-    }
-
-    public void setCacheDirectoryPath(String cacheDirectoryPath) {
-        this.cacheDirectoryPath = cacheDirectoryPath;
-    }
-
     @SuppressWarnings({"unchecked"})
     @Override
-    protected Map<?, ?> prepareFrameworkConfig(Map configMap) {
-        Map map = super.prepareFrameworkConfig(configMap);
+    protected Map<String, Object> prepareFrameworkConfig(Map<String, Object> configMap) {
+        Map<String, Object> map = super.prepareFrameworkConfig(configMap);
 
         // Explicitly specify the directory to use for caching bundles.
         map.put(BundleCache.CACHE_ROOTDIR_PROP, getCacheDirectoryPath());
@@ -56,5 +48,13 @@ public class FelixContainer extends DefaultContainer {
         configMap.put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, activators);
 
         return map;
+    }
+
+    public String getCacheDirectoryPath() {
+        return cacheDirectoryPath;
+    }
+
+    public void setCacheDirectoryPath(String cacheDirectoryPath) {
+        this.cacheDirectoryPath = cacheDirectoryPath;
     }
 }

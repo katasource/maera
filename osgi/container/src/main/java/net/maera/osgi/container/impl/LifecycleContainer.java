@@ -44,32 +44,30 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class LifecycleContainer implements Container, Initializable, Destroyable {
 
-    private static final transient Logger log = LoggerFactory.getLogger(LifecycleContainer.class);
-
     private static final String OSGI_FRAMEWORK_FACTORY_BOOTSTRAP_RESOURCE_PATH =
             "META-INF/services/org.osgi.framework.launch.FrameworkFactory";
-
-    private static final String STARTUP_THREAD_NAME = "OSGi:Startup";
     private static final long STARTUP_JOIN_WAIT_MILLIS = 10 * 60 * 1000;
+    private static final String STARTUP_THREAD_NAME = "OSGi:Startup";
 
-    private FrameworkFactory frameworkFactory;
-    private Framework framework;
-    private boolean frameworkCreatedImplicitly;
-    private Map<?, ?> frameworkConfig;
-    private long stopWaitMillis;
-
-    private volatile boolean initialized;
-    private volatile boolean running;
-    private final Lock lifecycleLock;
+    private static final transient Logger log = LoggerFactory.getLogger(LifecycleContainer.class);
 
     private final ThreadFactory frameworkStartThreadFactory;
+    private final Lock lifecycleLock;
+
+    private Framework framework;
+    private Map<String, Object> frameworkConfig;
+    private boolean frameworkCreatedImplicitly;
+    private FrameworkFactory frameworkFactory;
+    private volatile boolean initialized;
+    private volatile boolean running;
+    private long stopWaitMillis;
 
     public LifecycleContainer() {
         this(STARTUP_THREAD_NAME);
     }
 
     public LifecycleContainer(final String startupThreadName) {
-        this.frameworkConfig = new LinkedHashMap();
+        this.frameworkConfig = new LinkedHashMap<String, Object>();
         this.initialized = false;
         this.running = false;
         this.stopWaitMillis = 5000; //5 seconds
@@ -78,72 +76,13 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
         this.lifecycleLock = new ReentrantLock();
 
         this.frameworkStartThreadFactory = new ThreadFactory() {
+
             public Thread newThread(final Runnable r) {
                 final Thread thread = new Thread(r, startupThreadName);
                 thread.setDaemon(true);
                 return thread;
             }
         };
-    }
-
-    public FrameworkFactory getFrameworkFactory() {
-        return frameworkFactory;
-    }
-
-    public void setFrameworkFactory(FrameworkFactory frameworkFactory) {
-        this.frameworkFactory = frameworkFactory;
-    }
-
-    public Framework getFramework() {
-        return framework;
-    }
-
-    public void setFramework(Framework framework) {
-        this.framework = framework;
-    }
-
-    public Map<?, ?> getFrameworkConfig() {
-        return frameworkConfig;
-    }
-
-    public void setFrameworkConfig(Map<?, ?> frameworkConfig) {
-        this.frameworkConfig = frameworkConfig;
-    }
-
-    public long getStopWaitMillis() {
-        return stopWaitMillis;
-    }
-
-    public void setStopWaitMillis(long stopWaitMillis) {
-        this.stopWaitMillis = stopWaitMillis;
-    }
-
-    protected boolean isInitialized() {
-        return this.initialized;
-    }
-
-    protected boolean isRunning() {
-        return this.running;
-    }
-
-    private static FrameworkFactory createFrameworkFactory(String className) throws ContainerException {
-        try {
-            Class clazz = Class.forName(className);
-            return (FrameworkFactory) clazz.newInstance();
-        } catch (ClassNotFoundException e) {
-            throw new ContainerException("Unable to find FrameworkFactory class [" +
-                    className + "]. Ensure an OSGi 4.2 (or greater) compatible framework " +
-                    "is on the classpath.  These frameworks define this class in a file '" +
-                    OSGI_FRAMEWORK_FACTORY_BOOTSTRAP_RESOURCE_PATH + "'.", e);
-        } catch (IllegalAccessException e) {
-            String msg = "Fatal error: Unable to access frameworkFactoryClass [" +
-                    className + "].  The plugin system cannot initialize.";
-            throw new ContainerException(msg, e);
-        } catch (InstantiationException e) {
-            String msg = "Fatal error: Unable to instantiate frameworkFactoryClass [" + className + "].  Ensure " +
-                    "an OSGi 4.2 (or greater) compatible framework is on the classpath.";
-            throw new ContainerException(msg, e);
-        }
     }
 
     @Override
@@ -157,47 +96,20 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
         }
     }
 
-    protected void lockedInit() throws ContainerException {
-        if (this.framework == null) {
-            if (this.frameworkFactory == null) {
-                this.frameworkFactory = getDefaultFrameworkFactory();
-            }
-            if (this.frameworkFactory == null) {
-                throw new IllegalStateException("FrameworkFactory instance cannot be null.");
-            }
-            //allow subclasses to contribute to the config if desired:
-            Map<?,?> config = null;
-            try {
-                config = prepareFrameworkConfig(this.frameworkConfig);
-                log.debug("Prepared framework configuration map {}", config);
-            } catch (Throwable t ) {
-                Throwables.propagateIfInstanceOf(t, ContainerException.class);
-                throw new ContainerException("Unable to properly prepare framework configuration map.", t);
-            }
-            this.framework = this.frameworkFactory.newFramework(config);
-            this.frameworkCreatedImplicitly = true;
-        }
-
+    @Override
+    public void destroy() {
+        this.lifecycleLock.lock();
         try {
-            this.framework.init();
-            onInit();
-            this.initialized = true;
-        } catch (Throwable t) {
-            Throwables.propagateIfInstanceOf(t, ContainerException.class);
-            throw new ContainerException("Unable to successfully initialize.", t);
+            lockedDestroy();
+            log.debug("OSGi container cleanly destroyed.");
+        } finally {
+            this.lifecycleLock.unlock();
         }
     }
 
-    protected Map<?,?> prepareFrameworkConfig(Map frameworkConfig) {
-        return frameworkConfig;
-    }
-
-    /**
-     * Template method for subclass custom initialization logic, if necessary.
-     *
-     * @throws Exception if there is any error during initialization
-     */
-    protected void onInit() throws Exception {
+    @Override
+    public Bundle installBundle(Resource resource) throws ContainerException {
+        throw new UnsupportedOperationException("Not yet implemented!");
     }
 
     @Override
@@ -211,50 +123,6 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
         }
     }
 
-    protected void lockedStart() throws ContainerException {
-        if (running) return;
-        if (!initialized) {
-            init();
-        }
-        try {
-            start(this.framework);
-            onStart();
-            this.running = true;
-        } catch (InterruptedException e) {
-            //_always_ preserve the interrupt status if you don't re-throw the InterruptedException
-            //(Java Concurrency in Practice, Section 7.1.2):
-            Thread.currentThread().interrupt();
-            throw new ContainerException("Encountered InterruptedException while starting the OSGi framework.  " +
-                    "Thread interrupt status has been preserved.", e);
-        } catch (Throwable t) {
-            Throwables.propagateIfInstanceOf(t, ContainerException.class);
-            throw new ContainerException("Unable to start.", t);
-        }
-    }
-
-    private void start(final Framework framework) throws InterruptedException {
-        // Start the framework in a different thread that explicitly sets the daemon status.
-        final Runnable start = new Runnable() {
-            public void run() {
-                try {
-                    Thread.currentThread().setContextClassLoader(null);
-                    framework.start();
-                } catch (final BundleException e) {
-                    String msg = "Unable to start the OSGi framework instance of type " +
-                            framework.getClass();
-                    throw new ContainerException(msg, e);
-                }
-            }
-        };
-        final Thread t = frameworkStartThreadFactory.newThread(start);
-        t.start();
-
-        t.join(STARTUP_JOIN_WAIT_MILLIS); //should this be configurable?
-    }
-
-    protected void onStart() throws Exception {
-    }
-
     @Override
     public void stop() throws InterruptedException, ContainerException {
         stop(this.stopWaitMillis);
@@ -264,43 +132,6 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
         this.lifecycleLock.lock();
         try {
             lockedStop(waitMillis);
-        } finally {
-            this.lifecycleLock.unlock();
-        }
-    }
-
-    protected void lockedStop(long waitMillis) throws InterruptedException, ContainerException {
-        if (!running || this.framework == null) return;
-        try {
-            onStop();
-            this.framework.stop();
-            if (waitMillis > 0) {
-                this.framework.waitForStop(waitMillis);
-            }
-            this.running = false;
-            log.info("OSGi container stopped.");
-        } catch (Throwable t) {
-            Throwables.propagateIfInstanceOf(t, InterruptedException.class);
-            Throwables.propagateIfInstanceOf(t, ContainerException.class);
-            //wrap and propagate:
-            throw new ContainerException("Unable to cleanly stop the OSGi framework.");
-        }
-    }
-
-    protected void onStop() throws Exception {
-    }
-
-    @Override
-    public Bundle installBundle(Resource resource) throws ContainerException {
-        throw new UnsupportedOperationException("Not yet implemented!");
-    }
-
-    @Override
-    public void destroy() {
-        this.lifecycleLock.lock();
-        try {
-            lockedDestroy();
-            log.debug("OSGi container cleanly destroyed.");
         } finally {
             this.lifecycleLock.unlock();
         }
@@ -329,7 +160,136 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
         }
     }
 
+    protected void lockedInit() throws ContainerException {
+        if (this.framework == null) {
+            if (this.frameworkFactory == null) {
+                this.frameworkFactory = getDefaultFrameworkFactory();
+            }
+            if (this.frameworkFactory == null) {
+                throw new IllegalStateException("FrameworkFactory instance cannot be null.");
+            }
+            //allow subclasses to contribute to the config if desired:
+            Map<String, Object> config;
+            try {
+                config = prepareFrameworkConfig(this.frameworkConfig);
+                log.debug("Prepared framework configuration map {}", config);
+            } catch (Throwable t) {
+                Throwables.propagateIfInstanceOf(t, ContainerException.class);
+                throw new ContainerException("Unable to properly prepare framework configuration map.", t);
+            }
+            this.framework = this.frameworkFactory.newFramework(config);
+            this.frameworkCreatedImplicitly = true;
+        }
+
+        try {
+            this.framework.init();
+            onInit();
+            this.initialized = true;
+        } catch (Throwable t) {
+            Throwables.propagateIfInstanceOf(t, ContainerException.class);
+            throw new ContainerException("Unable to successfully initialize.", t);
+        }
+    }
+
+    protected void lockedStart() throws ContainerException {
+        if (running) return;
+        if (!initialized) {
+            init();
+        }
+        try {
+            start(this.framework);
+            onStart();
+            this.running = true;
+        } catch (InterruptedException e) {
+            //_always_ preserve the interrupt status if you don't re-throw the InterruptedException
+            //(Java Concurrency in Practice, Section 7.1.2):
+            Thread.currentThread().interrupt();
+            throw new ContainerException("Encountered InterruptedException while starting the OSGi framework.  " +
+                    "Thread interrupt status has been preserved.", e);
+        } catch (Throwable t) {
+            Throwables.propagateIfInstanceOf(t, ContainerException.class);
+            throw new ContainerException("Unable to start.", t);
+        }
+    }
+
+    protected void lockedStop(long waitMillis) throws InterruptedException, ContainerException {
+        if (!running || this.framework == null) return;
+        try {
+            onStop();
+            this.framework.stop();
+            if (waitMillis > 0) {
+                this.framework.waitForStop(waitMillis);
+            }
+            this.running = false;
+            log.info("OSGi container stopped.");
+        } catch (Throwable t) {
+            Throwables.propagateIfInstanceOf(t, InterruptedException.class);
+            Throwables.propagateIfInstanceOf(t, ContainerException.class);
+            //wrap and propagate:
+            throw new ContainerException("Unable to cleanly stop the OSGi framework.");
+        }
+    }
+
     protected void onDestroy() throws Exception {
+    }
+
+    /**
+     * Template method for subclass custom initialization logic, if necessary.
+     *
+     * @throws Exception if there is any error during initialization
+     */
+    protected void onInit() throws Exception {
+    }
+
+    protected void onStart() throws Exception {
+    }
+
+    protected void onStop() throws Exception {
+    }
+
+    protected Map<String, Object> prepareFrameworkConfig(Map<String, Object> frameworkConfig) {
+        return frameworkConfig;
+    }
+
+    private void start(final Framework framework) throws InterruptedException {
+        // Start the framework in a different thread that explicitly sets the daemon status.
+        final Runnable start = new Runnable() {
+
+            public void run() {
+                try {
+                    Thread.currentThread().setContextClassLoader(null);
+                    framework.start();
+                } catch (final BundleException e) {
+                    String msg = "Unable to start the OSGi framework instance of type " +
+                            framework.getClass();
+                    throw new ContainerException(msg, e);
+                }
+            }
+        };
+        final Thread t = frameworkStartThreadFactory.newThread(start);
+        t.start();
+
+        t.join(STARTUP_JOIN_WAIT_MILLIS); //should this be configurable?
+    }
+
+    private static FrameworkFactory createFrameworkFactory(String className) throws ContainerException {
+        try {
+            Class clazz = Class.forName(className);
+            return (FrameworkFactory) clazz.newInstance();
+        } catch (ClassNotFoundException e) {
+            throw new ContainerException("Unable to find FrameworkFactory class [" +
+                    className + "]. Ensure an OSGi 4.2 (or greater) compatible framework " +
+                    "is on the classpath.  These frameworks define this class in a file '" +
+                    OSGI_FRAMEWORK_FACTORY_BOOTSTRAP_RESOURCE_PATH + "'.", e);
+        } catch (IllegalAccessException e) {
+            String msg = "Fatal error: Unable to access frameworkFactoryClass [" +
+                    className + "].  The plugin system cannot initialize.";
+            throw new ContainerException(msg, e);
+        } catch (InstantiationException e) {
+            String msg = "Fatal error: Unable to instantiate frameworkFactoryClass [" + className + "].  Ensure " +
+                    "an OSGi 4.2 (or greater) compatible framework is on the classpath.";
+            throw new ContainerException(msg, e);
+        }
     }
 
     private static FrameworkFactory getDefaultFrameworkFactory() throws ContainerException {
@@ -343,6 +303,7 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
         }
 
         LineProcessor<String> classNameFinder = new LineProcessor<String>() {
+
             private String className;
 
             @Override
@@ -378,4 +339,43 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
         return createFrameworkFactory(className);
     }
 
+    public Framework getFramework() {
+        return framework;
+    }
+
+    public void setFramework(Framework framework) {
+        this.framework = framework;
+    }
+
+    public Map<?, ?> getFrameworkConfig() {
+        return frameworkConfig;
+    }
+
+    public void setFrameworkConfig(Map<String, Object> frameworkConfig) {
+        this.frameworkConfig = frameworkConfig;
+    }
+
+    public FrameworkFactory getFrameworkFactory() {
+        return frameworkFactory;
+    }
+
+    public void setFrameworkFactory(FrameworkFactory frameworkFactory) {
+        this.frameworkFactory = frameworkFactory;
+    }
+
+    public long getStopWaitMillis() {
+        return stopWaitMillis;
+    }
+
+    public void setStopWaitMillis(long stopWaitMillis) {
+        this.stopWaitMillis = stopWaitMillis;
+    }
+
+    protected boolean isInitialized() {
+        return this.initialized;
+    }
+
+    protected boolean isRunning() {
+        return this.running;
+    }
 }
