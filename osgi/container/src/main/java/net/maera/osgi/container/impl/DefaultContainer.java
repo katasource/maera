@@ -9,6 +9,7 @@ import org.osgi.framework.Constants;
 import java.util.Map;
 
 /**
+ * @author Les Hazlewood
  * @since 0.1
  */
 public class DefaultContainer extends LifecycleContainer {
@@ -93,7 +94,7 @@ public class DefaultContainer extends LifecycleContainer {
      * @param configMap The Felix configuration
      * @throws ContainerException If any validation fails
      */
-    private void validateConfiguration(Map configMap) throws ContainerException {
+    private void validateConfiguration(Map<String, Object> configMap) throws ContainerException {
         String systemExports = (String) configMap.get(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA);
         validateCaches(systemExports);
         detectIncorrectOsgiVersion();
