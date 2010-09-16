@@ -1,0 +1,138 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>net.maera</groupId>
+        <artifactId>maera-osgi</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>maera-osgi-seed-bundles</artifactId>
+    <packaging>pom</packaging>
+    <name>Maera :: OSGi :: Seed Bundles</name>
+    <description>
+        A packaging of the seed OSGi bundles that Maera will auto-deploy to the OSGi container at container
+        startup, mostly Gemini Blueprint and Spring 3.x.
+    </description>
+
+    <properties>
+        <frameworkBundleDirectory>${project.build.directory}/seed-bundles</frameworkBundleDirectory>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-seed-bundles</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${frameworkBundleDirectory}</outputDirectory>
+                            <artifactItems>
+                                <!-- Needed by the spring aop bundle: -->
+                                <artifactItem>
+                                    <groupId>org.aopalliance</groupId>
+                                    <artifactId>com.springsource.org.aopalliance</artifactId>
+                                    <version>${aopalliance.version}</version>
+                                </artifactItem>
+
+                                <!-- <artifactItem>
+                                    <groupId>org.eclipse.gemini.blueprint</groupId>
+                                    <artifactId>gemini-blueprint-annotation</artifactId>
+                                    <version>${gemini.blueprint.version}</version>
+                                </artifactItem> -->
+                                <artifactItem>
+                                    <groupId>org.eclipse.gemini.blueprint</groupId>
+                                    <artifactId>gemini-blueprint-core</artifactId>
+                                    <version>${gemini.blueprint.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.eclipse.gemini.blueprint</groupId>
+                                    <artifactId>gemini-blueprint-extender</artifactId>
+                                    <version>${gemini.blueprint.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.eclipse.gemini.blueprint</groupId>
+                                    <artifactId>gemini-blueprint-io</artifactId>
+                                    <version>${gemini.blueprint.version}</version>
+                                </artifactItem>
+                                <!-- Needed by the below slfj4 JCL bundle: -->
+                                <!-- <artifactItem>
+                                    <groupId>org.slf4j</groupId>
+                                    <artifactId>com.springsource.slf4j.api</artifactId>
+                                    <version>${slf4j.version}</version>
+                                </artifactItem>
+                                <!- - Needed by the Spring bundles: -->
+                                <!-- <artifactItem>
+                                    <groupId>org.slf4j</groupId>
+                                    <artifactId>com.springsource.slf4j.org.apache.commons.logging</artifactId>
+                                    <version>${slf4j.version}</version>
+                                </artifactItem> -->
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>org.springframework.aop</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>org.springframework.asm</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>org.springframework.beans</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>org.springframework.core</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>org.springframework.context</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.springframework</groupId>
+                                    <artifactId>org.springframework.expression</artifactId>
+                                    <version>${spring.version}</version>
+                                </artifactItem>
+
+                                <!-- Allow hot deploy/undeploy of bundles: -->
+                                <artifactItem>
+                                    <groupId>org.apache.felix</groupId>
+                                    <artifactId>org.apache.felix.fileinstall</artifactId>
+                                    <version>${felix.fileinstall.version}</version>
+                                </artifactItem>
+
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/seed-bundles.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>package-seed-bundles</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

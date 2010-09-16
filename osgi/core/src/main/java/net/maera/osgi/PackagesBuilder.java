@@ -2,6 +2,7 @@ package net.maera.osgi;
 
 import com.google.common.base.Charsets;
 import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
 import com.google.common.io.LineProcessor;
 import com.google.common.io.Resources;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Map;
 
 /**
  * @since 0.1
@@ -51,6 +53,18 @@ public class PackagesBuilder {
         return this;
     }
 
+    public PackagesBuilder append(Map<String,String> packagesWithVersions) {
+        if (packagesWithVersions != null && !packagesWithVersions.isEmpty() ) {
+            for( Map.Entry<String,String> entry : packagesWithVersions.entrySet() ) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+                value = value != null ? value.trim() : value;
+                append(key, value);
+            }
+        }
+        return this;
+    }
+
     /**
      * Append the OSGi packages by default (OSGi 4.2 specification package versions).
      *
@@ -75,6 +89,22 @@ public class PackagesBuilder {
             appendListedPackages(JDK7_PACKAGES_FILE);
         }
         return this;
+    }
+
+    /**
+     * These exist to work around JAXP problems.  Specifically, bundles that use static factories to create JAXP
+     * instances will execute FactoryFinder with the CCL set to the bundle.  These delegations ensure the appropriate
+     * implementation is found and loaded.
+     */
+    public PackagesBuilder withBootDelegationDefaults() {
+        return append("weblogic").append("weblogic.*")
+                .append("META-INF.services")
+                .append("com.yourkit").append("com.yourkit.*")
+                .append("com.jprofiler").append("com.jprofiler.*")
+                .append("org.apache.xerces").append("org.apache.xerces.*")
+                .append("org.apache.xalan").append("org.apache.xalan.*")
+                .append("sun.*").append("com.sun.*")
+                .append("com.icl.saxon");
     }
 
     public String toString() {

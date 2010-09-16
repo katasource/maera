@@ -6,12 +6,10 @@ import com.google.common.base.Throwables;
 import com.google.common.io.CharStreams;
 import com.google.common.io.LineProcessor;
 import com.google.common.io.Resources;
-import net.maera.io.Resource;
 import net.maera.lifecycle.Destroyable;
 import net.maera.lifecycle.Initializable;
 import net.maera.osgi.container.Container;
 import net.maera.osgi.container.ContainerException;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
@@ -34,7 +32,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * thread-safe during those calls.
  * <p/>
  * Subclasses can implement any lifecycle logic as required by overriding any of the respective template
- * {@link #onInit}, {@link #onStart}, {@link #onStop}, {@link #onDestroy} methods as necessary.
+ * {@link #afterInit}, {@link #onStart}, {@link #onStop}, {@link #onDestroy} methods as necessary.
  * <p/>
  * Finally, thread-safety is only guaranteed during the aforementioned lifecycle method invocations.  Subclasses
  * must ensure thread-safety on their own for any methods not invoked during the lifecycle operations.
@@ -42,7 +40,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Les Hazlewood
  * @since 0.1
  */
-public class LifecycleContainer implements Container, Initializable, Destroyable {
+public abstract class LifecycleContainer implements Container, Initializable, Destroyable {
 
     private static final String OSGI_FRAMEWORK_FACTORY_BOOTSTRAP_RESOURCE_PATH =
             "META-INF/services/org.osgi.framework.launch.FrameworkFactory";
@@ -50,23 +48,19 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
     private static final String STARTUP_THREAD_NAME = "OSGi:Startup";
 
     private static final transient Logger log = LoggerFactory.getLogger(LifecycleContainer.class);
-
-    private final ThreadFactory frameworkStartThreadFactory;
     private final Lock lifecycleLock;
 
     private Framework framework;
     private Map<String, Object> frameworkConfig;
     private boolean frameworkCreatedImplicitly;
     private FrameworkFactory frameworkFactory;
+
+    private ThreadFactory frameworkStartThreadFactory;
     private volatile boolean initialized;
     private volatile boolean running;
     private long stopWaitMillis;
 
     public LifecycleContainer() {
-        this(STARTUP_THREAD_NAME);
-    }
-
-    public LifecycleContainer(final String startupThreadName) {
         this.frameworkConfig = new LinkedHashMap<String, Object>();
         this.initialized = false;
         this.running = false;
@@ -78,7 +72,7 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
         this.frameworkStartThreadFactory = new ThreadFactory() {
 
             public Thread newThread(final Runnable r) {
-                final Thread thread = new Thread(r, startupThreadName);
+                final Thread thread = new Thread(r, STARTUP_THREAD_NAME);
                 thread.setDaemon(true);
                 return thread;
             }
@@ -108,11 +102,6 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
     }
 
     @Override
-    public Bundle installBundle(Resource resource) throws ContainerException {
-        throw new UnsupportedOperationException("Not yet implemented!");
-    }
-
-    @Override
     public void start() throws ContainerException {
         this.lifecycleLock.lock();
         try {
@@ -135,6 +124,25 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
         } finally {
             this.lifecycleLock.unlock();
         }
+    }
+
+    /**
+     * Template method for subclass custom post initialization logic, if necessary.  The Framework will already
+     * be successfully initialized after this method is invoked.
+     *
+     * @throws Exception if there is any error during initialization
+     */
+    protected void afterInit() throws Exception {
+    }
+
+    /**
+     * Template method that allows pre-initialization behavior for subclasses.  Called after all class attributes
+     * have been injected but before the framework config is {@link #prepareFrameworkConfig(java.util.Map) prepared}
+     * or the OSGi framework is {@link org.osgi.framework.launch.Framework#init() init}ialized.
+     * 
+     * @throws Exception if something goes wrong.
+     */
+    protected void afterPropertiesSet() throws Exception {
     }
 
     protected void lockedDestroy() throws ContainerException {
@@ -161,29 +169,30 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
     }
 
     protected void lockedInit() throws ContainerException {
-        if (this.framework == null) {
-            if (this.frameworkFactory == null) {
-                this.frameworkFactory = getDefaultFrameworkFactory();
-            }
-            if (this.frameworkFactory == null) {
-                throw new IllegalStateException("FrameworkFactory instance cannot be null.");
-            }
-            //allow subclasses to contribute to the config if desired:
-            Map<String, Object> config;
-            try {
-                config = prepareFrameworkConfig(this.frameworkConfig);
-                log.debug("Prepared framework configuration map {}", config);
-            } catch (Throwable t) {
-                Throwables.propagateIfInstanceOf(t, ContainerException.class);
-                throw new ContainerException("Unable to properly prepare framework configuration map.", t);
-            }
-            this.framework = this.frameworkFactory.newFramework(config);
-            this.frameworkCreatedImplicitly = true;
-        }
-
         try {
+            afterPropertiesSet();
+            if (this.framework == null) {
+                if (this.frameworkFactory == null) {
+                    this.frameworkFactory = getDefaultFrameworkFactory();
+                }
+                if (this.frameworkFactory == null) {
+                    throw new IllegalStateException("FrameworkFactory instance cannot be null.");
+                }
+                //allow subclasses to contribute to the config if desired:
+                Map<String, Object> config;
+                try {
+                    config = prepareFrameworkConfig(this.frameworkConfig);
+                    log.debug("Prepared framework configuration map {}", config);
+                } catch (Throwable t) {
+                    Throwables.propagateIfInstanceOf(t, ContainerException.class);
+                    throw new ContainerException("Unable to properly prepare framework configuration map.", t);
+                }
+                this.framework = this.frameworkFactory.newFramework(config);
+                this.frameworkCreatedImplicitly = true;
+            }
+
             this.framework.init();
-            onInit();
+            afterInit();
             this.initialized = true;
         } catch (Throwable t) {
             Throwables.propagateIfInstanceOf(t, ContainerException.class);
@@ -231,14 +240,6 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
     }
 
     protected void onDestroy() throws Exception {
-    }
-
-    /**
-     * Template method for subclass custom initialization logic, if necessary.
-     *
-     * @throws Exception if there is any error during initialization
-     */
-    protected void onInit() throws Exception {
     }
 
     protected void onStart() throws Exception {
@@ -361,6 +362,14 @@ public class LifecycleContainer implements Container, Initializable, Destroyable
 
     public void setFrameworkFactory(FrameworkFactory frameworkFactory) {
         this.frameworkFactory = frameworkFactory;
+    }
+
+    public ThreadFactory getFrameworkStartThreadFactory() {
+        return frameworkStartThreadFactory;
+    }
+
+    public void setFrameworkStartThreadFactory(ThreadFactory frameworkStartThreadFactory) {
+        this.frameworkStartThreadFactory = frameworkStartThreadFactory;
     }
 
     public long getStopWaitMillis() {

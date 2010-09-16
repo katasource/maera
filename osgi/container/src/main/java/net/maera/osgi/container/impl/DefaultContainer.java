@@ -1,9 +1,11 @@
 package net.maera.osgi.container.impl;
 
 import com.google.common.base.Strings;
+import net.maera.io.Resource;
 import net.maera.osgi.PackagesBuilder;
 import net.maera.osgi.container.ContainerException;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 
 import java.util.Map;
@@ -17,13 +19,29 @@ public class DefaultContainer extends LifecycleContainer {
     protected static final String MAERA_PROPERTY_PREFIX = "maera.";
 
     protected static final String OSGI_BOOT_DELEGATION_PROPERTY = "org.osgi.framework.bootdelegation";
+    
+    private Map<String,String> bootDelegationPackages;
+    private Map<String,String> extraBootDelegationPackages;
+    private Map<String,String> extraSystemPackages;
+
+    private HostActivator hostActivator;
 
     public DefaultContainer() {
         super();
+        hostActivator = new DefaultHostActivator();
     }
 
-    public DefaultContainer(String startupThreadFactoryName) {
-        super(startupThreadFactoryName);
+    @Override
+    public Bundle installBundle(Resource resource) throws ContainerException {
+        if ( this.hostActivator == null) {
+            throw new NullPointerException("HostActivator class attribute is null.  Subclass implementations " +
+                    "must provide a HostActivator instance.");
+        }
+        try {
+            return this.hostActivator.installBundle(resource, false);
+        } catch (BundleException e) {
+            throw new ContainerException("Unable to install bundle via HostActivator.", e);
+        }
     }
 
     @SuppressWarnings({"unchecked"})
@@ -31,25 +49,16 @@ public class DefaultContainer extends LifecycleContainer {
 
         // Add the bundle provided service interface package and the core OSGi
         // packages to be exported from the class path via the system bundle.
-        configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA,
-                new PackagesBuilder().withOsgiDefaults().withJdkDefaults().toString());
+        PackagesBuilder builder = new PackagesBuilder().withJdkDefaults().withOsgiDefaults().append(extraSystemPackages);
+        configMap.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, builder.toString());
 
+        builder = new PackagesBuilder();
         String bootDelegation = Strings.emptyToNull(getMaeraSpecificSystemProperty(OSGI_BOOT_DELEGATION_PROPERTY));
         if (bootDelegation == null) {
-            // These exist to work around JAXP problems.  Specifically, bundles that use static factories to create JAXP
-            // instances will execute FactoryFinder with the CCL set to the bundle.  These delegations ensure the appropriate
-            // implementation is found and loaded.
-            bootDelegation = "weblogic,weblogic.*," +
-                    "META-INF.services," +
-                    "com.yourkit,com.yourkit.*," +
-                    "com.jprofiler,com.jprofiler.*," +
-                    "org.apache.xerces,org.apache.xerces.*," +
-                    "org.apache.xalan,org.apache.xalan.*," +
-                    "sun.*,com.sun.*," +
-                    "com.icl.saxon";
+            builder.withBootDelegationDefaults();
         }
-
-        configMap.put(Constants.FRAMEWORK_BOOTDELEGATION, bootDelegation);
+        builder.append(extraBootDelegationPackages);
+        configMap.put(Constants.FRAMEWORK_BOOTDELEGATION, builder.toString());
 
         validateConfiguration(configMap);
 
@@ -123,5 +132,37 @@ public class DefaultContainer extends LifecycleContainer {
                 }
             }
         }
+    }
+
+    public Map<String, String> getBootDelegationPackages() {
+        return bootDelegationPackages;
+    }
+
+    public void setBootDelegationPackages(Map<String, String> bootDelegationPackages) {
+        this.bootDelegationPackages = bootDelegationPackages;
+    }
+
+    public Map<String, String> getExtraBootDelegationPackages() {
+        return extraBootDelegationPackages;
+    }
+
+    public void setExtraBootDelegationPackages(Map<String, String> extraBootDelegationPackages) {
+        this.extraBootDelegationPackages = extraBootDelegationPackages;
+    }
+
+    public Map<String, String> getExtraSystemPackages() {
+        return extraSystemPackages;
+    }
+
+    public void setExtraSystemPackages(Map<String, String> extraSystemPackages) {
+        this.extraSystemPackages = extraSystemPackages;
+    }
+
+    public HostActivator getHostActivator() {
+        return hostActivator;
+    }
+
+    public void setHostActivator(HostActivator hostActivator) {
+        this.hostActivator = hostActivator;
     }
 }

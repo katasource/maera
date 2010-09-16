@@ -65,6 +65,7 @@
         <spring.version>3.0.3.RELEASE</spring.version>
         <aopalliance.version>1.0.0</aopalliance.version>
         <slf4j.version>1.5.6</slf4j.version>
+        <felix.fileinstall.version>3.0.2</felix.fileinstall.version>
     </properties>
 
     <build>
@@ -156,6 +157,13 @@
                 <groupId>net.maera</groupId>
                 <artifactId>maera-felix</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.maera</groupId>
+                <artifactId>maera-osgi-seed-bundles</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
+                <type>zip</type>
             </dependency>
 
             <!-- 3rd Party dependencies: -->

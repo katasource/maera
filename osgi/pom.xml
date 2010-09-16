@@ -12,6 +12,7 @@
 
     <modules>
         <module>core</module>
+        <module>seed-bundles</module>
         <module>container</module>
         <module>bridge</module>
         <module>events</module>

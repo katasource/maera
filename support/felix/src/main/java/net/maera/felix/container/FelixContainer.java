@@ -2,7 +2,8 @@ package net.maera.felix.container;
 
 import net.maera.felix.logging.Slf4jLogger;
 import net.maera.osgi.container.impl.DefaultContainer;
-import net.maera.osgi.container.impl.TestActivator;
+import net.maera.osgi.container.impl.DefaultHostActivator;
+import net.maera.osgi.container.impl.HostActivator;
 import org.apache.felix.framework.cache.BundleCache;
 import org.apache.felix.framework.util.FelixConstants;
 import org.slf4j.Logger;
@@ -25,10 +26,6 @@ public class FelixContainer extends DefaultContainer {
         super();
     }
 
-    public FelixContainer(String startupThreadFactoryName) {
-        super(startupThreadFactoryName);
-    }
-
     @SuppressWarnings({"unchecked"})
     @Override
     protected Map<String, Object> prepareFrameworkConfig(Map<String, Object> configMap) {
@@ -38,13 +35,19 @@ public class FelixContainer extends DefaultContainer {
         map.put(BundleCache.CACHE_ROOTDIR_PROP, getCacheDirectoryPath());
 
         Slf4jLogger felixLogger = new Slf4jLogger(log);
-        map.put(FelixConstants.LOG_LEVEL_PROP, String.valueOf(felixLogger.getLogLevel()));
         map.put(FelixConstants.LOG_LOGGER_PROP, felixLogger);
+        map.put(FelixConstants.LOG_LEVEL_PROP, String.valueOf(felixLogger.getLogLevel()));
 
         map.put(FelixConstants.IMPLICIT_BOOT_DELEGATION_PROP, Boolean.FALSE.toString());
         map.put(FelixConstants.FRAMEWORK_BUNDLE_PARENT, FelixConstants.FRAMEWORK_BUNDLE_PARENT_FRAMEWORK);
 
-        List activators = Arrays.asList(new TestActivator());
+        HostActivator hostActivator = getHostActivator();
+        if (hostActivator == null) {
+            hostActivator = new DefaultHostActivator();
+            setHostActivator(hostActivator);
+        }
+
+        List activators = Arrays.asList(hostActivator);
         configMap.put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, activators);
 
         return map;

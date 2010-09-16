@@ -11,6 +11,54 @@
     <name>Maera :: Support :: Felix</name>
     <description>Implementation support for the Apache Felix OSGi framework.</description>
 
+    <properties>
+        <seedBundlesDir>${project.build.directory}/seed-bundles</seedBundlesDir>
+        <seedBundlesZip>${seedBundlesDir}/maera-osgi-seed-bundles-${project.version}.zip</seedBundlesZip>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!-- Make sure our tests have access to the seed-bundles .zip when bootstrapping the container: -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-seed-bundles</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/seed-bundles</outputDirectory>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>net.maera</groupId>
+                                    <artifactId>maera-osgi-seed-bundles</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>zip</type>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <project.version>${project.version}</project.version>
+                        <project.build.directory>${project.build.directory}</project.build.directory>
+                        <seedBundlesDir>${seedBundlesDir}</seedBundlesDir>
+                        <seedBundlesZip>${seedBundlesZip}</seedBundlesZip>
+                        <!-- <felix.fileinstall.dir>${user.home}/.katasoft/am/bundles/deploy</felix.fileinstall.dir>
+                        <felix.fileinstall.tmpdir>${user.home}/.katasoft/am/bundles/tmp</felix.fileinstall.tmpdir> -->
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>net.maera</groupId>
@@ -32,5 +80,12 @@
             <artifactId>com.springsource.slf4j.org.apache.commons.logging</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+                <groupId>net.maera</groupId>
+                <artifactId>maera-osgi-seed-bundles</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
+                <type>zip</type>
+            </dependency>
     </dependencies>
 </project>

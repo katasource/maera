@@ -1,6 +1,9 @@
 package net.maera.osgi.container.impl;
 
+import net.maera.io.Resource;
+import net.maera.osgi.container.ContainerException;
 import org.junit.Test;
+import org.osgi.framework.Bundle;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -12,9 +15,18 @@ import static org.junit.Assert.assertNull;
  */
 public class LifecycleContainerTest {
 
+    private static LifecycleContainer newTestContainer() {
+        return new LifecycleContainer() {
+            @Override
+            public Bundle installBundle(Resource resource) throws ContainerException {
+                return null;
+            }
+        };
+    }
+
     @Test
     public void testDefaultInstance() throws Exception {
-        LifecycleContainer container = new LifecycleContainer();
+        LifecycleContainer container = newTestContainer();
         assertNull(container.getFrameworkFactory());
         assertNull(container.getFramework());
         container.init();
@@ -38,7 +50,7 @@ public class LifecycleContainerTest {
      */
     @Test
     public void testNonInitializedStart() throws Exception {
-        LifecycleContainer container = new LifecycleContainer();
+        LifecycleContainer container = newTestContainer();
         assertNull(container.getFrameworkFactory());
         assertNull(container.getFramework());
         container.start();
