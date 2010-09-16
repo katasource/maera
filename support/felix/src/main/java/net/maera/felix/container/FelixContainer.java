@@ -1,6 +1,7 @@
 package net.maera.felix.container;
 
 import net.maera.felix.logging.Slf4jLogger;
+import net.maera.io.Resource;
 import net.maera.osgi.container.impl.DefaultContainer;
 import net.maera.osgi.container.impl.DefaultHostActivator;
 import net.maera.osgi.container.impl.HostActivator;
@@ -9,6 +10,7 @@ import org.apache.felix.framework.util.FelixConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +24,11 @@ public class FelixContainer extends DefaultContainer {
     private static final transient Logger log = LoggerFactory.getLogger(FelixContainer.class);
     private static final String STARTUP_THREAD_NAME = "Felix:Startup";
 
-    private String cacheDirectoryPath = "felix-cache";
+    private File cacheDirectory;
 
     public FelixContainer() {
         super();
+        cacheDirectory = new File("felix-cache");
         setFrameworkStartThreadFactory(new ThreadFactory() {
             @Override
             public Thread newThread(final Runnable r) {
@@ -42,7 +45,7 @@ public class FelixContainer extends DefaultContainer {
         Map<String, Object> map = super.prepareFrameworkConfig(configMap);
 
         // Explicitly specify the directory to use for caching bundles.
-        map.put(BundleCache.CACHE_ROOTDIR_PROP, getCacheDirectoryPath());
+        map.put(BundleCache.CACHE_ROOTDIR_PROP, getCacheDirectory().getAbsolutePath());
 
         Slf4jLogger felixLogger = new Slf4jLogger(log);
         map.put(FelixConstants.LOG_LOGGER_PROP, felixLogger);
@@ -63,11 +66,11 @@ public class FelixContainer extends DefaultContainer {
         return map;
     }
 
-    public String getCacheDirectoryPath() {
-        return cacheDirectoryPath;
+    public File getCacheDirectory() {
+        return cacheDirectory;
     }
 
-    public void setCacheDirectoryPath(String cacheDirectoryPath) {
-        this.cacheDirectoryPath = cacheDirectoryPath;
+    public void setCacheDirectory(File cacheDirectory) {
+        this.cacheDirectory = cacheDirectory;
     }
 }

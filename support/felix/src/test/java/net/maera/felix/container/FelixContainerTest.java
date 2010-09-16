@@ -1,7 +1,5 @@
 package net.maera.felix.container;
 
-import com.google.common.collect.MapMaker;
-import com.google.common.collect.Maps;
 import net.maera.io.FileSystemResource;
 import net.maera.osgi.container.impl.DefaultHostActivator;
 import org.junit.Test;
@@ -27,7 +25,7 @@ public class FelixContainerTest {
         container.setExtraSystemPackages(extras);
         container.setHostActivator(activator);
 
-        container.setCacheDirectoryPath(System.getProperty("project.build.directory"));
+        container.setCacheDirectory(new FileSystemResource(System.getProperty("project.build.directory")).getFile());
         container.init();
         container.start();
         container.stop();
