@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadFactory;
 
 /**
  * @since 0.1
@@ -19,11 +20,20 @@ import java.util.Map;
 public class FelixContainer extends DefaultContainer {
 
     private static final transient Logger log = LoggerFactory.getLogger(FelixContainer.class);
+    private static final String STARTUP_THREAD_NAME = "Felix:Startup";
 
     private String cacheDirectoryPath = "felix-cache";
 
     public FelixContainer() {
         super();
+        setFrameworkStartThreadFactory(new ThreadFactory() {
+            @Override
+            public Thread newThread(final Runnable r) {
+                final Thread thread = new Thread(r, STARTUP_THREAD_NAME);
+                thread.setDaemon(true);
+                return thread;
+            }
+        });
     }
 
     @SuppressWarnings({"unchecked"})
