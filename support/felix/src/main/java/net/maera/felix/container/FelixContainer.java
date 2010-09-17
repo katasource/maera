@@ -1,17 +1,17 @@
 package net.maera.felix.container;
 
 import net.maera.felix.logging.Slf4jLogger;
-import net.maera.io.Resource;
 import net.maera.osgi.container.impl.DefaultContainer;
 import net.maera.osgi.container.impl.DefaultHostActivator;
 import net.maera.osgi.container.impl.HostActivator;
 import org.apache.felix.framework.cache.BundleCache;
 import org.apache.felix.framework.util.FelixConstants;
+import org.osgi.framework.BundleActivator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadFactory;
@@ -25,6 +25,7 @@ public class FelixContainer extends DefaultContainer {
     private static final String STARTUP_THREAD_NAME = "Felix:Startup";
 
     private File cacheDirectory;
+    private List<BundleActivator> extraActivators;
 
     public FelixContainer() {
         super();
@@ -59,9 +60,19 @@ public class FelixContainer extends DefaultContainer {
             hostActivator = new DefaultHostActivator();
             setHostActivator(hostActivator);
         }
+        List<BundleActivator> allActivators;
+        int extraActivatorsSize = this.extraActivators != null ? this.extraActivators.size() : 0;
+        if (extraActivatorsSize > 0) {
+            allActivators = new ArrayList<BundleActivator>(extraActivatorsSize + 1);
+        } else {
+            allActivators = new ArrayList<BundleActivator>(1);
+        }
+        allActivators.add(hostActivator); //make it the first one always
+        if (extraActivatorsSize > 0 ) {
+            allActivators.addAll(this.extraActivators);
+        }
 
-        List activators = Arrays.asList(hostActivator);
-        configMap.put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, activators);
+        configMap.put(FelixConstants.SYSTEMBUNDLE_ACTIVATORS_PROP, allActivators);
 
         return map;
     }
@@ -72,5 +83,13 @@ public class FelixContainer extends DefaultContainer {
 
     public void setCacheDirectory(File cacheDirectory) {
         this.cacheDirectory = cacheDirectory;
+    }
+
+    public List<BundleActivator> getExtraActivators() {
+        return extraActivators;
+    }
+
+    public void setExtraActivators(List<BundleActivator> extraActivators) {
+        this.extraActivators = extraActivators;
     }
 }

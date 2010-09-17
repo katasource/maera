@@ -37,7 +37,7 @@ public class Slf4jLogger extends Logger {
         this.log = log;
         setLogLevel(
                 log.isDebugEnabled() ? Logger.LOG_DEBUG :
-                        log.isInfoEnabled() ? Logger.LOG_WARNING :
+                        log.isInfoEnabled() ? Logger.LOG_INFO :
                                 log.isWarnEnabled() ? Logger.LOG_WARNING :
                                         Logger.LOG_ERROR);
     }
@@ -48,23 +48,28 @@ public class Slf4jLogger extends Logger {
 
         switch (level) {
             case LOG_DEBUG:
-                log.debug(message);
-                break;
-            case LOG_ERROR:
                 if (throwable != null) {
-                    if ((throwable instanceof BundleException) &&
-                            (((BundleException) throwable).getNestedException() != null)) {
-                        throwable = ((BundleException) throwable).getNestedException();
-                    }
-                    log.error(message, throwable);
-                } else
-                    log.error(message);
+                    log.debug(message, throwable);
+                } else {
+                    log.debug(message);
+                }
                 break;
             case LOG_INFO:
-                logInfoUnlessLame(message);
+                if (throwable != null) {
+                    log.info(message, throwable);
+                } else {
+                    log.info(message);
+                }
+                //logInfoUnlessLame(message);
                 break;
             case LOG_WARNING:
+                if (throwable != null) {
+                    log.warn(message, throwable);
+                } else {
+                    log.warn(message);
+                }
                 // Handles special class loader errors from felix that have quite useful information
+                /*
                 if (throwable != null) {
                     if (throwable instanceof ClassNotFoundException && isClassNotFoundsWeCareAbout(throwable)) {
                         log.debug("Class not found in bundle: " + message);
@@ -73,10 +78,31 @@ public class Slf4jLogger extends Logger {
                     }
                 } else {
                     logInfoUnlessLame(message);
+                }*/
+
+                break;
+            case LOG_ERROR:
+                if (throwable != null) {
+                    log.error(message, throwable);
+                } else {
+                    log.error(message);
                 }
+                /*if (throwable != null) {
+                    if ((throwable instanceof BundleException) &&
+                            (((BundleException) throwable).getNestedException() != null)) {
+                        throwable = ((BundleException) throwable).getNestedException();
+                    }
+                    log.error(message, throwable);
+                } else
+                    log.error(message);*/
                 break;
             default:
-                log.debug("UNKNOWN[" + level + "]: " + message);
+                String msg = "UNKNOWN LOG LEVEL [" + level + "]: " + message;
+                if (throwable != null) {
+                    log.warn(msg, throwable);
+                } else {
+                    log.warn(msg);
+                }
         }
     }
 
