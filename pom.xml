@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.katasoft.cinder.maven</groupId>
         <artifactId>java-pom</artifactId>
-        <version>1.1.5</version>
+        <version>6.1</version>
     </parent>
 
     <groupId>net.maera</groupId>
@@ -15,7 +15,7 @@
     <packaging>pom</packaging>
 
     <name>Maera</name>
-    <url>http://maera.googlecode.com</url>
+    <url>https://github.com/katasource/maera</url>
 
     <licenses>
         <license>
@@ -26,7 +26,7 @@
 
     <issueManagement>
         <system>Google Code</system>
-        <url>http://code.google.com/p/maera/issues/list</url>
+        <url>https://github.com/katasource/maera/issues</url>
     </issueManagement>
 
     <ciManagement>
@@ -35,9 +35,9 @@
     </ciManagement>
 
     <scm>
-        <connection>scm:svn:http://maera.googlecode.com/svn/trunk</connection>
-        <developerConnection>scm:svn:https://maera.googlecode.com/svn/trunk</developerConnection>
-        <url>http://maera.googlecode.com/svn/trunk</url>
+        <connection>scm:git:https://github.com/katasource/maera.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:katasource/maera.git</developerConnection>
+        <url>https://github.com/katasource/maera</url>
     </scm>
 
     <modules>
@@ -61,8 +61,8 @@
 
     <properties>
         <osgi.version>4.2.0</osgi.version>
-        <gemini.blueprint.version>1.0.0.M1</gemini.blueprint.version>
-        <spring.version>3.0.4.RELEASE</spring.version>
+        <gemini.blueprint.version>1.0.0.RELEASE</gemini.blueprint.version>
+        <spring.version>3.1.0.RELEASE</spring.version>
         <aopalliance.version>1.0.0</aopalliance.version>
         <slf4j.version>1.6.1</slf4j.version>
         <felix.fileinstall.version>3.0.2</felix.fileinstall.version>
